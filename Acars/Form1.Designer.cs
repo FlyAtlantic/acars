@@ -66,7 +66,7 @@
             this.lblGrossWeight = new System.Windows.Forms.Label();
             this.lblAlternate = new System.Windows.Forms.Label();
             this.txtGrossWeight = new System.Windows.Forms.TextBox();
-            this.textBox5 = new System.Windows.Forms.TextBox();
+            this.txtArrival = new System.Windows.Forms.TextBox();
             this.lblFuel = new System.Windows.Forms.Label();
             this.txtFuel = new System.Windows.Forms.TextBox();
             this.txtDeparture = new System.Windows.Forms.TextBox();
@@ -270,7 +270,7 @@
             this.groupBox1.Controls.Add(this.lblGrossWeight);
             this.groupBox1.Controls.Add(this.lblAlternate);
             this.groupBox1.Controls.Add(this.txtGrossWeight);
-            this.groupBox1.Controls.Add(this.textBox5);
+            this.groupBox1.Controls.Add(this.txtArrival);
             this.groupBox1.Controls.Add(this.lblFuel);
             this.groupBox1.Controls.Add(this.txtFuel);
             this.groupBox1.Controls.Add(this.txtDeparture);
@@ -461,16 +461,16 @@
             this.txtGrossWeight.Text = "264.954 kg";
             this.txtGrossWeight.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // textBox5
+            // txtArrival
             // 
-            this.textBox5.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBox5.Enabled = false;
-            this.textBox5.Location = new System.Drawing.Point(212, 87);
-            this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(42, 13);
-            this.textBox5.TabIndex = 27;
-            this.textBox5.Text = "ZZZZ";
-            this.textBox5.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txtArrival.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtArrival.Enabled = false;
+            this.txtArrival.Location = new System.Drawing.Point(212, 87);
+            this.txtArrival.Name = "txtArrival";
+            this.txtArrival.Size = new System.Drawing.Size(42, 13);
+            this.txtArrival.TabIndex = 27;
+            this.txtArrival.Text = "ZZZZ";
+            this.txtArrival.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // lblFuel
             // 
@@ -582,7 +582,7 @@
         private System.Windows.Forms.Label lblGrossWeight;
         private System.Windows.Forms.Label lblAlternate;
         private System.Windows.Forms.TextBox txtGrossWeight;
-        private System.Windows.Forms.TextBox textBox5;
+        private System.Windows.Forms.TextBox txtArrival;
         private System.Windows.Forms.Label lblFuel;
         private System.Windows.Forms.TextBox txtFuel;
         private System.Windows.Forms.TextBox txtDeparture;
