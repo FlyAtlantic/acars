@@ -176,7 +176,7 @@ namespace Acars
             try
             {
                 
-                string sqlCommand1 = "SELECT `departure`, `destination`, `date_Assigned` FROM `pilotassignments` left join flights on pilotassignments.flightid = flights.idf left join utilizadores on pilotassignments.pilot = utilizadores.user_id WHERE utilizadores.user_email=@email";
+                string sqlCommand1 = "SELECT `departure`, `destination`, `alternate` FROM `pilotassignments` left join flights on pilotassignments.flightid = flights.idf left join utilizadores on pilotassignments.pilot = utilizadores.user_id WHERE utilizadores.user_email=@email";
                 MySqlCommand cmd = new MySqlCommand(sqlCommand1, conn);
                 cmd.Parameters.AddWithValue("@email", email);
                 MySqlDataReader result2 = cmd.ExecuteReader();
@@ -191,6 +191,7 @@ namespace Acars
               
                     txtDeparture.Text = String.Format("{0}", (result2[0]));
                     txtArrival.Text = String.Format("{0}", (result2[1]));
+                    txtAlternate.Text = String.Format("{0}", (result2[2]));
                     result2.Close();
 
                 }              
