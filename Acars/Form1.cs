@@ -304,23 +304,21 @@ namespace Acars
                     txtAltitude.Text = String.Format("{0} ft", (playerAltitude.Value * 3.2808399).ToString("F0"));
                     txtHeading.Text = String.Format("{0} º", (compass.Value).ToString("F0"));
                     txtGroundSpeed.Text = String.Format("{0} kt", (airspeed.Value / 128).ToString(""));
+                    txtVerticalSpeed.Text = String.Format("{0}", (playerVerticalSpeed.Value).ToString("F0"));
 
                     // aircraft wieghts
                     txtGrossWeight.Text = String.Format("{0} kg", (playerGW.Value / 2.2046226218487757).ToString("F0"));
-                    txtFuel.Text = String.Format("{0} kg", (playerGW.Value - playerZFW.Value).ToString("F0"));
-
-                    txtVerticalSpeed.Text = String.Format("{0}", (playerVerticalSpeed.Value).ToString("F0"));
-                    Console.WriteLine("{0}", playerVerticalSpeed.Value);
+                    txtFuel.Text = String.Format("{0} kg", (playerGW.Value - playerZFW.Value).ToString("F0"));                  
 
                     // aircraft configuration
-                    txtSquawk.Text = String.Format("{0}", (playersquawk.Value).ToString("X").PadLeft(4, '0'));
-
+                    txtSquawk.Text = String.Format("{0}", (playersquawk.Value).ToString("X").PadLeft(4, '0'));                                       
                     txtCallsign.Text = String.Format("{0}", (result2[0]));
                     txtDeparture.Text = String.Format("{0}", (result2[1]));
                     txtArrival.Text = String.Format("{0}", (result2[2]));
                     txtAlternate.Text = String.Format("{0}", (result2[3]));
 
                     Console.WriteLine("{0}", playerAircraftOnGround.Value);
+                    Console.WriteLine("{0}", playerVerticalSpeed.Value);
 
                     // get sim time from FSUIPC, no date
                     DateTime fsTime = new DateTime(DateTime.UtcNow.Year, 1, 1, playerSimTime.Value[0], playerSimTime.Value[1], playerSimTime.Value[2]);
