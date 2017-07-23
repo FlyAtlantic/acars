@@ -13,6 +13,22 @@ using MySql.Data.MySqlClient;
 
 namespace Acars
 {
+    public enum FlightPhases
+    {
+        PREFLIGHT = 0,
+        TAXIOUT = 1,
+        TAKEOFF = 2,
+        /// <summary>
+        /// Happens first at airborne time
+        /// </summary>
+        CLIMBING = 3,
+        CRUISE = 4,
+        DESCENDING = 5,
+        APPROACH = 6,
+        LANDING = 7,
+        TAXIIN = 8
+    }
+
     public partial class Form1 : Form
     {
         /// <summary>
@@ -61,6 +77,23 @@ namespace Acars
         string email;
         string password;
 
+        FlightPhases flightPhase;
+
+        DateTime departureTime;
+        DateTime arrivalTime;
+        TimeSpan flightTime
+        {
+            get
+            {
+                if (departureTime == null || arrivalTime == null)
+                    return TimeSpan.MinValue;
+                return arrivalTime - departureTime;
+            }
+        }
+
+        // FSUIPC information
+        bool onGround;
+
         public Form1()
         {
             InitializeComponent();
@@ -79,6 +112,42 @@ namespace Acars
                     MessageBoxIcon.Error);
                 Application.Exit();
             }
+        }
+
+        /// <summary>
+        /// Prepares all variables for a fresh flight
+        /// </summary>
+        /// <returns></returns>
+        private void FlightStart()
+        {
+            flightPhase = FlightPhases.PREFLIGHT;
+            onGround = false;
+        }
+
+        /// <summary>
+        /// Handle flight phases
+        /// </summary>
+        private void FlightRun()
+        {
+            switch (flightPhase)
+            {
+                case FlightPhases.PREFLIGHT:
+                    // check for airborne
+                    if (!onGround)
+                    {
+                        flightPhase = FlightPhases.CLIMBING;
+                        departureTime = DateTime.UtcNow;
+                    }
+                    break;
+                case FlightPhases.CLIMBING:
+                    if (onGround)
+                    {
+                        flightPhase = FlightPhases.TAXIOUT;
+                        arrivalTime = DateTime.UtcNow;
+                    }
+                    break;
+            }
+
         }
 
         private string StringToSha1Hash(string input)
@@ -115,13 +184,16 @@ namespace Acars
                 button1.Enabled = false;
                 button1.Text = "Flying...";
                 flightacars.Start();
-
             }
             else
             {            
                 FlightAssignedDone = DoLogin(txtEmail.Text, txtPassword.Text);
                 if (FlightAssignedDone)
                 {
+                    // prepare current flight
+                    FlightStart();
+
+                    // save validated credentials
                     Properties.Settings.Default.Email = txtEmail.Text;
                     Properties.Settings.Default.Password = txtPassword.Text;
                     Properties.Settings.Default.Save();
@@ -131,6 +203,12 @@ namespace Acars
             }
         }
 
+        /// <summary>
+        /// Handle login and assigned flight confirmation
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
         private bool DoLogin(string email, string password)
         {
             try
@@ -192,44 +270,60 @@ namespace Acars
             string result = "";
             try
             {
-                
-                string sqlCommand1 = "SELECT `callsign`, `departure`, `destination`, `alternate` FROM `pilotassignments` left join flights on pilotassignments.flightid = flights.idf left join utilizadores on pilotassignments.pilot = utilizadores.user_id WHERE utilizadores.user_email=@email";
+                // handle flight phases
+                FlightRun();
+
+                if (departureTime != null)
+                    txtDepTime.Text = departureTime.ToString("HH:mm");
+
+                if (arrivalTime != null)
+                    txtArrTime.Text = arrivalTime.ToString("HH:mm");
+
+                if (flightTime != TimeSpan.MinValue)
+                    txtFlightTime.Text = String.Format("{0}:{1}",
+                                                       Math.Truncate(flightTime.TotalHours),
+                                                       flightTime.Minutes);
+
+                // get current assigned fligth information
+                string sqlCommand1 = "SELECT `callsign`, `departure`, `destination`, `alternate` FROM `pilotassignments` left join flights on pilotassignments.flightid = flights.idf left join utilizadores on pilotassignments.pilot = utilizadores.user_id WHERE utilizadores.user_email=@email limit 1";
                 MySqlCommand cmd = new MySqlCommand(sqlCommand1, conn);
                 cmd.Parameters.AddWithValue("@email", email);
                 MySqlDataReader result2 = cmd.ExecuteReader();
+
+                // will only run once, due to query limit
                 while (result2.Read())
                 {
+                    // aircraft telemetry
                     txtAltitude.Text = String.Format("{0} ft", (playerAltitude.Value * 3.2808399).ToString("F0"));
                     txtHeading.Text = String.Format("{0} º", (compass.Value).ToString("F0"));
                     txtGroundSpeed.Text = String.Format("{0} kt", (airspeed.Value / 128).ToString(""));
-                    txtSquawk.Text = String.Format("{0}", (playersquawk.Value).ToString("X").PadLeft(4, '0'));
+
+                    // aircraft wieghts
                     txtGrossWeight.Text = String.Format("{0} kg", (playerGW.Value / 2.2046226218487757).ToString("F0"));
                     txtFuel.Text = String.Format("{0} kg", (playerGW.Value - playerZFW.Value).ToString("F0"));
-                    txtFlightTime.Text = String.Format("{0}", (txtArrTime.Text - txtDepTime.Text).ToString("F0"));
 
-                    Console.WriteLine("{0}", playerAircraftOnGround.Value);
+                    // aircraft configuration
+                    txtSquawk.Text = String.Format("{0}", (playersquawk.Value).ToString("X").PadLeft(4, '0'));
 
-                    // Sim time
-                    DateTime fsTime = new DateTime(DateTime.UtcNow.Year, 1, 1, playerSimTime.Value[0], playerSimTime.Value[1], playerSimTime.Value[2]);
-                    txtSimHour.Text = fsTime.ToShortTimeString();
-
-                    if (playerAircraftOnGround.Value == 0 && txtDepTime.Text == "----") {
-                        DateTime depTime = new DateTime(DateTime.UtcNow.Year, 1, 1, playerSimTime.Value[0], playerSimTime.Value[1], 0);
-                        txtDepTime.Text = depTime.ToShortTimeString();
-                    }
-                    if (playerAircraftOnGround.Value == 1 && txtDepTime.Text != "----")
-                    {
-                        DateTime arrTime = new DateTime(DateTime.UtcNow.Year, 1, 1, playerSimTime.Value[0], playerSimTime.Value[1], 0);
-                        txtArrTime.Text = arrTime.ToShortTimeString();
-                    }
                     txtCallsign.Text = String.Format("{0}", (result2[0]));
                     txtDeparture.Text = String.Format("{0}", (result2[1]));
                     txtArrival.Text = String.Format("{0}", (result2[2]));
                     txtAlternate.Text = String.Format("{0}", (result2[3]));
-                    result2.Close();
 
-                }              
-                
+                    Console.WriteLine("{0}", playerAircraftOnGround.Value);
+
+                    // get sim time from FSUIPC, no date
+                    DateTime fsTime = new DateTime(DateTime.UtcNow.Year, 1, 1, playerSimTime.Value[0], playerSimTime.Value[1], playerSimTime.Value[2]);
+                    txtSimHour.Text = fsTime.ToShortTimeString();
+
+                    // only one assigned flight at a time is allowed
+                    break;
+                }
+                // clean up
+                result2.Close();
+
+
+
                 // validar email.password
                 // preparar a query
                 string sqlCommand = "insert into acarslogs values (@altitude)";
