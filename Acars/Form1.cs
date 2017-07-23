@@ -217,6 +217,11 @@ namespace Acars
                         DateTime depTime = new DateTime(DateTime.UtcNow.Year, 1, 1, playerSimTime.Value[0], playerSimTime.Value[1], 0);
                         txtDepTime.Text = depTime.ToShortTimeString();
                     }
+                    if (playerAircraftOnGround.Value == 1 && txtDepTime.Text == "----")
+                    {
+                        DateTime arrTime = new DateTime(DateTime.UtcNow.Year, 1, 1, playerSimTime.Value[0], playerSimTime.Value[1], 0);
+                        txtArrTime.Text = arrTime.ToShortTimeString();
+                    }
                     txtCallsign.Text = String.Format("{0}", (result2[0]));
                     txtDeparture.Text = String.Format("{0}", (result2[1]));
                     txtArrival.Text = String.Format("{0}", (result2[2]));
