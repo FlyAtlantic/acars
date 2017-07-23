@@ -20,5 +20,8 @@
     <Setting Name="Dbuser" Type="System.String" Scope="Application">
       <Value Profile="(Default)">u647980497_123</Value>
     </Setting>
+    <Setting Name="autologin" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

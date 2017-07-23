@@ -73,6 +73,7 @@
             this.lblDeparture = new System.Windows.Forms.Label();
             this.progressBar = new System.Windows.Forms.ProgressBar();
             this.lblProgressBar = new System.Windows.Forms.Label();
+            this.chkAutoLogin = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -529,11 +530,23 @@
             this.lblProgressBar.TabIndex = 22;
             this.lblProgressBar.Text = "Progress";
             // 
+            // chkAutoLogin
+            // 
+            this.chkAutoLogin.AutoSize = true;
+            this.chkAutoLogin.Location = new System.Drawing.Point(256, 505);
+            this.chkAutoLogin.Name = "chkAutoLogin";
+            this.chkAutoLogin.Size = new System.Drawing.Size(77, 17);
+            this.chkAutoLogin.TabIndex = 23;
+            this.chkAutoLogin.Text = "Auto Login";
+            this.chkAutoLogin.UseVisualStyleBackColor = true;
+            this.chkAutoLogin.CheckedChanged += new System.EventHandler(this.chkAutoLogin_CheckedChanged);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(345, 534);
+            this.Controls.Add(this.chkAutoLogin);
             this.Controls.Add(this.lblProgressBar);
             this.Controls.Add(this.progressBar);
             this.Controls.Add(this.groupBox1);
@@ -601,6 +614,7 @@
         private System.Windows.Forms.Label lblSimulatorHour;
         private System.Windows.Forms.TextBox txtSimHour;
         private System.Windows.Forms.Label lblProgressBar;
+        private System.Windows.Forms.CheckBox chkAutoLogin;
     }
 }
 
