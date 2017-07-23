@@ -88,16 +88,27 @@ namespace Acars
         // CharacterPosition
         private Offset<long> characterLatitude = new Offset<long>(0x0560);
         private Offset<long> characterLongitude = new Offset<long>(0x0568);
-        #endregion offset declarations
 
+        private Offset<long> characterAltitude = new Offset<long>(0x0570);
+        #endregion offset declarations
 
         #region warp property getters and setters
         public FsLatLonPoint CharacterPosition
         {
             get
             {
+                process();
                 return new FsLatLonPoint(new FsLatitude(characterLatitude.Value),
                                          new FsLongitude(characterLongitude.Value));
+            }
+        }
+
+        public long CharacterAltitude
+        {
+            get
+            {
+                process();
+                return characterAltitude.Value;
             }
         }
         #endregion warp property getters and setters
