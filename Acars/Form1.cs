@@ -61,13 +61,24 @@ namespace Acars
         string email;
         string password;
 
-        private object btnLogin;
-
         public Form1()
         {
             InitializeComponent();
+
             conn = new MySqlConnection(getConnectionString());
-            conn.Open();
+            try
+            {
+                conn.Open();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    ex.Message,
+                    "Closing",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                Application.Exit();
+            }
         }
 
         private string StringToSha1Hash(string input)
@@ -164,7 +175,6 @@ namespace Acars
                             txtFlightInformation.Text = "No Flight Assigned";
                         }
                         result1.Close();
-                        //lblFlightInformation.Text = "No Flight Assigned!";
                     }
 
                 }
@@ -256,12 +266,22 @@ namespace Acars
         {
             txtEmail.Text = Properties.Settings.Default.Email;
             txtPassword.Text = Properties.Settings.Default.Password;
+
+            chkAutoLogin.Checked = Properties.Settings.Default.autologin;
+            // call function that handles login button clicks
+            btnLogin_Click(this, e);
         }
 
        private string getConnectionString()
         {
             return String.Format("server={0};uid={1};pwd={2};database={3};", Properties.Settings.Default.Server, Properties.Settings.Default.Dbuser, Properties.Settings.Default.Dbpass, Properties.Settings.Default.Database);  
             
+        }
+
+        private void chkAutoLogin_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.autologin = chkAutoLogin.Checked;
+            Properties.Settings.Default.Save();
         }
     }
 }
