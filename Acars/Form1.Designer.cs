@@ -370,7 +370,7 @@
             this.txtDepTime.Name = "txtDepTime";
             this.txtDepTime.Size = new System.Drawing.Size(55, 13);
             this.txtDepTime.TabIndex = 35;
-            this.txtDepTime.Text = "01:45";
+            this.txtDepTime.Text = "----";
             this.txtDepTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // lblSimulatorHour

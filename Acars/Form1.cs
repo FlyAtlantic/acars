@@ -54,7 +54,7 @@ namespace Acars
         /// <summary>
         /// On Ground = 1 // Airborne = 0
         /// </summary>
-        static private new Offset<int> playerDepartureHour = new Offset<int>(0x0366);
+        static private new Offset<short> playerAircraftOnGround = new Offset<short>(0x0366, false);
         
         MySqlConnection conn;
         bool FlightAssignedDone = false;
@@ -193,7 +193,7 @@ namespace Acars
             try
             {
                 
-                string sqlCommand1 = "SELECT `departure`, `destination`, `alternate` FROM `pilotassignments` left join flights on pilotassignments.flightid = flights.idf left join utilizadores on pilotassignments.pilot = utilizadores.user_id WHERE utilizadores.user_email=@email";
+                string sqlCommand1 = "SELECT `callsign`, `departure`, `destination`, `alternate` FROM `pilotassignments` left join flights on pilotassignments.flightid = flights.idf left join utilizadores on pilotassignments.pilot = utilizadores.user_id WHERE utilizadores.user_email=@email";
                 MySqlCommand cmd = new MySqlCommand(sqlCommand1, conn);
                 cmd.Parameters.AddWithValue("@email", email);
                 MySqlDataReader result2 = cmd.ExecuteReader();
@@ -205,28 +205,26 @@ namespace Acars
                     txtSquawk.Text = String.Format("{0}", (playersquawk.Value).ToString("X").PadLeft(4, '0'));
                     txtGrossWeight.Text = String.Format("{0} kg", (playerGW.Value / 2.2046226218487757).ToString("F0"));
                     txtFuel.Text = String.Format("{0} kg", (playerGW.Value - playerZFW.Value).ToString("F0"));
+                    txtFlightTime.Text = String.Format("{0}", (txtDepTime.Text - txtArrTime.Text).ToString("F0"));
+
+                    Console.WriteLine("{0}", playerAircraftOnGround.Value);
 
                     // Sim time
                     DateTime fsTime = new DateTime(DateTime.UtcNow.Year, 1, 1, playerSimTime.Value[0], playerSimTime.Value[1], playerSimTime.Value[2]);
                     txtSimHour.Text = fsTime.ToShortTimeString();
 
-                    if (playerDepartureHour.Value == 0)
-                    {
+                    if (playerAircraftOnGround.Value = "0" && txtDepTime.Text = "----") {
                         DateTime depTime = new DateTime(DateTime.UtcNow.Year, 1, 1, playerSimTime.Value[0], playerSimTime.Value[1], 0);
                         txtDepTime.Text = depTime.ToShortTimeString();
                     }
-
-                    txtDeparture.Text = String.Format("{0}", (result2[0]));
-                    txtArrival.Text = String.Format("{0}", (result2[1]));
-                    txtAlternate.Text = String.Format("{0}", (result2[2]));
+                    txtCallsign.Text = String.Format("{0}", (result2[0]));
+                    txtDeparture.Text = String.Format("{0}", (result2[1]));
+                    txtArrival.Text = String.Format("{0}", (result2[2]));
+                    txtAlternate.Text = String.Format("{0}", (result2[3]));
                     result2.Close();
 
                 }              
-
-
-                Console.WriteLine( playerZFW.Value / 256);
-                Console.WriteLine(playerGW.Value);
-
+                
 
                 // validar email.password
                 // preparar a query
