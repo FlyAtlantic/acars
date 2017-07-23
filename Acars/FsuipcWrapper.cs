@@ -83,8 +83,23 @@ namespace Acars
         }
         #endregion warpping process and open sequence
 
-        #region warp property getters and setters
+        #region offset declarations
 
+        // CharacterPosition
+        private Offset<long> characterLatitude = new Offset<long>(0x0560);
+        private Offset<long> characterLongitude = new Offset<long>(0x0568);
+        #endregion offset declarations
+
+
+        #region warp property getters and setters
+        public FsLatLonPoint CharacterPosition
+        {
+            get
+            {
+                return new FsLatLonPoint(new FsLatitude(characterLatitude.Value),
+                                         new FsLongitude(characterLongitude.Value));
+            }
+        }
         #endregion warp property getters and setters
     }
 }
