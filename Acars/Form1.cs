@@ -125,7 +125,7 @@ namespace Acars
         private void FlightStart()
         {
             flightPhase = FlightPhases.PREFLIGHT;
-            onGround = false;
+            onGround = true;
         }
 
         /// <summary>
@@ -274,7 +274,7 @@ namespace Acars
             string result = "";
             try
             {
-                // handle flight phases
+                // handle flight phase changes
                 FlightRun();
 
                 if (departureTime != null)
@@ -287,6 +287,9 @@ namespace Acars
                     txtFlightTime.Text = String.Format("{0}:{1}",
                                                        Math.Truncate(flightTime.TotalHours),
                                                        flightTime.Minutes);
+
+                // process FSUIPC data
+                onGround = (playerAircraftOnGround.Value == 0) ? false : true;
 
                 // get current assigned fligth information
                 string sqlCommand1 = "SELECT `callsign`, `departure`, `destination`, `alternate` FROM `pilotassignments` left join flights on pilotassignments.flightid = flights.idf left join utilizadores on pilotassignments.pilot = utilizadores.user_id WHERE utilizadores.user_email=@email limit 1";
