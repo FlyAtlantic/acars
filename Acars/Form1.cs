@@ -290,6 +290,11 @@ namespace Acars
 
                 // process FSUIPC data
                 onGround = (playerAircraftOnGround.Value == 0) ? false : true;
+                txtAltitude.Text = String.Format("{0} ft", (playerAltitude.Value * 3.2808399).ToString("F0"));
+                txtHeading.Text = String.Format("{0} º", (compass.Value).ToString("F0"));
+                txtGroundSpeed.Text = String.Format("{0} kt", (airspeed.Value / 128).ToString(""));
+                txtVerticalSpeed.Text = String.Format("{0}", (playerVerticalSpeed.Value).ToString("F0"));
+
 
                 // get current assigned fligth information
                 string sqlCommand1 = "SELECT `callsign`, `departure`, `destination`, `alternate` FROM `pilotassignments` left join flights on pilotassignments.flightid = flights.idf left join utilizadores on pilotassignments.pilot = utilizadores.user_id WHERE utilizadores.user_email=@email limit 1";
@@ -300,12 +305,6 @@ namespace Acars
                 // will only run once, due to query limit
                 while (result2.Read())
                 {
-                    // aircraft telemetry
-                    txtAltitude.Text = String.Format("{0} ft", (playerAltitude.Value * 3.2808399).ToString("F0"));
-                    txtHeading.Text = String.Format("{0} º", (compass.Value).ToString("F0"));
-                    txtGroundSpeed.Text = String.Format("{0} kt", (airspeed.Value / 128).ToString(""));
-                    txtVerticalSpeed.Text = String.Format("{0}", (playerVerticalSpeed.Value).ToString("F0"));
-
                     // aircraft wieghts
                     txtGrossWeight.Text = String.Format("{0} kg", (playerGW.Value / 2.2046226218487757).ToString("F0"));
                     txtFuel.Text = String.Format("{0} kg", (playerGW.Value - playerZFW.Value).ToString("F0"));                  
