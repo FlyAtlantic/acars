@@ -164,7 +164,7 @@ namespace Acars
 
                         while (result1.Read())
                         {
-                            txtFlightInformation.Text = String.Format("Departure: {0} Destination: {1} Departure Time: {2}", result1[0], result1[1], result1[2]);
+                            txtFlightInformation.Text = String.Format("Departure: {0} Destination: {1} Time Assigned: {2:HHmm}", result1[0], result1[1], result1[2]);
                             button1.Text = "Start Flight";
                             result1.Close();
                             return true;
