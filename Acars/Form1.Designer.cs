@@ -47,8 +47,20 @@
             this.lblStatus = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.lblSquawk = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.txtSquawk = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.lblCallsign = new System.Windows.Forms.Label();
+            this.txtCallsign = new System.Windows.Forms.TextBox();
+            this.lblFlightTime = new System.Windows.Forms.Label();
+            this.txtFlightTime = new System.Windows.Forms.TextBox();
+            this.lblArrTime = new System.Windows.Forms.Label();
+            this.txtArrTime = new System.Windows.Forms.TextBox();
+            this.lblDepTime = new System.Windows.Forms.Label();
+            this.txtDepTime = new System.Windows.Forms.TextBox();
+            this.lblSimulatorHour = new System.Windows.Forms.Label();
+            this.txtSimHour = new System.Windows.Forms.TextBox();
+            this.lblFuelRemaining = new System.Windows.Forms.Label();
+            this.txtFuelRemaining = new System.Windows.Forms.TextBox();
             this.lblArrival = new System.Windows.Forms.Label();
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.lblGrossWeight = new System.Windows.Forms.Label();
@@ -60,18 +72,6 @@
             this.txtDeparture = new System.Windows.Forms.TextBox();
             this.lblDeparture = new System.Windows.Forms.Label();
             this.progressBar = new System.Windows.Forms.ProgressBar();
-            this.lblFuelRemaining = new System.Windows.Forms.Label();
-            this.txtFuelRemaining = new System.Windows.Forms.TextBox();
-            this.lblSimulatorHour = new System.Windows.Forms.Label();
-            this.txtSimHour = new System.Windows.Forms.TextBox();
-            this.lblDepTime = new System.Windows.Forms.Label();
-            this.txtDepTime = new System.Windows.Forms.TextBox();
-            this.lblArrTime = new System.Windows.Forms.Label();
-            this.txtArrTime = new System.Windows.Forms.TextBox();
-            this.lblFlightTime = new System.Windows.Forms.Label();
-            this.txtFlightTime = new System.Windows.Forms.TextBox();
-            this.lblCallsign = new System.Windows.Forms.Label();
-            this.txtCallsign = new System.Windows.Forms.TextBox();
             this.lblProgressBar = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -150,7 +150,6 @@
             this.lblFlightStatus.Size = new System.Drawing.Size(65, 13);
             this.lblFlightStatus.TabIndex = 8;
             this.lblFlightStatus.Text = "Flight Status";
-
             // 
             // lblAltitude
             // 
@@ -160,7 +159,6 @@
             this.lblAltitude.Size = new System.Drawing.Size(42, 13);
             this.lblAltitude.TabIndex = 10;
             this.lblAltitude.Text = "Altitude";
-
             // 
             // txtAltitude
             // 
@@ -172,7 +170,6 @@
             this.txtAltitude.TabIndex = 11;
             this.txtAltitude.Text = "380 ft";
             this.txtAltitude.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-
             // 
             // lblHeading
             // 
@@ -243,16 +240,16 @@
             this.lblSquawk.TabIndex = 18;
             this.lblSquawk.Text = "Squawk Num";
             // 
-            // textBox2
+            // txtSquawk
             // 
-            this.textBox2.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBox2.Enabled = false;
-            this.textBox2.Location = new System.Drawing.Point(273, 42);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(51, 13);
-            this.textBox2.TabIndex = 19;
-            this.textBox2.Text = "4722";
-            this.textBox2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txtSquawk.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtSquawk.Enabled = false;
+            this.txtSquawk.Location = new System.Drawing.Point(273, 42);
+            this.txtSquawk.Name = "txtSquawk";
+            this.txtSquawk.Size = new System.Drawing.Size(51, 13);
+            this.txtSquawk.TabIndex = 19;
+            this.txtSquawk.Text = "4722";
+            this.txtSquawk.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // groupBox1
             // 
@@ -279,7 +276,7 @@
             this.groupBox1.Controls.Add(this.txtDeparture);
             this.groupBox1.Controls.Add(this.lblDeparture);
             this.groupBox1.Controls.Add(this.lblStatus);
-            this.groupBox1.Controls.Add(this.textBox2);
+            this.groupBox1.Controls.Add(this.txtSquawk);
             this.groupBox1.Controls.Add(this.lblAltitude);
             this.groupBox1.Controls.Add(this.lblSquawk);
             this.groupBox1.Controls.Add(this.txtAltitude);
@@ -294,6 +291,126 @@
             this.groupBox1.TabIndex = 20;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "groupBox1";
+            // 
+            // lblCallsign
+            // 
+            this.lblCallsign.AutoSize = true;
+            this.lblCallsign.Location = new System.Drawing.Point(21, 157);
+            this.lblCallsign.Name = "lblCallsign";
+            this.lblCallsign.Size = new System.Drawing.Size(43, 13);
+            this.lblCallsign.TabIndex = 40;
+            this.lblCallsign.Text = "Callsign";
+            // 
+            // txtCallsign
+            // 
+            this.txtCallsign.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtCallsign.Enabled = false;
+            this.txtCallsign.Location = new System.Drawing.Point(12, 173);
+            this.txtCallsign.Name = "txtCallsign";
+            this.txtCallsign.Size = new System.Drawing.Size(55, 13);
+            this.txtCallsign.TabIndex = 41;
+            this.txtCallsign.Text = "TSZ101";
+            this.txtCallsign.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // lblFlightTime
+            // 
+            this.lblFlightTime.AutoSize = true;
+            this.lblFlightTime.Location = new System.Drawing.Point(274, 116);
+            this.lblFlightTime.Name = "lblFlightTime";
+            this.lblFlightTime.Size = new System.Drawing.Size(58, 13);
+            this.lblFlightTime.TabIndex = 38;
+            this.lblFlightTime.Text = "Flight Time";
+            // 
+            // txtFlightTime
+            // 
+            this.txtFlightTime.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtFlightTime.Enabled = false;
+            this.txtFlightTime.Location = new System.Drawing.Point(272, 132);
+            this.txtFlightTime.Name = "txtFlightTime";
+            this.txtFlightTime.Size = new System.Drawing.Size(55, 13);
+            this.txtFlightTime.TabIndex = 39;
+            this.txtFlightTime.Text = "01:45";
+            this.txtFlightTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // lblArrTime
+            // 
+            this.lblArrTime.AutoSize = true;
+            this.lblArrTime.Location = new System.Drawing.Point(209, 116);
+            this.lblArrTime.Name = "lblArrTime";
+            this.lblArrTime.Size = new System.Drawing.Size(46, 13);
+            this.lblArrTime.TabIndex = 36;
+            this.lblArrTime.Text = "Arr Hour";
+            // 
+            // txtArrTime
+            // 
+            this.txtArrTime.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtArrTime.Enabled = false;
+            this.txtArrTime.Location = new System.Drawing.Point(207, 132);
+            this.txtArrTime.Name = "txtArrTime";
+            this.txtArrTime.Size = new System.Drawing.Size(55, 13);
+            this.txtArrTime.TabIndex = 37;
+            this.txtArrTime.Text = "01:45";
+            this.txtArrTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // lblDepTime
+            // 
+            this.lblDepTime.AutoSize = true;
+            this.lblDepTime.Location = new System.Drawing.Point(148, 116);
+            this.lblDepTime.Name = "lblDepTime";
+            this.lblDepTime.Size = new System.Drawing.Size(53, 13);
+            this.lblDepTime.TabIndex = 34;
+            this.lblDepTime.Text = "Dep Hour";
+            // 
+            // txtDepTime
+            // 
+            this.txtDepTime.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtDepTime.Enabled = false;
+            this.txtDepTime.Location = new System.Drawing.Point(146, 132);
+            this.txtDepTime.Name = "txtDepTime";
+            this.txtDepTime.Size = new System.Drawing.Size(55, 13);
+            this.txtDepTime.TabIndex = 35;
+            this.txtDepTime.Text = "01:45";
+            this.txtDepTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // lblSimulatorHour
+            // 
+            this.lblSimulatorHour.AutoSize = true;
+            this.lblSimulatorHour.Location = new System.Drawing.Point(76, 116);
+            this.lblSimulatorHour.Name = "lblSimulatorHour";
+            this.lblSimulatorHour.Size = new System.Drawing.Size(50, 13);
+            this.lblSimulatorHour.TabIndex = 32;
+            this.lblSimulatorHour.Text = "Sim Time";
+            // 
+            // txtSimHour
+            // 
+            this.txtSimHour.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtSimHour.Enabled = false;
+            this.txtSimHour.Location = new System.Drawing.Point(74, 132);
+            this.txtSimHour.Name = "txtSimHour";
+            this.txtSimHour.Size = new System.Drawing.Size(55, 13);
+            this.txtSimHour.TabIndex = 33;
+            this.txtSimHour.Text = "01:45:00";
+            this.txtSimHour.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // lblFuelRemaining
+            // 
+            this.lblFuelRemaining.AutoSize = true;
+            this.lblFuelRemaining.Location = new System.Drawing.Point(25, 116);
+            this.lblFuelRemaining.Name = "lblFuelRemaining";
+            this.lblFuelRemaining.Size = new System.Drawing.Size(28, 13);
+            this.lblFuelRemaining.TabIndex = 30;
+            this.lblFuelRemaining.Text = "ETA";
+            // 
+            // txtFuelRemaining
+            // 
+            this.txtFuelRemaining.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtFuelRemaining.Enabled = false;
+            this.txtFuelRemaining.Location = new System.Drawing.Point(12, 132);
+            this.txtFuelRemaining.Name = "txtFuelRemaining";
+            this.txtFuelRemaining.Size = new System.Drawing.Size(55, 13);
+            this.txtFuelRemaining.TabIndex = 31;
+            this.txtFuelRemaining.Text = "01:45";
+            this.txtFuelRemaining.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // lblArrival
             // 
@@ -403,128 +520,6 @@
             this.progressBar.TabIndex = 21;
             this.progressBar.Value = 50;
             // 
-            // lblFuelRemaining
-            // 
-            this.lblFuelRemaining.AutoSize = true;
-            this.lblFuelRemaining.Location = new System.Drawing.Point(25, 116);
-            this.lblFuelRemaining.Name = "lblFuelRemaining";
-            this.lblFuelRemaining.Size = new System.Drawing.Size(28, 13);
-            this.lblFuelRemaining.TabIndex = 30;
-            this.lblFuelRemaining.Text = "ETA";
-
-            // 
-            // txtFuelRemaining
-            // 
-            this.txtFuelRemaining.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txtFuelRemaining.Enabled = false;
-            this.txtFuelRemaining.Location = new System.Drawing.Point(12, 132);
-            this.txtFuelRemaining.Name = "txtFuelRemaining";
-            this.txtFuelRemaining.Size = new System.Drawing.Size(55, 13);
-            this.txtFuelRemaining.TabIndex = 31;
-            this.txtFuelRemaining.Text = "01:45";
-            this.txtFuelRemaining.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-
-            // 
-            // lblSimulatorHour
-            // 
-            this.lblSimulatorHour.AutoSize = true;
-            this.lblSimulatorHour.Location = new System.Drawing.Point(76, 116);
-            this.lblSimulatorHour.Name = "lblSimulatorHour";
-            this.lblSimulatorHour.Size = new System.Drawing.Size(50, 13);
-            this.lblSimulatorHour.TabIndex = 32;
-            this.lblSimulatorHour.Text = "Sim Time";
-            // 
-            // txtSimHour
-            // 
-            this.txtSimHour.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txtSimHour.Enabled = false;
-            this.txtSimHour.Location = new System.Drawing.Point(74, 132);
-            this.txtSimHour.Name = "txtSimHour";
-            this.txtSimHour.Size = new System.Drawing.Size(55, 13);
-            this.txtSimHour.TabIndex = 33;
-            this.txtSimHour.Text = "01:45:00";
-            this.txtSimHour.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // lblDepTime
-            // 
-            this.lblDepTime.AutoSize = true;
-            this.lblDepTime.Location = new System.Drawing.Point(148, 116);
-            this.lblDepTime.Name = "lblDepTime";
-            this.lblDepTime.Size = new System.Drawing.Size(53, 13);
-            this.lblDepTime.TabIndex = 34;
-            this.lblDepTime.Text = "Dep Hour";
-            // 
-            // txtDepTime
-            // 
-            this.txtDepTime.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txtDepTime.Enabled = false;
-            this.txtDepTime.Location = new System.Drawing.Point(146, 132);
-            this.txtDepTime.Name = "txtDepTime";
-            this.txtDepTime.Size = new System.Drawing.Size(55, 13);
-            this.txtDepTime.TabIndex = 35;
-            this.txtDepTime.Text = "01:45";
-            this.txtDepTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // lblArrTime
-            // 
-            this.lblArrTime.AutoSize = true;
-            this.lblArrTime.Location = new System.Drawing.Point(209, 116);
-            this.lblArrTime.Name = "lblArrTime";
-            this.lblArrTime.Size = new System.Drawing.Size(46, 13);
-            this.lblArrTime.TabIndex = 36;
-            this.lblArrTime.Text = "Arr Hour";
-            // 
-            // txtArrTime
-            // 
-            this.txtArrTime.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txtArrTime.Enabled = false;
-            this.txtArrTime.Location = new System.Drawing.Point(207, 132);
-            this.txtArrTime.Name = "txtArrTime";
-            this.txtArrTime.Size = new System.Drawing.Size(55, 13);
-            this.txtArrTime.TabIndex = 37;
-            this.txtArrTime.Text = "01:45";
-            this.txtArrTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // lblFlightTime
-            // 
-            this.lblFlightTime.AutoSize = true;
-            this.lblFlightTime.Location = new System.Drawing.Point(274, 116);
-            this.lblFlightTime.Name = "lblFlightTime";
-            this.lblFlightTime.Size = new System.Drawing.Size(58, 13);
-            this.lblFlightTime.TabIndex = 38;
-            this.lblFlightTime.Text = "Flight Time";
-            // 
-            // txtFlightTime
-            // 
-            this.txtFlightTime.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txtFlightTime.Enabled = false;
-            this.txtFlightTime.Location = new System.Drawing.Point(272, 132);
-            this.txtFlightTime.Name = "txtFlightTime";
-            this.txtFlightTime.Size = new System.Drawing.Size(55, 13);
-            this.txtFlightTime.TabIndex = 39;
-            this.txtFlightTime.Text = "01:45";
-            this.txtFlightTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // lblCallsign
-            // 
-            this.lblCallsign.AutoSize = true;
-            this.lblCallsign.Location = new System.Drawing.Point(21, 157);
-            this.lblCallsign.Name = "lblCallsign";
-            this.lblCallsign.Size = new System.Drawing.Size(43, 13);
-            this.lblCallsign.TabIndex = 40;
-            this.lblCallsign.Text = "Callsign";
-            // 
-            // txtCallsign
-            // 
-            this.txtCallsign.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txtCallsign.Enabled = false;
-            this.txtCallsign.Location = new System.Drawing.Point(12, 173);
-            this.txtCallsign.Name = "txtCallsign";
-            this.txtCallsign.Size = new System.Drawing.Size(55, 13);
-            this.txtCallsign.TabIndex = 41;
-            this.txtCallsign.Text = "TSZ101";
-            this.txtCallsign.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
             // lblProgressBar
             // 
             this.lblProgressBar.AutoSize = true;
@@ -580,7 +575,7 @@
         private System.Windows.Forms.Label lblStatus;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label lblSquawk;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox txtSquawk;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label lblArrival;
         private System.Windows.Forms.TextBox textBox3;

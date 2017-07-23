@@ -35,6 +35,14 @@ namespace Acars
         /// Airspeed
         /// </summary>
         static private Offset<int> airspeed = new Offset<int>(0x02BC);
+        /// <summary>
+        /// Squawk code
+        /// </summary>
+        static private Offset<int> playersquawk = new Offset<int>(0x0354);
+        /// <summary>
+        /// Gross Weight
+        /// </summary>
+        static private Offset<int> playerGW = new Offset<int>(0x30C0);
 
         bool FlightAssignedDone = false;
         string email;
@@ -165,7 +173,11 @@ namespace Acars
             string result = "";
             try
             {
-                txtAltitude.Text = String.Format("Altitude: {0}", (playerAltitude.Value * 3.2808399).ToString("F2"));
+                txtAltitude.Text = String.Format("{0}", (playerAltitude.Value * 3.2808399).ToString("F0"));
+                txtHeading.Text = String.Format("{0}", (compass.Value).ToString("F0"));
+                txtGroundSpeed.Text = String.Format("{0}", (airspeed.Value / 128).ToString(""));
+                txtSquawk.Text = String.Format("{0}", (playersquawk.Value).ToString(""));
+                txtGrossWeight.Text = String.Format("{0}", (playerGW.Value * 256).ToString(""));
 
                 MySqlConnection conn = new MySqlConnection(getConnectionString());
                 conn.Open();
