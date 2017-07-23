@@ -58,13 +58,24 @@ namespace Acars
         string email;
         string password;
 
-        private object btnLogin;
-
         public Form1()
         {
             InitializeComponent();
+
             conn = new MySqlConnection(getConnectionString());
-            conn.Open();
+            try
+            {
+                conn.Open();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    ex.Message,
+                    "Closing",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                Application.Exit();
+            }
         }
 
         private string StringToSha1Hash(string input)
