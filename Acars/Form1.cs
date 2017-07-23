@@ -42,7 +42,7 @@ namespace Acars
         /// <summary>
         /// Gross Weight
         /// </summary>
-        static private Offset<int> playerGW = new Offset<int>(0x30C0);
+        static private Offset<Double> playerGW = new Offset<Double>(0x30C0);
 
         bool FlightAssignedDone = false;
         string email;
@@ -175,7 +175,7 @@ namespace Acars
                 txtHeading.Text = String.Format("{0}", (compass.Value).ToString("F0"));
                 txtGroundSpeed.Text = String.Format("{0}", (airspeed.Value / 128).ToString(""));
                 txtSquawk.Text = String.Format("{0}", (playersquawk.Value).ToString("X").PadLeft(4, '0'));
-                txtGrossWeight.Text = String.Format("{0}", (playerGW.Value * 256).ToString(""));
+                txtGrossWeight.Text = String.Format("{0}", (playerGW.Value).ToString("F2"));
 
                 MySqlConnection conn = new MySqlConnection(getConnectionString());
                 conn.Open();
