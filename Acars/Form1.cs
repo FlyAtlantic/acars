@@ -40,10 +40,20 @@ namespace Acars
         /// </summary>
         static private Offset<short> playersquawk = new Offset<short>(0x0354);
         /// <summary>
-        /// Gross Weight
+        /// Gross Weight Pounds
         /// </summary>
         static private Offset<Double> playerGW = new Offset<Double>(0x30C0);
+        /// <summary>
+        /// Zero Fuel Weight Pouds
+        /// </summary>
+        static private Offset<Double> playerZFW = new Offset<Double>(0x3BFC);
+        /// <summary>
+        /// Simulator Hour
+        /// </summary>
+        static private Offset<byte[]> playerSimTime = new Offset<byte[]>(0x0238, 10);
 
+        
+        MySqlConnection conn;
         bool FlightAssignedDone = false;
         string email;
         string password;
@@ -53,6 +63,8 @@ namespace Acars
         public Form1()
         {
             InitializeComponent();
+            conn = new MySqlConnection(getConnectionString());
+            conn.Open();
         }
 
         private string StringToSha1Hash(string input)
@@ -107,12 +119,8 @@ namespace Acars
 
         private bool DoLogin(string email, string password)
         {
-            MySqlConnection conn;
-
             try
             {
-                conn = new MySqlConnection(getConnectionString());
-                conn.Open();
 
                 // validar email.password
                 // preparar a query
@@ -171,19 +179,37 @@ namespace Acars
             string result = "";
             try
             {
-                txtAltitude.Text = String.Format("{0}", (playerAltitude.Value * 3.2808399).ToString("F0"));
-                txtHeading.Text = String.Format("{0}", (compass.Value).ToString("F0"));
-                txtGroundSpeed.Text = String.Format("{0}", (airspeed.Value / 128).ToString(""));
-                txtSquawk.Text = String.Format("{0}", (playersquawk.Value).ToString("X").PadLeft(4, '0'));
-                txtGrossWeight.Text = String.Format("{0}", (playerGW.Value).ToString("F2"));
+                
+                string sqlCommand1 = "SELECT `departure`, `destination`, `alternate` FROM `pilotassignments` left join flights on pilotassignments.flightid = flights.idf left join utilizadores on pilotassignments.pilot = utilizadores.user_id WHERE utilizadores.user_email=@email";
+                MySqlCommand cmd = new MySqlCommand(sqlCommand1, conn);
+                cmd.Parameters.AddWithValue("@email", email);
+                MySqlDataReader result2 = cmd.ExecuteReader();
+                while (result2.Read())
+                {
+                    txtAltitude.Text = String.Format("{0} ft", (playerAltitude.Value * 3.2808399).ToString("F0"));
+                    txtHeading.Text = String.Format("{0} º", (compass.Value).ToString("F0"));
+                    txtGroundSpeed.Text = String.Format("{0} kt", (airspeed.Value / 128).ToString(""));
+                    txtSquawk.Text = String.Format("{0}", (playersquawk.Value).ToString("X").PadLeft(4, '0'));
+                    txtGrossWeight.Text = String.Format("{0} kg", (playerGW.Value / 2.2046226218487757).ToString("F0"));
+                    txtFuel.Text = String.Format("{0} kg", (playerGW.Value - playerZFW.Value).ToString("F0"));
+                    txtSimHour.Text = String.Format("{0} kg", (playerSimTime.Value).ToString("F0"));
 
-                MySqlConnection conn = new MySqlConnection(getConnectionString());
-                conn.Open();
+                    txtDeparture.Text = String.Format("{0}", (result2[0]));
+                    txtArrival.Text = String.Format("{0}", (result2[1]));
+                    txtAlternate.Text = String.Format("{0}", (result2[2]));
+                    result2.Close();
+
+                }              
+
+
+                Console.WriteLine( playerZFW.Value / 256);
+                Console.WriteLine(playerGW.Value);
+
 
                 // validar email.password
                 // preparar a query
                 string sqlCommand = "insert into acarslogs values (@altitude)";
-                MySqlCommand cmd = new MySqlCommand(sqlCommand, conn);
+
                 // preencher os parametros
                 cmd.Parameters.AddWithValue("@altitude", (playerAltitude.Value * 3.2808399).ToString("F2"));
                 // executar a query
