@@ -38,7 +38,7 @@ namespace Acars
         /// <summary>
         /// Squawk code
         /// </summary>
-        static private Offset<int> playersquawk = new Offset<int>(0x0354);
+        static private Offset<short> playersquawk = new Offset<short>(0x0354);
         /// <summary>
         /// Gross Weight
         /// </summary>
@@ -78,13 +78,13 @@ namespace Acars
             {
                 bool fsuipcOpen = false;
            
-                    while (!fsuipcOpen)
-                        try
-                        {
-                            FSUIPCConnection.Open();
-                            fsuipcOpen = true;
-                        }
-                        catch (Exception crap) { }
+                while (!fsuipcOpen)
+                    try
+                    {
+                        FSUIPCConnection.Open();
+                        fsuipcOpen = true;
+                    }
+                    catch (Exception crap) { }
 
                 button1.Enabled = false;
                 button1.Text = "Flying...";
@@ -135,8 +135,6 @@ namespace Acars
                     }
                     else
                     {
-
-
                         sqlCommand = "SELECT `departure`, `destination`, `date_Assigned` FROM `pilotassignments` left join flights on pilotassignments.flightid = flights.idf left join utilizadores on pilotassignments.pilot = utilizadores.user_id WHERE utilizadores.user_email=@email";
                         cmd = new MySqlCommand(sqlCommand, conn);
                         cmd.Parameters.AddWithValue("@email", email);
@@ -176,7 +174,7 @@ namespace Acars
                 txtAltitude.Text = String.Format("{0}", (playerAltitude.Value * 3.2808399).ToString("F0"));
                 txtHeading.Text = String.Format("{0}", (compass.Value).ToString("F0"));
                 txtGroundSpeed.Text = String.Format("{0}", (airspeed.Value / 128).ToString(""));
-                txtSquawk.Text = String.Format("{0}", (playersquawk.Value).ToString(""));
+                txtSquawk.Text = String.Format("{0}", (playersquawk.Value).ToString("X"));
                 txtGrossWeight.Text = String.Format("{0}", (playerGW.Value * 256).ToString(""));
 
                 MySqlConnection conn = new MySqlConnection(getConnectionString());
