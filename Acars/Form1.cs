@@ -50,8 +50,11 @@ namespace Acars
         /// <summary>
         /// Simulator Hour
         /// </summary>
-        static private Offset<byte[]> playerSimTime = new Offset<byte[]>(0x0238, 10);
-
+        static private Offset<byte[]> playerSimTime = new Offset<byte[]>(0x023B, 10);
+        /// <summary>
+        /// On Ground = 1 // Airborne = 0
+        /// </summary>
+        static private new Offset<int> playerDepartureHour = new Offset<int>(0x0366);
         
         MySqlConnection conn;
         bool FlightAssignedDone = false;
@@ -196,6 +199,12 @@ namespace Acars
                     // Sim time
                     DateTime fsTime = new DateTime(DateTime.UtcNow.Year, 1, 1, playerSimTime.Value[0], playerSimTime.Value[1], playerSimTime.Value[2]);
                     txtSimHour.Text = fsTime.ToShortTimeString();
+
+                    if (playerDepartureHour.Value == 0)
+                    {
+                        DateTime depTime = new DateTime(DateTime.UtcNow.Year, 1, 1, playerSimTime.Value[0], playerSimTime.Value[1], 0);
+                        txtDepTime.Text = depTime.ToShortTimeString();
+                    }
 
                     txtDeparture.Text = String.Format("{0}", (result2[0]));
                     txtArrival.Text = String.Format("{0}", (result2[1]));
