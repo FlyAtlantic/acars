@@ -284,7 +284,7 @@ namespace Acars
                     txtArrTime.Text = arrivalTime.ToString("HH:mm");
 
                 if (flightTime != TimeSpan.MinValue)
-                    txtFlightTime.Text = String.Format("{0}:{1}",
+                    txtFlightTime.Text = String.Format("{0:00}:{1:00}",
                                                        Math.Truncate(flightTime.TotalHours),
                                                        flightTime.Minutes);
 
