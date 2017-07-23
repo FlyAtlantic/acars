@@ -74,6 +74,8 @@
             this.progressBar = new System.Windows.Forms.ProgressBar();
             this.lblProgressBar = new System.Windows.Forms.Label();
             this.chkAutoLogin = new System.Windows.Forms.CheckBox();
+            this.lblVerticalSpeed = new System.Windows.Forms.Label();
+            this.txtVerticalSpeed = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -254,6 +256,8 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.lblVerticalSpeed);
+            this.groupBox1.Controls.Add(this.txtVerticalSpeed);
             this.groupBox1.Controls.Add(this.lblCallsign);
             this.groupBox1.Controls.Add(this.txtCallsign);
             this.groupBox1.Controls.Add(this.lblFlightTime);
@@ -541,6 +545,26 @@
             this.chkAutoLogin.UseVisualStyleBackColor = true;
             this.chkAutoLogin.CheckedChanged += new System.EventHandler(this.chkAutoLogin_CheckedChanged);
             // 
+            // lblVerticalSpeed
+            // 
+            this.lblVerticalSpeed.AutoSize = true;
+            this.lblVerticalSpeed.Location = new System.Drawing.Point(75, 157);
+            this.lblVerticalSpeed.Name = "lblVerticalSpeed";
+            this.lblVerticalSpeed.Size = new System.Drawing.Size(53, 13);
+            this.lblVerticalSpeed.TabIndex = 42;
+            this.lblVerticalSpeed.Text = "Dep Hour";
+            // 
+            // txtVerticalSpeed
+            // 
+            this.txtVerticalSpeed.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtVerticalSpeed.Enabled = false;
+            this.txtVerticalSpeed.Location = new System.Drawing.Point(74, 173);
+            this.txtVerticalSpeed.Name = "txtVerticalSpeed";
+            this.txtVerticalSpeed.Size = new System.Drawing.Size(55, 13);
+            this.txtVerticalSpeed.TabIndex = 43;
+            this.txtVerticalSpeed.Text = "-500 ft/m";
+            this.txtVerticalSpeed.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -615,6 +639,8 @@
         private System.Windows.Forms.TextBox txtSimHour;
         private System.Windows.Forms.Label lblProgressBar;
         private System.Windows.Forms.CheckBox chkAutoLogin;
+        private System.Windows.Forms.Label lblVerticalSpeed;
+        private System.Windows.Forms.TextBox txtVerticalSpeed;
     }
 }
 

@@ -55,7 +55,11 @@ namespace Acars
         /// On Ground = 1 // Airborne = 0
         /// </summary>
         static private new Offset<short> playerAircraftOnGround = new Offset<short>(0x0366, false);
-        
+        /// <summary>
+        /// Vertical Speed
+        /// </summary>
+        static private new Offset<double> playerVerticalSpeed = new Offset<double>(0x0842);
+
         MySqlConnection conn;
         bool FlightAssignedDone = false;
         string email;
@@ -205,9 +209,10 @@ namespace Acars
                     txtSquawk.Text = String.Format("{0}", (playersquawk.Value).ToString("X").PadLeft(4, '0'));
                     txtGrossWeight.Text = String.Format("{0} kg", (playerGW.Value / 2.2046226218487757).ToString("F0"));
                     txtFuel.Text = String.Format("{0} kg", (playerGW.Value - playerZFW.Value).ToString("F0"));
-                    txtFlightTime.Text = String.Format("{0}", (txtArrTime.Text - txtDepTime.Text).ToString("F0"));
 
-                    Console.WriteLine("{0}", playerAircraftOnGround.Value);
+                    txtVerticalSpeed.Text = String.Format("{0}", (playerVerticalSpeed.Value).ToString("F0"));
+
+                    Console.WriteLine("{0}", playerVerticalSpeed.Value);
 
                     // Sim time
                     DateTime fsTime = new DateTime(DateTime.UtcNow.Year, 1, 1, playerSimTime.Value[0], playerSimTime.Value[1], playerSimTime.Value[2]);
