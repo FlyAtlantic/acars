@@ -205,7 +205,7 @@ namespace Acars
                     txtSquawk.Text = String.Format("{0}", (playersquawk.Value).ToString("X").PadLeft(4, '0'));
                     txtGrossWeight.Text = String.Format("{0} kg", (playerGW.Value / 2.2046226218487757).ToString("F0"));
                     txtFuel.Text = String.Format("{0} kg", (playerGW.Value - playerZFW.Value).ToString("F0"));
-                    txtFlightTime.Text = String.Format("{0}", (txtDepTime.Text - txtArrTime.Text).ToString("F0"));
+                    txtFlightTime.Text = String.Format("{0}", (txtArrTime.Text - txtDepTime.Text).ToString("F0"));
 
                     Console.WriteLine("{0}", playerAircraftOnGround.Value);
 
@@ -225,7 +225,6 @@ namespace Acars
 
                 }              
                 
-
                 // validar email.password
                 // preparar a query
                 string sqlCommand = "insert into acarslogs values (@altitude)";
