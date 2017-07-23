@@ -174,7 +174,7 @@ namespace Acars
                 txtAltitude.Text = String.Format("{0}", (playerAltitude.Value * 3.2808399).ToString("F0"));
                 txtHeading.Text = String.Format("{0}", (compass.Value).ToString("F0"));
                 txtGroundSpeed.Text = String.Format("{0}", (airspeed.Value / 128).ToString(""));
-                txtSquawk.Text = String.Format("{0}", (playersquawk.Value).ToString("X"));
+                txtSquawk.Text = String.Format("{0}", (playersquawk.Value).ToString("X").PadLeft(4, '0'));
                 txtGrossWeight.Text = String.Format("{0}", (playerGW.Value * 256).ToString(""));
 
                 MySqlConnection conn = new MySqlConnection(getConnectionString());
