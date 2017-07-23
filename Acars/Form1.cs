@@ -47,8 +47,12 @@ namespace Acars
         /// Zero Fuel Weight Pouds
         /// </summary>
         static private Offset<Double> playerZFW = new Offset<Double>(0x3BFC);
+        /// <summary>
+        /// Simulator Hour
+        /// </summary>
+        static private Offset<byte[]> playerSimTime = new Offset<byte[]>(0x0238, 10);
 
-
+        
         MySqlConnection conn;
         bool FlightAssignedDone = false;
         string email;
@@ -188,14 +192,15 @@ namespace Acars
                     txtSquawk.Text = String.Format("{0}", (playersquawk.Value).ToString("X").PadLeft(4, '0'));
                     txtGrossWeight.Text = String.Format("{0} kg", (playerGW.Value / 2.2046226218487757).ToString("F0"));
                     txtFuel.Text = String.Format("{0} kg", (playerGW.Value - playerZFW.Value).ToString("F0"));
-              
+                    txtSimHour.Text = String.Format("{0} kg", (playerSimTime.Value).ToString("F0"));
+
                     txtDeparture.Text = String.Format("{0}", (result2[0]));
                     txtArrival.Text = String.Format("{0}", (result2[1]));
                     txtAlternate.Text = String.Format("{0}", (result2[2]));
                     result2.Close();
 
                 }              
-             
+
 
                 Console.WriteLine( playerZFW.Value / 256);
                 Console.WriteLine(playerGW.Value);
