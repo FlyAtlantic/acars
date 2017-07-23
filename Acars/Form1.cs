@@ -192,7 +192,7 @@ namespace Acars
                     txtSquawk.Text = String.Format("{0}", (playersquawk.Value).ToString("X").PadLeft(4, '0'));
                     txtGrossWeight.Text = String.Format("{0} kg", (playerGW.Value / 2.2046226218487757).ToString("F0"));
                     txtFuel.Text = String.Format("{0} kg", (playerGW.Value - playerZFW.Value).ToString("F0"));
-                    txtSimHour.Text = String.Format("{0} kg", (playerSimTime.Value).ToString("F0"));
+                    txtSimHour.Text = String.Format("{0} kg", (playerSimTime.Value).ToString());
 
                     txtDeparture.Text = String.Format("{0}", (result2[0]));
                     txtArrival.Text = String.Format("{0}", (result2[1]));
