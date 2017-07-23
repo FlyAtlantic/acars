@@ -189,8 +189,8 @@ namespace Acars
                     txtGrossWeight.Text = String.Format("{0} kg", (playerGW.Value / 2.2046226218487757).ToString("F0"));
                     txtFuel.Text = String.Format("{0} kg", (playerGW.Value - playerZFW.Value).ToString("F0"));
               
-                    txtDeparture = String.Format("{0}", (result2[0]));
-                    txtArrival = String.Format("{0}", (result2[1]));
+                    txtDeparture.Text = String.Format("{0}", (result2[0]));
+                    txtArrival.Text = String.Format("{0}", (result2[1]));
                     result2.Close();
 
                 }              
