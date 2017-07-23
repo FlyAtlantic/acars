@@ -74,7 +74,7 @@ namespace Acars
         /// <summary>
         /// Vertical Speed
         /// </summary>
-        static private new Offset<double> playerVerticalSpeed = new Offset<double>(0x0842);
+        static private new Offset<int> playerVerticalSpeed = new Offset<int>(0x0842);
 
         MySqlConnection conn;
         bool FlightAssignedDone = false;
