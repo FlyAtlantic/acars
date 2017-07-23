@@ -40,10 +40,16 @@ namespace Acars
         /// </summary>
         static private Offset<short> playersquawk = new Offset<short>(0x0354);
         /// <summary>
-        /// Gross Weight
+        /// Gross Weight Pounds
         /// </summary>
         static private Offset<Double> playerGW = new Offset<Double>(0x30C0);
+        /// <summary>
+        /// Zero Fuel Weight Pouds
+        /// </summary>
+        static private Offset<Double> playerZFW = new Offset<Double>(0x3BFC);
 
+
+        MySqlConnection conn;
         bool FlightAssignedDone = false;
         string email;
         string password;
@@ -53,6 +59,8 @@ namespace Acars
         public Form1()
         {
             InitializeComponent();
+            conn = new MySqlConnection(getConnectionString());
+            conn.Open();
         }
 
         private string StringToSha1Hash(string input)
@@ -107,12 +115,8 @@ namespace Acars
 
         private bool DoLogin(string email, string password)
         {
-            MySqlConnection conn;
-
             try
             {
-                conn = new MySqlConnection(getConnectionString());
-                conn.Open();
 
                 // validar email.password
                 // preparar a query
@@ -171,19 +175,33 @@ namespace Acars
             string result = "";
             try
             {
-                txtAltitude.Text = String.Format("{0}", (playerAltitude.Value * 3.2808399).ToString("F0"));
-                txtHeading.Text = String.Format("{0}", (compass.Value).ToString("F0"));
-                txtGroundSpeed.Text = String.Format("{0}", (airspeed.Value / 128).ToString(""));
-                txtSquawk.Text = String.Format("{0}", (playersquawk.Value).ToString("X").PadLeft(4, '0'));
-                txtGrossWeight.Text = String.Format("{0}", (playerGW.Value).ToString("F2"));
+                
+                string sqlCommand1 = "SELECT `departure`, `destination`, `date_Assigned` FROM `pilotassignments` left join flights on pilotassignments.flightid = flights.idf left join utilizadores on pilotassignments.pilot = utilizadores.user_id WHERE utilizadores.user_email=@email";
+                MySqlCommand cmd = new MySqlCommand(sqlCommand1, conn);
+                cmd.Parameters.AddWithValue("@email", email);
+                MySqlDataReader result2 = cmd.ExecuteReader();
 
-                MySqlConnection conn = new MySqlConnection(getConnectionString());
-                conn.Open();
+                while (result2.Read())
+                {
+                    txtAltitude.Text = String.Format("{0} ft", (playerAltitude.Value * 3.2808399).ToString("F0"));
+                    txtHeading.Text = String.Format("{0} º", (compass.Value).ToString("F0"));
+                    txtGroundSpeed.Text = String.Format("{0} kt", (airspeed.Value / 128).ToString(""));
+                    txtSquawk.Text = String.Format("{0}", (playersquawk.Value).ToString("X").PadLeft(4, '0'));
+                    txtGrossWeight.Text = String.Format("{0} kg", (playerGW.Value / 2.2046226218487757).ToString("F0"));
+                    txtFuel.Text = String.Format("{0} kg", (playerGW.Value - playerZFW.Value).ToString("F0"));
+                    result2.Close();
+
+                }              
+             
+
+                Console.WriteLine( playerZFW.Value / 256);
+                Console.WriteLine(playerGW.Value);
+
 
                 // validar email.password
                 // preparar a query
                 string sqlCommand = "insert into acarslogs values (@altitude)";
-                MySqlCommand cmd = new MySqlCommand(sqlCommand, conn);
+
                 // preencher os parametros
                 cmd.Parameters.AddWithValue("@altitude", (playerAltitude.Value * 3.2808399).ToString("F2"));
                 // executar a query
