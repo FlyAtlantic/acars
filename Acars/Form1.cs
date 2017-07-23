@@ -213,7 +213,7 @@ namespace Acars
                     DateTime fsTime = new DateTime(DateTime.UtcNow.Year, 1, 1, playerSimTime.Value[0], playerSimTime.Value[1], playerSimTime.Value[2]);
                     txtSimHour.Text = fsTime.ToShortTimeString();
 
-                    if (playerAircraftOnGround.Value = "0" && txtDepTime.Text = "----") {
+                    if (playerAircraftOnGround.Value == 0 && txtDepTime.Text == "----") {
                         DateTime depTime = new DateTime(DateTime.UtcNow.Year, 1, 1, playerSimTime.Value[0], playerSimTime.Value[1], 0);
                         txtDepTime.Text = depTime.ToShortTimeString();
                     }
