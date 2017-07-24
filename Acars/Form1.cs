@@ -379,6 +379,7 @@ namespace Acars
                     {
                         txtLog.Text = String.Format("Gear Up at: {0} ft", (playerAltitude.Value * 3.2808399).ToString("F0"));
                     }
+                   
 
 
                     txtSquawk.Text = String.Format("{0}", (playersquawk.Value).ToString("X").PadLeft(4, '0'));
