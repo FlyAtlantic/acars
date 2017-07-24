@@ -74,7 +74,7 @@ namespace Acars
         /// <summary>
         /// Vertical Speed
         /// </summary>
-        static private new Offset<int> playerVerticalSpeed = new Offset<int>(0x0842);
+        static private new Offset<short> playerVerticalSpeed = new Offset<short>(0x0842);
 
         MySqlConnection conn;
         bool FlightAssignedDone = false;
@@ -293,9 +293,7 @@ namespace Acars
                 txtAltitude.Text = String.Format("{0} ft", (playerAltitude.Value * 3.2808399).ToString("F0"));
                 txtHeading.Text = String.Format("{0} º", (compass.Value).ToString("F0"));
                 txtGroundSpeed.Text = String.Format("{0} kt", (airspeed.Value / 128).ToString(""));
-                txtVerticalSpeed.Text = String.Format("{0}", (playerVerticalSpeed.Value).ToString("F0"));
-
-
+                txtVerticalSpeed.Text = String.Format("{0} ft/m", ((playerVerticalSpeed.Value * 3.28084) / -1).ToString("F0"));
                 // get current assigned fligth information
                 string sqlCommand1 = "SELECT `callsign`, `departure`, `destination`, `alternate` FROM `pilotassignments` left join flights on pilotassignments.flightid = flights.idf left join utilizadores on pilotassignments.pilot = utilizadores.user_id WHERE utilizadores.user_email=@email limit 1";
                 MySqlCommand cmd = new MySqlCommand(sqlCommand1, conn);
@@ -315,9 +313,6 @@ namespace Acars
                     txtDeparture.Text = String.Format("{0}", (result2[1]));
                     txtArrival.Text = String.Format("{0}", (result2[2]));
                     txtAlternate.Text = String.Format("{0}", (result2[3]));
-
-                    Console.WriteLine("{0}", playerAircraftOnGround.Value);
-                    Console.WriteLine("{0}", playerVerticalSpeed.Value);
 
                     // get sim time from FSUIPC, no date
                     DateTime fsTime = new DateTime(DateTime.UtcNow.Year, 1, 1, playerSimTime.Value[0], playerSimTime.Value[1], playerSimTime.Value[2]);
