@@ -96,6 +96,12 @@ namespace Acars
         /// </summary>
         static private new Offset<short> playerGear = new Offset<short>(0x0BE8, false);
 
+        static private new Offset<string> messageWrite = new Offset<string>(0x3380, 128);
+
+        static private new Offset<short> messageDuration = new Offset<short>(0x32FA);
+
+        
+
         MySqlConnection conn;
         bool FlightAssignedDone = false;
         string email;
@@ -202,9 +208,33 @@ namespace Acars
                     try
                     {
                         FSUIPCConnection.Open();
-                        fsuipcOpen = true;
+                        fsuipcOpen = true;                       
                     }
                     catch (Exception crap) { }
+
+                System.Text.Encoding encoding = System.Text.Encoding.UTF8; //or some other, but prefer some UTF is Unicode is used
+                
+                DateTime Zulu = new DateTime(DateTime.UtcNow.Year, 1, 1, 0, 0, 0);
+
+                
+                byte[] FsTime = playerSimTime.Value;
+                string FsTimeZulu = System.Text.Encoding.UTF8.GetString(FsTime);
+
+                string GetZulu = Zulu.ToShortTimeString();                
+
+                byte[] bytes = encoding.GetBytes(GetZulu);
+
+                
+
+                Console.WriteLine("Tempo Convertido Byte: {0}", bytes);
+                Console.WriteLine("Tempo: {0}", Zulu.ToShortTimeString()); ///00:00
+                Console.WriteLine("Hour: {0}", playerSimTime.Value);
+                Console.WriteLine("Hour Converter: {0}", FsTimeZulu);
+
+                string Message = "Welcome to FlyAtlantic Acars";
+                messageWrite.Value = Message;
+                messageDuration.Value = 10;
+                FSUIPCConnection.Process();
 
                 button1.Enabled = false;
                 button1.Text = "Flying...";
