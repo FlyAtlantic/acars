@@ -49,6 +49,8 @@
             this.lblSquawk = new System.Windows.Forms.Label();
             this.txtSquawk = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.lblVerticalSpeed = new System.Windows.Forms.Label();
+            this.txtVerticalSpeed = new System.Windows.Forms.TextBox();
             this.lblCallsign = new System.Windows.Forms.Label();
             this.txtCallsign = new System.Windows.Forms.TextBox();
             this.lblFlightTime = new System.Windows.Forms.Label();
@@ -74,8 +76,6 @@
             this.progressBar = new System.Windows.Forms.ProgressBar();
             this.lblProgressBar = new System.Windows.Forms.Label();
             this.chkAutoLogin = new System.Windows.Forms.CheckBox();
-            this.lblVerticalSpeed = new System.Windows.Forms.Label();
-            this.txtVerticalSpeed = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -297,6 +297,26 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "groupBox1";
             // 
+            // lblVerticalSpeed
+            // 
+            this.lblVerticalSpeed.AutoSize = true;
+            this.lblVerticalSpeed.Location = new System.Drawing.Point(88, 157);
+            this.lblVerticalSpeed.Name = "lblVerticalSpeed";
+            this.lblVerticalSpeed.Size = new System.Drawing.Size(26, 13);
+            this.lblVerticalSpeed.TabIndex = 42;
+            this.lblVerticalSpeed.Text = "V/S";
+            // 
+            // txtVerticalSpeed
+            // 
+            this.txtVerticalSpeed.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtVerticalSpeed.Enabled = false;
+            this.txtVerticalSpeed.Location = new System.Drawing.Point(74, 173);
+            this.txtVerticalSpeed.Name = "txtVerticalSpeed";
+            this.txtVerticalSpeed.Size = new System.Drawing.Size(55, 13);
+            this.txtVerticalSpeed.TabIndex = 43;
+            this.txtVerticalSpeed.Text = "----";
+            this.txtVerticalSpeed.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
             // lblCallsign
             // 
             this.lblCallsign.AutoSize = true;
@@ -314,7 +334,7 @@
             this.txtCallsign.Name = "txtCallsign";
             this.txtCallsign.Size = new System.Drawing.Size(55, 13);
             this.txtCallsign.TabIndex = 41;
-            this.txtCallsign.Text = "TSZ101";
+            this.txtCallsign.Text = "----";
             this.txtCallsign.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // lblFlightTime
@@ -396,6 +416,7 @@
             this.txtSimHour.TabIndex = 33;
             this.txtSimHour.Text = "01:45:00";
             this.txtSimHour.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txtSimHour.TextChanged += new System.EventHandler(this.txtSimHour_TextChanged);
             // 
             // lblFuelRemaining
             // 
@@ -544,26 +565,6 @@
             this.chkAutoLogin.Text = "Auto Login";
             this.chkAutoLogin.UseVisualStyleBackColor = true;
             this.chkAutoLogin.CheckedChanged += new System.EventHandler(this.chkAutoLogin_CheckedChanged);
-            // 
-            // lblVerticalSpeed
-            // 
-            this.lblVerticalSpeed.AutoSize = true;
-            this.lblVerticalSpeed.Location = new System.Drawing.Point(75, 157);
-            this.lblVerticalSpeed.Name = "lblVerticalSpeed";
-            this.lblVerticalSpeed.Size = new System.Drawing.Size(53, 13);
-            this.lblVerticalSpeed.TabIndex = 42;
-            this.lblVerticalSpeed.Text = "Dep Hour";
-            // 
-            // txtVerticalSpeed
-            // 
-            this.txtVerticalSpeed.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txtVerticalSpeed.Enabled = false;
-            this.txtVerticalSpeed.Location = new System.Drawing.Point(74, 173);
-            this.txtVerticalSpeed.Name = "txtVerticalSpeed";
-            this.txtVerticalSpeed.Size = new System.Drawing.Size(55, 13);
-            this.txtVerticalSpeed.TabIndex = 43;
-            this.txtVerticalSpeed.Text = "-500 ft/m";
-            this.txtVerticalSpeed.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // Form1
             // 

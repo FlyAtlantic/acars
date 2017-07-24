@@ -75,6 +75,26 @@ namespace Acars
         /// Vertical Speed
         /// </summary>
         static private new Offset<short> playerVerticalSpeed = new Offset<short>(0x0842);
+        /// <summary>
+        /// Stall Warning (0=no, 1=stall) com erros quando overspeed
+        /// </summary>
+        static private new Offset<short> playerStall = new Offset<short>(0x036C, false);
+        /// <summary>
+        /// OverSpeed Warning (0=no, 1=overspeed) com erros quando overspeed
+        /// </summary>
+        static private new Offset<short> playerOverSpeed = new Offset<short>(0x036D, false);
+        /// <summary>
+        /// 	Slew mode (indicator and control), 0=off, 1=on. (See 05DE also).
+        /// </summary>
+        static private new Offset<short> playerSlew = new Offset<short>(0x05DC, false);
+        /// <summary>
+        /// 	Parking brake: 0=off, 32767=on
+        /// </summary>
+        static private new Offset<short> playerParkingBrake = new Offset<short>(0x0BC8, false);
+        /// <summary>
+        /// 		Gear control: 0=Up, 16383=Down
+        /// </summary>
+        static private new Offset<short> playerGear = new Offset<short>(0x0BE8, false);
 
         MySqlConnection conn;
         bool FlightAssignedDone = false;
@@ -294,8 +314,9 @@ namespace Acars
                 txtHeading.Text = String.Format("{0} º", (compass.Value).ToString("F0"));
                 txtGroundSpeed.Text = String.Format("{0} kt", (airspeed.Value / 128).ToString(""));
                 txtVerticalSpeed.Text = String.Format("{0} ft/m", ((playerVerticalSpeed.Value * 3.28084) / -1).ToString("F0"));
+
                 // get current assigned fligth information
-                string sqlCommand1 = "SELECT `callsign`, `departure`, `destination`, `alternate` FROM `pilotassignments` left join flights on pilotassignments.flightid = flights.idf left join utilizadores on pilotassignments.pilot = utilizadores.user_id WHERE utilizadores.user_email=@email limit 1";
+                string sqlCommand1 = "SELECT `flightnumber`, `departure`, `destination`, `alternate` FROM `pilotassignments` left join flights on pilotassignments.flightid = flights.idf left join utilizadores on pilotassignments.pilot = utilizadores.user_id WHERE utilizadores.user_email=@email limit 1";
                 MySqlCommand cmd = new MySqlCommand(sqlCommand1, conn);
                 cmd.Parameters.AddWithValue("@email", email);
                 MySqlDataReader result2 = cmd.ExecuteReader();
@@ -305,10 +326,16 @@ namespace Acars
                 {
                     // aircraft wieghts
                     txtGrossWeight.Text = String.Format("{0} kg", (playerGW.Value / 2.2046226218487757).ToString("F0"));
-                    txtFuel.Text = String.Format("{0} kg", (playerGW.Value - playerZFW.Value).ToString("F0"));                  
+                    txtFuel.Text = String.Format("{0} kg", (playerGW.Value - playerZFW.Value).ToString("F0"));
 
                     // aircraft configuration
-                    txtSquawk.Text = String.Format("{0}", (playersquawk.Value).ToString("X").PadLeft(4, '0'));                                       
+                    Console.WriteLine("Stall: {0}", playerStall.Value);
+                    Console.WriteLine("OverSpeed: {0}", playerOverSpeed.Value);
+                    Console.WriteLine("Slew: {0}", playerSlew.Value);
+                    Console.WriteLine("ParkingBrake: {0}", playerParkingBrake.Value);
+                    Console.WriteLine("Gear: {0}", playerGear.Value);
+
+                    txtSquawk.Text = String.Format("{0}", (playersquawk.Value).ToString("X").PadLeft(4, '0'));
                     txtCallsign.Text = String.Format("{0}", (result2[0]));
                     txtDeparture.Text = String.Format("{0}", (result2[1]));
                     txtArrival.Text = String.Format("{0}", (result2[2]));
@@ -380,6 +407,11 @@ namespace Acars
         {
             Properties.Settings.Default.autologin = chkAutoLogin.Checked;
             Properties.Settings.Default.Save();
+        }
+
+        private void txtSimHour_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
