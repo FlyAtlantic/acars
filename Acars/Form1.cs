@@ -117,6 +117,7 @@ namespace Acars
 
         // FSUIPC information
         bool onGround;
+        bool Gear;
 
         public Form1()
         {
@@ -310,6 +311,7 @@ namespace Acars
 
                 // process FSUIPC data
                 onGround = (playerAircraftOnGround.Value == 0) ? false : true;
+                Gear = (playerGear.Value == 0) ? false : true;
                 txtAltitude.Text = String.Format("{0} ft", (playerAltitude.Value * 3.2808399).ToString("F0"));
                 txtHeading.Text = String.Format("{0} º", (compass.Value).ToString("F0"));
                 txtGroundSpeed.Text = String.Format("{0} kt", (airspeed.Value / 128).ToString(""));
@@ -333,10 +335,17 @@ namespace Acars
                     Console.WriteLine("OverSpeed: {0}", playerOverSpeed.Value);
                     Console.WriteLine("Slew: {0}", playerSlew.Value);
                     Console.WriteLine("ParkingBrake: {0}", playerParkingBrake.Value);
-                    Console.WriteLine("Gear: {0}", playerGear.Value);
+                    Console.WriteLine("Gear: {0}", playerGear.Value.ToString("F0"));
 
-                    //Tree Text
-                    treeLog.Text = String.Format("Gear: {0}", (playerGear.Value));
+                    //Log Text
+                    if (Gear) {
+                        txtLog.Text = String.Format("Gear Down at: {0} ft", (playerAltitude.Value));
+                    }
+                    if (!Gear)
+                    {
+                        txtLog.Text = String.Format("Gear Up at: {0} ft", (playerAltitude.Value));
+                    }
+
 
                     txtSquawk.Text = String.Format("{0}", (playersquawk.Value).ToString("X").PadLeft(4, '0'));
                     txtCallsign.Text = String.Format("{0}", (result2[0]));

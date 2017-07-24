@@ -77,7 +77,7 @@
             this.lblProgressBar = new System.Windows.Forms.Label();
             this.chkAutoLogin = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.treeLog = new System.Windows.Forms.TreeView();
+            this.txtLog = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -357,7 +357,7 @@
             this.txtFlightTime.Name = "txtFlightTime";
             this.txtFlightTime.Size = new System.Drawing.Size(55, 13);
             this.txtFlightTime.TabIndex = 39;
-            this.txtFlightTime.Text = "01:45";
+            this.txtFlightTime.Text = "----";
             this.txtFlightTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // lblArrTime
@@ -377,7 +377,7 @@
             this.txtArrTime.Name = "txtArrTime";
             this.txtArrTime.Size = new System.Drawing.Size(55, 13);
             this.txtArrTime.TabIndex = 37;
-            this.txtArrTime.Text = "01:45";
+            this.txtArrTime.Text = "----";
             this.txtArrTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // lblDepTime
@@ -417,7 +417,7 @@
             this.txtSimHour.Name = "txtSimHour";
             this.txtSimHour.Size = new System.Drawing.Size(55, 13);
             this.txtSimHour.TabIndex = 33;
-            this.txtSimHour.Text = "01:45:00";
+            this.txtSimHour.Text = "----";
             this.txtSimHour.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.txtSimHour.TextChanged += new System.EventHandler(this.txtSimHour_TextChanged);
             // 
@@ -571,7 +571,7 @@
             // 
             // groupBox2
             // 
-            this.groupBox2.Controls.Add(this.treeLog);
+            this.groupBox2.Controls.Add(this.txtLog);
             this.groupBox2.Location = new System.Drawing.Point(365, 59);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(374, 224);
@@ -579,12 +579,12 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "groupBox2";
             // 
-            // treeLog
+            // txtLog
             // 
-            this.treeLog.Location = new System.Drawing.Point(6, 19);
-            this.treeLog.Name = "treeLog";
-            this.treeLog.Size = new System.Drawing.Size(362, 199);
-            this.treeLog.TabIndex = 26;
+            this.txtLog.Location = new System.Drawing.Point(13, 25);
+            this.txtLog.Name = "txtLog";
+            this.txtLog.Size = new System.Drawing.Size(350, 20);
+            this.txtLog.TabIndex = 0;
             // 
             // Form1
             // 
@@ -610,6 +610,7 @@
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -665,7 +666,7 @@
         private System.Windows.Forms.Label lblVerticalSpeed;
         private System.Windows.Forms.TextBox txtVerticalSpeed;
         private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.TreeView treeLog;
+        private System.Windows.Forms.TextBox txtLog;
     }
 }
 
