@@ -76,7 +76,10 @@
             this.progressBar = new System.Windows.Forms.ProgressBar();
             this.lblProgressBar = new System.Windows.Forms.Label();
             this.chkAutoLogin = new System.Windows.Forms.CheckBox();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.treeLog = new System.Windows.Forms.TreeView();
             this.groupBox1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // txtEmail
@@ -566,11 +569,29 @@
             this.chkAutoLogin.UseVisualStyleBackColor = true;
             this.chkAutoLogin.CheckedChanged += new System.EventHandler(this.chkAutoLogin_CheckedChanged);
             // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.treeLog);
+            this.groupBox2.Location = new System.Drawing.Point(365, 59);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(374, 224);
+            this.groupBox2.TabIndex = 25;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "groupBox2";
+            // 
+            // treeLog
+            // 
+            this.treeLog.Location = new System.Drawing.Point(6, 19);
+            this.treeLog.Name = "treeLog";
+            this.treeLog.Size = new System.Drawing.Size(362, 199);
+            this.treeLog.TabIndex = 26;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(345, 534);
+            this.ClientSize = new System.Drawing.Size(765, 534);
+            this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.chkAutoLogin);
             this.Controls.Add(this.lblProgressBar);
             this.Controls.Add(this.progressBar);
@@ -588,6 +609,7 @@
             this.Load += new System.EventHandler(this.Form1_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -642,6 +664,8 @@
         private System.Windows.Forms.CheckBox chkAutoLogin;
         private System.Windows.Forms.Label lblVerticalSpeed;
         private System.Windows.Forms.TextBox txtVerticalSpeed;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.TreeView treeLog;
     }
 }
 

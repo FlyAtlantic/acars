@@ -335,6 +335,9 @@ namespace Acars
                     Console.WriteLine("ParkingBrake: {0}", playerParkingBrake.Value);
                     Console.WriteLine("Gear: {0}", playerGear.Value);
 
+                    //Tree Text
+                    treeLog.Text = String.Format("Gear: {0}", (playerGear.Value));
+
                     txtSquawk.Text = String.Format("{0}", (playersquawk.Value).ToString("X").PadLeft(4, '0'));
                     txtCallsign.Text = String.Format("{0}", (result2[0]));
                     txtDeparture.Text = String.Format("{0}", (result2[1]));
