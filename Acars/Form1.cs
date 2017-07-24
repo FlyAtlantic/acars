@@ -331,19 +331,23 @@ namespace Acars
                     txtFuel.Text = String.Format("{0} kg", (playerGW.Value - playerZFW.Value).ToString("F0"));
 
                     // aircraft configuration
+                    Console.WriteLine(FSUIPCConnection.FlightSimVersionConnected.ToString());
                     Console.WriteLine("Stall: {0}", playerStall.Value);
                     Console.WriteLine("OverSpeed: {0}", playerOverSpeed.Value);
                     Console.WriteLine("Slew: {0}", playerSlew.Value);
                     Console.WriteLine("ParkingBrake: {0}", playerParkingBrake.Value);
                     Console.WriteLine("Gear: {0}", playerGear.Value.ToString("F0"));
 
+                   
+
+
                     //Log Text
                     if (Gear) {
-                        txtLog.Text = String.Format("Gear Down at: {0} ft", (playerAltitude.Value));
+                        txtLog.Text = String.Format("Gear Down at: {0} ft", (playerAltitude.Value * 3.2808399).ToString("F0"));
                     }
                     if (!Gear)
                     {
-                        txtLog.Text = String.Format("Gear Up at: {0} ft", (playerAltitude.Value));
+                        txtLog.Text = String.Format("Gear Up at: {0} ft", (playerAltitude.Value * 3.2808399).ToString("F0"));
                     }
 
 
@@ -425,5 +429,6 @@ namespace Acars
         {
 
         }
+
     }
 }
