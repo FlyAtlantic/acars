@@ -113,6 +113,19 @@ namespace Acars
         ///Landing Lights
         /// </summary>
         static private new Offset<short> playerLandingLights = new Offset<short>(0x028C, false);
+        /// </summary>
+        ///  /// Simulator Hours
+        /// </summary>
+        static private Offset<byte[]> playerHourSim = new Offset<byte[]>(0x023B, 4);
+        /// </summary>
+        ///  /// Simulator Minute
+        /// </summary>
+        static private Offset<byte[]> playerMinuteSim = new Offset<byte[]>(0x023C, 4);
+
+        /// </summary>
+        ///  /// Simulator Year
+        /// </summary>
+        static private Offset<byte[]> playerYearSim = new Offset<byte[]>(0x0240, 4);
 
 
         MySqlConnection conn;
@@ -230,25 +243,19 @@ namespace Acars
                         fsuipcOpen = true;                       
                     }
                     catch (Exception crap) { }
+                //insere hora zulu no Simulador
+                int Hour = DateTime.UtcNow.Hour;
+                int Minute = DateTime.UtcNow.Minute;
+                int Year = DateTime.UtcNow.Year;
 
-                System.Text.Encoding encoding = System.Text.Encoding.UTF8; //or some other, but prefer some UTF is Unicode is used
-                
-                DateTime Zulu = new DateTime(DateTime.UtcNow.Year, 1, 1, 0, 0, 0);
+                byte[] arrProp = BitConverter.GetBytes(Hour);
+                byte[] arrProp1 = BitConverter.GetBytes(Minute);
+                byte[] arrProp2 = BitConverter.GetBytes(Year);
 
-
-                byte[] FsTime = playerSimTime.Value;
-                string FsTimeZulu = System.Text.Encoding.UTF8.GetString(FsTime);
-
-                string GetZulu = Zulu.ToShortTimeString();    
-
-                byte[] bytes = encoding.GetBytes(GetZulu);
-
-                
-
-                Console.WriteLine("Tempo Convertido Byte: {0}", bytes);
-                Console.WriteLine("Tempo: {0}", Zulu.ToShortTimeString()); ///00:00
-                Console.WriteLine("Hour: {0}", playerSimTime.Value);
-                Console.WriteLine("Hour Converter: {0}", FsTimeZulu);
+                playerHourSim.Value = arrProp;
+                playerMinuteSim.Value = arrProp1;
+                playerYearSim.Value = arrProp2;
+                FSUIPCConnection.Process();
 
                 string Message = "Welcome to FlyAtlantic Acars";
                 messageWrite.Value = Message;
@@ -401,7 +408,6 @@ namespace Acars
                         messageDuration.Value = 5;
                         FSUIPCConnection.Process();
                     }
-                    
 
                     // aircraft wieghts
                     txtGrossWeight.Text = String.Format("{0} kg", (playerGW.Value / 2.2046226218487757).ToString("F0"));
