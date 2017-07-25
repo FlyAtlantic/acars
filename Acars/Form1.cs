@@ -440,7 +440,8 @@ namespace Acars
                     }
 
                     //Log Text
-                    txtLog.Text = String.Format("Simulator: {0} \r\n", FSUIPCConnection.FlightSimVersionConnected);
+                    txtLog.Text = String.Format("{0:dd-MM-yyyy HH:mm:ss}\r\n", DateTime.UtcNow);
+                    txtLog.Text = txtLog.Text + String.Format("Simulator: {0} \r\n", FSUIPCConnection.FlightSimVersionConnected);
                     if (Gear) {
                         txtLog.Text = txtLog.Text + String.Format("Gear Down at: {0} ft\r\n", (playerAltitude.Value * 3.2808399).ToString("F0"));
                     }
@@ -508,7 +509,17 @@ namespace Acars
                     if (onGround && arrivalTime != null)
                     {
                         txtLog.Text = txtLog.Text + String.Format("TouchDown: {0} ft/min\r\n", (playerVerticalSpeed.Value).ToString("F0"));
-                    }                   
+                    }
+
+                    // Compose a string that consists of three lines.
+                    string lines = txtLog.Text;
+
+                    // Write the string to a file.
+                    using (System.IO.StreamWriter file =
+                    new System.IO.StreamWriter(@"C:\Log.txt", true))
+                    {
+                        file.WriteLine(txtLog.Text);
+                    }
 
 
                     txtSquawk.Text = String.Format("{0}", (playersquawk.Value).ToString("X").PadLeft(4, '0'));
@@ -519,11 +530,12 @@ namespace Acars
 
                     // get sim time from FSUIPC, no date
                     DateTime fsTime = new DateTime(DateTime.UtcNow.Year, 1, 1, playerSimTime.Value[0], playerSimTime.Value[1], playerSimTime.Value[2]);
-                    txtSimHour.Text = fsTime.ToShortTimeString();
+                    txtSimHour.Text = fsTime.ToShortTimeString();                 
 
                     // only one assigned flight at a time is allowed
                     break;
                 }
+                
                 // clean up
                 result2.Close();
 
