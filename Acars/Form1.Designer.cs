@@ -38,7 +38,6 @@
             this.lblFlightInformation = new System.Windows.Forms.Label();
             this.txtFlightInformation = new System.Windows.Forms.TextBox();
             this.flightacars = new System.Windows.Forms.Timer(this.components);
-            this.lblFlightStatus = new System.Windows.Forms.Label();
             this.lblAltitude = new System.Windows.Forms.Label();
             this.txtAltitude = new System.Windows.Forms.TextBox();
             this.lblHeading = new System.Windows.Forms.Label();
@@ -79,20 +78,26 @@
             this.chkAutoLogin = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.txtLog = new System.Windows.Forms.TextBox();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            this.groupBox3.SuspendLayout();
+            this.groupBox4.SuspendLayout();
+            this.groupBox5.SuspendLayout();
             this.SuspendLayout();
             // 
             // txtEmail
             // 
-            this.txtEmail.Location = new System.Drawing.Point(105, 484);
+            this.txtEmail.Location = new System.Drawing.Point(104, 523);
             this.txtEmail.Name = "txtEmail";
             this.txtEmail.Size = new System.Drawing.Size(143, 20);
             this.txtEmail.TabIndex = 0;
             // 
             // txtPassword
             // 
-            this.txtPassword.Location = new System.Drawing.Point(105, 530);
+            this.txtPassword.Location = new System.Drawing.Point(104, 569);
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.PasswordChar = '*';
             this.txtPassword.Size = new System.Drawing.Size(143, 20);
@@ -101,7 +106,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(150, 514);
+            this.label2.Location = new System.Drawing.Point(149, 553);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(53, 13);
             this.label2.TabIndex = 3;
@@ -109,7 +114,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(119, 566);
+            this.button1.Location = new System.Drawing.Point(118, 605);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(114, 23);
             this.button1.TabIndex = 4;
@@ -120,7 +125,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(160, 468);
+            this.label1.Location = new System.Drawing.Point(159, 507);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(32, 13);
             this.label1.TabIndex = 5;
@@ -129,7 +134,7 @@
             // lblFlightInformation
             // 
             this.lblFlightInformation.AutoSize = true;
-            this.lblFlightInformation.Location = new System.Drawing.Point(133, 403);
+            this.lblFlightInformation.Location = new System.Drawing.Point(132, 442);
             this.lblFlightInformation.Name = "lblFlightInformation";
             this.lblFlightInformation.Size = new System.Drawing.Size(87, 13);
             this.lblFlightInformation.TabIndex = 6;
@@ -138,7 +143,7 @@
             // txtFlightInformation
             // 
             this.txtFlightInformation.Enabled = false;
-            this.txtFlightInformation.Location = new System.Drawing.Point(5, 431);
+            this.txtFlightInformation.Location = new System.Drawing.Point(4, 470);
             this.txtFlightInformation.Name = "txtFlightInformation";
             this.txtFlightInformation.Size = new System.Drawing.Size(343, 20);
             this.txtFlightInformation.TabIndex = 7;
@@ -148,15 +153,6 @@
             // 
             this.flightacars.Interval = 1000;
             this.flightacars.Tick += new System.EventHandler(this.flightacars_Tick);
-            // 
-            // lblFlightStatus
-            // 
-            this.lblFlightStatus.AutoSize = true;
-            this.lblFlightStatus.Location = new System.Drawing.Point(144, 113);
-            this.lblFlightStatus.Name = "lblFlightStatus";
-            this.lblFlightStatus.Size = new System.Drawing.Size(65, 13);
-            this.lblFlightStatus.TabIndex = 8;
-            this.lblFlightStatus.Text = "Flight Status";
             // 
             // lblAltitude
             // 
@@ -201,7 +197,7 @@
             // lblGroundSpeed
             // 
             this.lblGroundSpeed.AutoSize = true;
-            this.lblGroundSpeed.Location = new System.Drawing.Point(140, 26);
+            this.lblGroundSpeed.Location = new System.Drawing.Point(148, 26);
             this.lblGroundSpeed.Name = "lblGroundSpeed";
             this.lblGroundSpeed.Size = new System.Drawing.Size(27, 13);
             this.lblGroundSpeed.TabIndex = 14;
@@ -211,7 +207,7 @@
             // 
             this.txtGroundSpeed.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtGroundSpeed.Enabled = false;
-            this.txtGroundSpeed.Location = new System.Drawing.Point(129, 42);
+            this.txtGroundSpeed.Location = new System.Drawing.Point(137, 42);
             this.txtGroundSpeed.Name = "txtGroundSpeed";
             this.txtGroundSpeed.Size = new System.Drawing.Size(49, 13);
             this.txtGroundSpeed.TabIndex = 15;
@@ -221,7 +217,7 @@
             // lblStatus
             // 
             this.lblStatus.AutoSize = true;
-            this.lblStatus.Location = new System.Drawing.Point(205, 26);
+            this.lblStatus.Location = new System.Drawing.Point(281, 26);
             this.lblStatus.Name = "lblStatus";
             this.lblStatus.Size = new System.Drawing.Size(37, 13);
             this.lblStatus.TabIndex = 16;
@@ -231,7 +227,7 @@
             // 
             this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBox1.Enabled = false;
-            this.textBox1.Location = new System.Drawing.Point(184, 42);
+            this.textBox1.Location = new System.Drawing.Point(260, 42);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(78, 13);
             this.textBox1.TabIndex = 17;
@@ -241,17 +237,17 @@
             // lblSquawk
             // 
             this.lblSquawk.AutoSize = true;
-            this.lblSquawk.Location = new System.Drawing.Point(263, 26);
+            this.lblSquawk.Location = new System.Drawing.Point(149, 25);
             this.lblSquawk.Name = "lblSquawk";
-            this.lblSquawk.Size = new System.Drawing.Size(71, 13);
+            this.lblSquawk.Size = new System.Drawing.Size(46, 13);
             this.lblSquawk.TabIndex = 18;
-            this.lblSquawk.Text = "Squawk Num";
+            this.lblSquawk.Text = "Squawk";
             // 
             // txtSquawk
             // 
             this.txtSquawk.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtSquawk.Enabled = false;
-            this.txtSquawk.Location = new System.Drawing.Point(273, 42);
+            this.txtSquawk.Location = new System.Drawing.Point(147, 41);
             this.txtSquawk.Name = "txtSquawk";
             this.txtSquawk.Size = new System.Drawing.Size(51, 13);
             this.txtSquawk.TabIndex = 19;
@@ -262,41 +258,15 @@
             // 
             this.groupBox1.Controls.Add(this.lblVerticalSpeed);
             this.groupBox1.Controls.Add(this.txtVerticalSpeed);
-            this.groupBox1.Controls.Add(this.lblCallsign);
-            this.groupBox1.Controls.Add(this.txtCallsign);
-            this.groupBox1.Controls.Add(this.lblFlightTime);
-            this.groupBox1.Controls.Add(this.txtFlightTime);
-            this.groupBox1.Controls.Add(this.lblArrTime);
-            this.groupBox1.Controls.Add(this.txtArrTime);
-            this.groupBox1.Controls.Add(this.lblDepTime);
-            this.groupBox1.Controls.Add(this.txtDepTime);
-            this.groupBox1.Controls.Add(this.lblSimulatorHour);
-            this.groupBox1.Controls.Add(this.txtSimHour);
-            this.groupBox1.Controls.Add(this.lblFuelRemaining);
-            this.groupBox1.Controls.Add(this.txtFuelRemaining);
-            this.groupBox1.Controls.Add(this.lblArrival);
-            this.groupBox1.Controls.Add(this.txtAlternate);
-            this.groupBox1.Controls.Add(this.lblGrossWeight);
-            this.groupBox1.Controls.Add(this.lblAlternate);
-            this.groupBox1.Controls.Add(this.txtGrossWeight);
-            this.groupBox1.Controls.Add(this.txtArrival);
-            this.groupBox1.Controls.Add(this.lblFuel);
-            this.groupBox1.Controls.Add(this.txtFuel);
-            this.groupBox1.Controls.Add(this.txtDeparture);
-            this.groupBox1.Controls.Add(this.lblDeparture);
-            this.groupBox1.Controls.Add(this.lblStatus);
-            this.groupBox1.Controls.Add(this.txtSquawk);
             this.groupBox1.Controls.Add(this.lblAltitude);
-            this.groupBox1.Controls.Add(this.lblSquawk);
             this.groupBox1.Controls.Add(this.txtAltitude);
-            this.groupBox1.Controls.Add(this.textBox1);
             this.groupBox1.Controls.Add(this.lblHeading);
             this.groupBox1.Controls.Add(this.txtHeading);
             this.groupBox1.Controls.Add(this.txtGroundSpeed);
             this.groupBox1.Controls.Add(this.lblGroundSpeed);
-            this.groupBox1.Location = new System.Drawing.Point(5, 129);
+            this.groupBox1.Location = new System.Drawing.Point(12, 319);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(347, 207);
+            this.groupBox1.Size = new System.Drawing.Size(347, 67);
             this.groupBox1.TabIndex = 20;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Flight Status";
@@ -304,7 +274,7 @@
             // lblVerticalSpeed
             // 
             this.lblVerticalSpeed.AutoSize = true;
-            this.lblVerticalSpeed.Location = new System.Drawing.Point(88, 157);
+            this.lblVerticalSpeed.Location = new System.Drawing.Point(209, 26);
             this.lblVerticalSpeed.Name = "lblVerticalSpeed";
             this.lblVerticalSpeed.Size = new System.Drawing.Size(26, 13);
             this.lblVerticalSpeed.TabIndex = 42;
@@ -314,7 +284,7 @@
             // 
             this.txtVerticalSpeed.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtVerticalSpeed.Enabled = false;
-            this.txtVerticalSpeed.Location = new System.Drawing.Point(74, 173);
+            this.txtVerticalSpeed.Location = new System.Drawing.Point(195, 42);
             this.txtVerticalSpeed.Name = "txtVerticalSpeed";
             this.txtVerticalSpeed.Size = new System.Drawing.Size(55, 13);
             this.txtVerticalSpeed.TabIndex = 43;
@@ -324,7 +294,7 @@
             // lblCallsign
             // 
             this.lblCallsign.AutoSize = true;
-            this.lblCallsign.Location = new System.Drawing.Point(21, 157);
+            this.lblCallsign.Location = new System.Drawing.Point(14, 26);
             this.lblCallsign.Name = "lblCallsign";
             this.lblCallsign.Size = new System.Drawing.Size(43, 13);
             this.lblCallsign.TabIndex = 40;
@@ -334,7 +304,7 @@
             // 
             this.txtCallsign.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtCallsign.Enabled = false;
-            this.txtCallsign.Location = new System.Drawing.Point(12, 173);
+            this.txtCallsign.Location = new System.Drawing.Point(8, 42);
             this.txtCallsign.Name = "txtCallsign";
             this.txtCallsign.Size = new System.Drawing.Size(55, 13);
             this.txtCallsign.TabIndex = 41;
@@ -344,7 +314,7 @@
             // lblFlightTime
             // 
             this.lblFlightTime.AutoSize = true;
-            this.lblFlightTime.Location = new System.Drawing.Point(274, 116);
+            this.lblFlightTime.Location = new System.Drawing.Point(215, 27);
             this.lblFlightTime.Name = "lblFlightTime";
             this.lblFlightTime.Size = new System.Drawing.Size(58, 13);
             this.lblFlightTime.TabIndex = 38;
@@ -354,7 +324,7 @@
             // 
             this.txtFlightTime.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtFlightTime.Enabled = false;
-            this.txtFlightTime.Location = new System.Drawing.Point(272, 132);
+            this.txtFlightTime.Location = new System.Drawing.Point(213, 43);
             this.txtFlightTime.Name = "txtFlightTime";
             this.txtFlightTime.Size = new System.Drawing.Size(55, 13);
             this.txtFlightTime.TabIndex = 39;
@@ -364,7 +334,7 @@
             // lblArrTime
             // 
             this.lblArrTime.AutoSize = true;
-            this.lblArrTime.Location = new System.Drawing.Point(209, 116);
+            this.lblArrTime.Location = new System.Drawing.Point(144, 27);
             this.lblArrTime.Name = "lblArrTime";
             this.lblArrTime.Size = new System.Drawing.Size(46, 13);
             this.lblArrTime.TabIndex = 36;
@@ -374,7 +344,7 @@
             // 
             this.txtArrTime.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtArrTime.Enabled = false;
-            this.txtArrTime.Location = new System.Drawing.Point(207, 132);
+            this.txtArrTime.Location = new System.Drawing.Point(142, 43);
             this.txtArrTime.Name = "txtArrTime";
             this.txtArrTime.Size = new System.Drawing.Size(55, 13);
             this.txtArrTime.TabIndex = 37;
@@ -384,7 +354,7 @@
             // lblDepTime
             // 
             this.lblDepTime.AutoSize = true;
-            this.lblDepTime.Location = new System.Drawing.Point(148, 116);
+            this.lblDepTime.Location = new System.Drawing.Point(14, 27);
             this.lblDepTime.Name = "lblDepTime";
             this.lblDepTime.Size = new System.Drawing.Size(53, 13);
             this.lblDepTime.TabIndex = 34;
@@ -394,7 +364,7 @@
             // 
             this.txtDepTime.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtDepTime.Enabled = false;
-            this.txtDepTime.Location = new System.Drawing.Point(146, 132);
+            this.txtDepTime.Location = new System.Drawing.Point(12, 43);
             this.txtDepTime.Name = "txtDepTime";
             this.txtDepTime.Size = new System.Drawing.Size(55, 13);
             this.txtDepTime.TabIndex = 35;
@@ -404,7 +374,7 @@
             // lblSimulatorHour
             // 
             this.lblSimulatorHour.AutoSize = true;
-            this.lblSimulatorHour.Location = new System.Drawing.Point(76, 116);
+            this.lblSimulatorHour.Location = new System.Drawing.Point(215, 25);
             this.lblSimulatorHour.Name = "lblSimulatorHour";
             this.lblSimulatorHour.Size = new System.Drawing.Size(50, 13);
             this.lblSimulatorHour.TabIndex = 32;
@@ -414,7 +384,7 @@
             // 
             this.txtSimHour.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtSimHour.Enabled = false;
-            this.txtSimHour.Location = new System.Drawing.Point(74, 132);
+            this.txtSimHour.Location = new System.Drawing.Point(213, 41);
             this.txtSimHour.Name = "txtSimHour";
             this.txtSimHour.Size = new System.Drawing.Size(55, 13);
             this.txtSimHour.TabIndex = 33;
@@ -425,7 +395,7 @@
             // lblFuelRemaining
             // 
             this.lblFuelRemaining.AutoSize = true;
-            this.lblFuelRemaining.Location = new System.Drawing.Point(25, 116);
+            this.lblFuelRemaining.Location = new System.Drawing.Point(90, 27);
             this.lblFuelRemaining.Name = "lblFuelRemaining";
             this.lblFuelRemaining.Size = new System.Drawing.Size(28, 13);
             this.lblFuelRemaining.TabIndex = 30;
@@ -435,7 +405,7 @@
             // 
             this.txtFuelRemaining.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtFuelRemaining.Enabled = false;
-            this.txtFuelRemaining.Location = new System.Drawing.Point(12, 132);
+            this.txtFuelRemaining.Location = new System.Drawing.Point(77, 43);
             this.txtFuelRemaining.Name = "txtFuelRemaining";
             this.txtFuelRemaining.Size = new System.Drawing.Size(55, 13);
             this.txtFuelRemaining.TabIndex = 31;
@@ -445,7 +415,7 @@
             // lblArrival
             // 
             this.lblArrival.AutoSize = true;
-            this.lblArrival.Location = new System.Drawing.Point(215, 71);
+            this.lblArrival.Location = new System.Drawing.Point(148, 26);
             this.lblArrival.Name = "lblArrival";
             this.lblArrival.Size = new System.Drawing.Size(36, 13);
             this.lblArrival.TabIndex = 26;
@@ -455,7 +425,7 @@
             // 
             this.txtAlternate.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtAlternate.Enabled = false;
-            this.txtAlternate.Location = new System.Drawing.Point(273, 87);
+            this.txtAlternate.Location = new System.Drawing.Point(202, 42);
             this.txtAlternate.Name = "txtAlternate";
             this.txtAlternate.Size = new System.Drawing.Size(51, 13);
             this.txtAlternate.TabIndex = 29;
@@ -465,7 +435,7 @@
             // lblGrossWeight
             // 
             this.lblGrossWeight.AutoSize = true;
-            this.lblGrossWeight.Location = new System.Drawing.Point(26, 71);
+            this.lblGrossWeight.Location = new System.Drawing.Point(21, 25);
             this.lblGrossWeight.Name = "lblGrossWeight";
             this.lblGrossWeight.Size = new System.Drawing.Size(26, 13);
             this.lblGrossWeight.TabIndex = 20;
@@ -474,7 +444,7 @@
             // lblAlternate
             // 
             this.lblAlternate.AutoSize = true;
-            this.lblAlternate.Location = new System.Drawing.Point(275, 71);
+            this.lblAlternate.Location = new System.Drawing.Point(203, 26);
             this.lblAlternate.Name = "lblAlternate";
             this.lblAlternate.Size = new System.Drawing.Size(49, 13);
             this.lblAlternate.TabIndex = 28;
@@ -484,7 +454,7 @@
             // 
             this.txtGrossWeight.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtGrossWeight.Enabled = false;
-            this.txtGrossWeight.Location = new System.Drawing.Point(12, 87);
+            this.txtGrossWeight.Location = new System.Drawing.Point(7, 41);
             this.txtGrossWeight.Name = "txtGrossWeight";
             this.txtGrossWeight.Size = new System.Drawing.Size(55, 13);
             this.txtGrossWeight.TabIndex = 21;
@@ -495,7 +465,7 @@
             // 
             this.txtArrival.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtArrival.Enabled = false;
-            this.txtArrival.Location = new System.Drawing.Point(212, 87);
+            this.txtArrival.Location = new System.Drawing.Point(145, 42);
             this.txtArrival.Name = "txtArrival";
             this.txtArrival.Size = new System.Drawing.Size(42, 13);
             this.txtArrival.TabIndex = 27;
@@ -505,7 +475,7 @@
             // lblFuel
             // 
             this.lblFuel.AutoSize = true;
-            this.lblFuel.Location = new System.Drawing.Point(87, 71);
+            this.lblFuel.Location = new System.Drawing.Point(90, 25);
             this.lblFuel.Name = "lblFuel";
             this.lblFuel.Size = new System.Drawing.Size(28, 13);
             this.lblFuel.TabIndex = 22;
@@ -515,7 +485,7 @@
             // 
             this.txtFuel.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtFuel.Enabled = false;
-            this.txtFuel.Location = new System.Drawing.Point(72, 87);
+            this.txtFuel.Location = new System.Drawing.Point(75, 41);
             this.txtFuel.Name = "txtFuel";
             this.txtFuel.Size = new System.Drawing.Size(59, 13);
             this.txtFuel.TabIndex = 23;
@@ -526,7 +496,7 @@
             // 
             this.txtDeparture.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtDeparture.Enabled = false;
-            this.txtDeparture.Location = new System.Drawing.Point(147, 87);
+            this.txtDeparture.Location = new System.Drawing.Point(81, 42);
             this.txtDeparture.Name = "txtDeparture";
             this.txtDeparture.Size = new System.Drawing.Size(49, 13);
             this.txtDeparture.TabIndex = 25;
@@ -536,7 +506,7 @@
             // lblDeparture
             // 
             this.lblDeparture.AutoSize = true;
-            this.lblDeparture.Location = new System.Drawing.Point(144, 71);
+            this.lblDeparture.Location = new System.Drawing.Point(78, 26);
             this.lblDeparture.Name = "lblDeparture";
             this.lblDeparture.Size = new System.Drawing.Size(54, 13);
             this.lblDeparture.TabIndex = 24;
@@ -544,7 +514,7 @@
             // 
             // progressBar
             // 
-            this.progressBar.Location = new System.Drawing.Point(22, 366);
+            this.progressBar.Location = new System.Drawing.Point(21, 405);
             this.progressBar.Name = "progressBar";
             this.progressBar.Size = new System.Drawing.Size(308, 21);
             this.progressBar.TabIndex = 21;
@@ -553,7 +523,7 @@
             // lblProgressBar
             // 
             this.lblProgressBar.AutoSize = true;
-            this.lblProgressBar.Location = new System.Drawing.Point(152, 350);
+            this.lblProgressBar.Location = new System.Drawing.Point(151, 389);
             this.lblProgressBar.Name = "lblProgressBar";
             this.lblProgressBar.Size = new System.Drawing.Size(48, 13);
             this.lblProgressBar.TabIndex = 22;
@@ -562,7 +532,7 @@
             // chkAutoLogin
             // 
             this.chkAutoLogin.AutoSize = true;
-            this.chkAutoLogin.Location = new System.Drawing.Point(262, 609);
+            this.chkAutoLogin.Location = new System.Drawing.Point(253, 609);
             this.chkAutoLogin.Name = "chkAutoLogin";
             this.chkAutoLogin.Size = new System.Drawing.Size(77, 17);
             this.chkAutoLogin.TabIndex = 23;
@@ -573,7 +543,7 @@
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.txtLog);
-            this.groupBox2.Location = new System.Drawing.Point(365, 59);
+            this.groupBox2.Location = new System.Drawing.Point(365, 12);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(374, 224);
             this.groupBox2.TabIndex = 25;
@@ -588,6 +558,59 @@
             this.txtLog.Size = new System.Drawing.Size(350, 184);
             this.txtLog.TabIndex = 0;
             // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.lblCallsign);
+            this.groupBox3.Controls.Add(this.txtCallsign);
+            this.groupBox3.Controls.Add(this.lblDeparture);
+            this.groupBox3.Controls.Add(this.txtDeparture);
+            this.groupBox3.Controls.Add(this.lblArrival);
+            this.groupBox3.Controls.Add(this.txtArrival);
+            this.groupBox3.Controls.Add(this.lblAlternate);
+            this.groupBox3.Controls.Add(this.txtAlternate);
+            this.groupBox3.Controls.Add(this.lblStatus);
+            this.groupBox3.Controls.Add(this.textBox1);
+            this.groupBox3.Location = new System.Drawing.Point(12, 91);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(347, 70);
+            this.groupBox3.TabIndex = 26;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Flight Information";
+            // 
+            // groupBox4
+            // 
+            this.groupBox4.Controls.Add(this.lblGrossWeight);
+            this.groupBox4.Controls.Add(this.txtGrossWeight);
+            this.groupBox4.Controls.Add(this.lblFuel);
+            this.groupBox4.Controls.Add(this.txtFuel);
+            this.groupBox4.Controls.Add(this.lblSquawk);
+            this.groupBox4.Controls.Add(this.txtSquawk);
+            this.groupBox4.Controls.Add(this.lblSimulatorHour);
+            this.groupBox4.Controls.Add(this.txtSimHour);
+            this.groupBox4.Location = new System.Drawing.Point(12, 167);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(347, 70);
+            this.groupBox4.TabIndex = 42;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "Aircraft Information";
+            // 
+            // groupBox5
+            // 
+            this.groupBox5.Controls.Add(this.lblDepTime);
+            this.groupBox5.Controls.Add(this.txtDepTime);
+            this.groupBox5.Controls.Add(this.lblFuelRemaining);
+            this.groupBox5.Controls.Add(this.txtFuelRemaining);
+            this.groupBox5.Controls.Add(this.lblFlightTime);
+            this.groupBox5.Controls.Add(this.txtArrTime);
+            this.groupBox5.Controls.Add(this.txtFlightTime);
+            this.groupBox5.Controls.Add(this.lblArrTime);
+            this.groupBox5.Location = new System.Drawing.Point(12, 243);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(347, 70);
+            this.groupBox5.TabIndex = 43;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "Schedule Information";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -595,12 +618,14 @@
             this.BackgroundImage = global::Acars.Properties.Resources.banner;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.ClientSize = new System.Drawing.Size(765, 638);
+            this.Controls.Add(this.groupBox5);
+            this.Controls.Add(this.groupBox4);
+            this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.chkAutoLogin);
             this.Controls.Add(this.lblProgressBar);
             this.Controls.Add(this.progressBar);
             this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.lblFlightStatus);
             this.Controls.Add(this.txtFlightInformation);
             this.Controls.Add(this.lblFlightInformation);
             this.Controls.Add(this.label1);
@@ -616,6 +641,12 @@
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
+            this.groupBox4.ResumeLayout(false);
+            this.groupBox4.PerformLayout();
+            this.groupBox5.ResumeLayout(false);
+            this.groupBox5.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -631,7 +662,6 @@
         private System.Windows.Forms.Label lblFlightInformation;
         private System.Windows.Forms.TextBox txtFlightInformation;
         private System.Windows.Forms.Timer flightacars;
-        private System.Windows.Forms.Label lblFlightStatus;
         private System.Windows.Forms.Label lblAltitude;
         private System.Windows.Forms.TextBox txtAltitude;
         private System.Windows.Forms.Label lblHeading;
@@ -672,6 +702,9 @@
         private System.Windows.Forms.TextBox txtVerticalSpeed;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.TextBox txtLog;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.GroupBox groupBox5;
     }
 }
 
