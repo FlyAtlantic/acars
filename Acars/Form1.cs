@@ -121,12 +121,14 @@ namespace Acars
         ///  /// Simulator Minute
         /// </summary>
         static private Offset<byte[]> playerMinuteSim = new Offset<byte[]>(0x023C, 4);
-
         /// </summary>
         ///  /// Simulator Year
         /// </summary>
         static private Offset<byte[]> playerYearSim = new Offset<byte[]>(0x0240, 4);
-
+        /// </summary>
+        ///  /// Day of Year
+        /// </summary>
+        static private Offset<byte[]> playerDayOfYear = new Offset<byte[]>(0x023E, 4);
 
         MySqlConnection conn;
         bool FlightAssignedDone = false;
@@ -404,9 +406,18 @@ namespace Acars
                     Console.WriteLine(FSUIPCConnection.FlightSimVersionConnected.ToString());
 
                     //insere e verifica hora zulu no Simulador
+
+                    int DayofYear = DateTime.UtcNow.DayOfYear;                 
                     int Hour = DateTime.UtcNow.Hour;
                     int Minute = DateTime.UtcNow.Minute;
                     int Year = DateTime.UtcNow.Year;
+                    int[] numbers = { DayofYear, Year };
+                    foreach (var value in numbers)
+                    {
+                        byte[] arrProp3 = BitConverter.GetBytes(value);
+                        playerDayOfYear.Value = arrProp3;
+                        FSUIPCConnection.Process();
+                    }
 
                     byte[] arrProp = BitConverter.GetBytes(Hour);
                     byte[] arrProp1 = BitConverter.GetBytes(Minute);
@@ -416,7 +427,7 @@ namespace Acars
                     {
                         playerHourSim.Value = arrProp;
                         playerMinuteSim.Value = arrProp1;
-                        playerYearSim.Value = arrProp2;
+                        playerYearSim.Value = arrProp2;                        
                         string Message1 = "Simulator Hour can not be changed!";
                         messageWrite.Value = Message1;
                         messageDuration.Value = 5;
