@@ -242,20 +242,7 @@ namespace Acars
                         FSUIPCConnection.Open();
                         fsuipcOpen = true;                       
                     }
-                    catch (Exception crap) { }
-                //insere hora zulu no Simulador
-                int Hour = DateTime.UtcNow.Hour;
-                int Minute = DateTime.UtcNow.Minute;
-                int Year = DateTime.UtcNow.Year;
-
-                byte[] arrProp = BitConverter.GetBytes(Hour);
-                byte[] arrProp1 = BitConverter.GetBytes(Minute);
-                byte[] arrProp2 = BitConverter.GetBytes(Year);
-
-                playerHourSim.Value = arrProp;
-                playerMinuteSim.Value = arrProp1;
-                playerYearSim.Value = arrProp2;
-                FSUIPCConnection.Process();
+                    catch (Exception crap) { }             
 
                 string Message = "Welcome to FlyAtlantic Acars";
                 messageWrite.Value = Message;
@@ -416,6 +403,25 @@ namespace Acars
                     // aircraft configuration
                     Console.WriteLine(FSUIPCConnection.FlightSimVersionConnected.ToString());
 
+                    //insere e verifica hora zulu no Simulador
+                    int Hour = DateTime.UtcNow.Hour;
+                    int Minute = DateTime.UtcNow.Minute;
+                    int Year = DateTime.UtcNow.Year;
+
+                    byte[] arrProp = BitConverter.GetBytes(Hour);
+                    byte[] arrProp1 = BitConverter.GetBytes(Minute);
+                    byte[] arrProp2 = BitConverter.GetBytes(Year);
+
+                    if (playerHourSim.Value != arrProp && playerMinuteSim.Value != arrProp1)
+                    {
+                        playerHourSim.Value = arrProp;
+                        playerMinuteSim.Value = arrProp1;
+                        playerYearSim.Value = arrProp2;
+                        string Message1 = "Simulator Hour can not be changed!";
+                        messageWrite.Value = Message1;
+                        messageDuration.Value = 5;
+                        FSUIPCConnection.Process();
+                    }
 
                     //Log Text
                     txtLog.Text = String.Format("Simulator: {0} \r\n", FSUIPCConnection.FlightSimVersionConnected);
