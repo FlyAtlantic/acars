@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.txtEmail = new System.Windows.Forms.TextBox();
             this.txtPassword = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -84,14 +85,14 @@
             // 
             // txtEmail
             // 
-            this.txtEmail.Location = new System.Drawing.Point(99, 380);
+            this.txtEmail.Location = new System.Drawing.Point(105, 484);
             this.txtEmail.Name = "txtEmail";
             this.txtEmail.Size = new System.Drawing.Size(143, 20);
             this.txtEmail.TabIndex = 0;
             // 
             // txtPassword
             // 
-            this.txtPassword.Location = new System.Drawing.Point(99, 426);
+            this.txtPassword.Location = new System.Drawing.Point(105, 530);
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.PasswordChar = '*';
             this.txtPassword.Size = new System.Drawing.Size(143, 20);
@@ -100,7 +101,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(144, 410);
+            this.label2.Location = new System.Drawing.Point(150, 514);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(53, 13);
             this.label2.TabIndex = 3;
@@ -108,7 +109,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(113, 462);
+            this.button1.Location = new System.Drawing.Point(119, 566);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(114, 23);
             this.button1.TabIndex = 4;
@@ -119,7 +120,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(154, 364);
+            this.label1.Location = new System.Drawing.Point(160, 468);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(32, 13);
             this.label1.TabIndex = 5;
@@ -128,7 +129,7 @@
             // lblFlightInformation
             // 
             this.lblFlightInformation.AutoSize = true;
-            this.lblFlightInformation.Location = new System.Drawing.Point(127, 299);
+            this.lblFlightInformation.Location = new System.Drawing.Point(133, 403);
             this.lblFlightInformation.Name = "lblFlightInformation";
             this.lblFlightInformation.Size = new System.Drawing.Size(87, 13);
             this.lblFlightInformation.TabIndex = 6;
@@ -137,7 +138,7 @@
             // txtFlightInformation
             // 
             this.txtFlightInformation.Enabled = false;
-            this.txtFlightInformation.Location = new System.Drawing.Point(-1, 327);
+            this.txtFlightInformation.Location = new System.Drawing.Point(5, 431);
             this.txtFlightInformation.Name = "txtFlightInformation";
             this.txtFlightInformation.Size = new System.Drawing.Size(343, 20);
             this.txtFlightInformation.TabIndex = 7;
@@ -151,7 +152,7 @@
             // lblFlightStatus
             // 
             this.lblFlightStatus.AutoSize = true;
-            this.lblFlightStatus.Location = new System.Drawing.Point(138, 9);
+            this.lblFlightStatus.Location = new System.Drawing.Point(144, 113);
             this.lblFlightStatus.Name = "lblFlightStatus";
             this.lblFlightStatus.Size = new System.Drawing.Size(65, 13);
             this.lblFlightStatus.TabIndex = 8;
@@ -293,12 +294,12 @@
             this.groupBox1.Controls.Add(this.txtHeading);
             this.groupBox1.Controls.Add(this.txtGroundSpeed);
             this.groupBox1.Controls.Add(this.lblGroundSpeed);
-            this.groupBox1.Location = new System.Drawing.Point(-1, 25);
+            this.groupBox1.Location = new System.Drawing.Point(5, 129);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(347, 207);
             this.groupBox1.TabIndex = 20;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "groupBox1";
+            this.groupBox1.Text = "Flight Status";
             // 
             // lblVerticalSpeed
             // 
@@ -543,7 +544,7 @@
             // 
             // progressBar
             // 
-            this.progressBar.Location = new System.Drawing.Point(16, 262);
+            this.progressBar.Location = new System.Drawing.Point(22, 366);
             this.progressBar.Name = "progressBar";
             this.progressBar.Size = new System.Drawing.Size(308, 21);
             this.progressBar.TabIndex = 21;
@@ -552,7 +553,7 @@
             // lblProgressBar
             // 
             this.lblProgressBar.AutoSize = true;
-            this.lblProgressBar.Location = new System.Drawing.Point(146, 246);
+            this.lblProgressBar.Location = new System.Drawing.Point(152, 350);
             this.lblProgressBar.Name = "lblProgressBar";
             this.lblProgressBar.Size = new System.Drawing.Size(48, 13);
             this.lblProgressBar.TabIndex = 22;
@@ -561,7 +562,7 @@
             // chkAutoLogin
             // 
             this.chkAutoLogin.AutoSize = true;
-            this.chkAutoLogin.Location = new System.Drawing.Point(256, 505);
+            this.chkAutoLogin.Location = new System.Drawing.Point(262, 609);
             this.chkAutoLogin.Name = "chkAutoLogin";
             this.chkAutoLogin.Size = new System.Drawing.Size(77, 17);
             this.chkAutoLogin.TabIndex = 23;
@@ -577,20 +578,23 @@
             this.groupBox2.Size = new System.Drawing.Size(374, 224);
             this.groupBox2.TabIndex = 25;
             this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "groupBox2";
+            this.groupBox2.Text = "Flight Log";
             // 
             // txtLog
             // 
             this.txtLog.Location = new System.Drawing.Point(13, 25);
+            this.txtLog.Multiline = true;
             this.txtLog.Name = "txtLog";
-            this.txtLog.Size = new System.Drawing.Size(350, 20);
+            this.txtLog.Size = new System.Drawing.Size(350, 184);
             this.txtLog.TabIndex = 0;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(765, 534);
+            this.BackgroundImage = global::Acars.Properties.Resources.banner;
+            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.ClientSize = new System.Drawing.Size(765, 638);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.chkAutoLogin);
             this.Controls.Add(this.lblProgressBar);
@@ -604,8 +608,9 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.txtPassword);
             this.Controls.Add(this.txtEmail);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "FlyAtlantic Acars";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
