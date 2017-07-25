@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using FSUIPC;
 using MySql.Data.MySqlClient;
+using static System.Resources.ResXFileRef;
 
 namespace Acars
 {
@@ -129,7 +130,11 @@ namespace Acars
         ///  /// Day of Year
         /// </summary>
         static private Offset<byte[]> playerDayOfYear = new Offset<byte[]>(0x023E, 4);
-
+        /// </summary>
+        ///  /// Simulator Menus
+        /// </summary>
+        static private Offset<byte[]> playerSimMenus = new Offset<byte[]>(0x32F1, 8);
+  
         MySqlConnection conn;
         bool FlightAssignedDone = false;
         string email;
@@ -423,7 +428,7 @@ namespace Acars
                     byte[] arrProp1 = BitConverter.GetBytes(Minute);
                     byte[] arrProp2 = BitConverter.GetBytes(Year);
 
-                    if (playerHourSim.Value != arrProp && playerMinuteSim.Value != arrProp1)
+                    if (playerHourSim.Value != (byte[])arrProp && playerMinuteSim.Value != (byte[])arrProp1)
                     {
                         playerHourSim.Value = arrProp;
                         playerMinuteSim.Value = arrProp1;
