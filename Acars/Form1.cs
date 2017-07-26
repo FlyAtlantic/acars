@@ -422,15 +422,15 @@ namespace Acars
                         FSUIPCConnection.Process();
                     }
 
-                    byte[] arrProp = BitConverter.GetBytes(Hour);
-                    byte[] arrProp1 = BitConverter.GetBytes(Minute);
-                    byte[] arrProp2 = BitConverter.GetBytes(Year);
+                    byte[] arrHour = BitConverter.GetBytes(Hour);
+                    byte[] arrMinute = BitConverter.GetBytes(Minute);
+                    byte[] arrSecond = BitConverter.GetBytes(Year);
 
-                    if (playerHourSim.Value != (byte[])arrProp && playerMinuteSim.Value != (byte[])arrProp1)
+                    if (playerHourSim.Value != (byte[])arrHour && playerMinuteSim.Value != (byte[])arrMinute)
                     {
-                        playerHourSim.Value = arrProp;
-                        playerMinuteSim.Value = arrProp1;
-                        playerYearSim.Value = arrProp2;                        
+                        playerHourSim.Value = arrHour;
+                        playerMinuteSim.Value = arrMinute;
+                        playerYearSim.Value = arrSecond;                        
                         string Message1 = "Simulator Hour can not be changed!";
                         messageWrite.Value = Message1;
                         messageDuration.Value = 5;
