@@ -80,6 +80,8 @@
             this.txtLog = new System.Windows.Forms.TextBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.lblZFW = new System.Windows.Forms.Label();
+            this.txtZFW = new System.Windows.Forms.TextBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -237,7 +239,7 @@
             // lblSquawk
             // 
             this.lblSquawk.AutoSize = true;
-            this.lblSquawk.Location = new System.Drawing.Point(149, 25);
+            this.lblSquawk.Location = new System.Drawing.Point(215, 25);
             this.lblSquawk.Name = "lblSquawk";
             this.lblSquawk.Size = new System.Drawing.Size(46, 13);
             this.lblSquawk.TabIndex = 18;
@@ -247,7 +249,7 @@
             // 
             this.txtSquawk.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtSquawk.Enabled = false;
-            this.txtSquawk.Location = new System.Drawing.Point(147, 41);
+            this.txtSquawk.Location = new System.Drawing.Point(213, 41);
             this.txtSquawk.Name = "txtSquawk";
             this.txtSquawk.Size = new System.Drawing.Size(51, 13);
             this.txtSquawk.TabIndex = 19;
@@ -374,7 +376,7 @@
             // lblSimulatorHour
             // 
             this.lblSimulatorHour.AutoSize = true;
-            this.lblSimulatorHour.Location = new System.Drawing.Point(215, 25);
+            this.lblSimulatorHour.Location = new System.Drawing.Point(281, 25);
             this.lblSimulatorHour.Name = "lblSimulatorHour";
             this.lblSimulatorHour.Size = new System.Drawing.Size(50, 13);
             this.lblSimulatorHour.TabIndex = 32;
@@ -384,7 +386,7 @@
             // 
             this.txtSimHour.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtSimHour.Enabled = false;
-            this.txtSimHour.Location = new System.Drawing.Point(213, 41);
+            this.txtSimHour.Location = new System.Drawing.Point(279, 41);
             this.txtSimHour.Name = "txtSimHour";
             this.txtSimHour.Size = new System.Drawing.Size(55, 13);
             this.txtSimHour.TabIndex = 33;
@@ -475,7 +477,7 @@
             // lblFuel
             // 
             this.lblFuel.AutoSize = true;
-            this.lblFuel.Location = new System.Drawing.Point(90, 25);
+            this.lblFuel.Location = new System.Drawing.Point(156, 25);
             this.lblFuel.Name = "lblFuel";
             this.lblFuel.Size = new System.Drawing.Size(28, 13);
             this.lblFuel.TabIndex = 22;
@@ -485,12 +487,13 @@
             // 
             this.txtFuel.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtFuel.Enabled = false;
-            this.txtFuel.Location = new System.Drawing.Point(75, 41);
+            this.txtFuel.Location = new System.Drawing.Point(141, 41);
             this.txtFuel.Name = "txtFuel";
             this.txtFuel.Size = new System.Drawing.Size(59, 13);
             this.txtFuel.TabIndex = 23;
-            this.txtFuel.Text = "-errors-";
+            this.txtFuel.Text = "----";
             this.txtFuel.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txtFuel.TextChanged += new System.EventHandler(this.txtFuel_TextChanged);
             // 
             // txtDeparture
             // 
@@ -579,6 +582,8 @@
             // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.lblZFW);
+            this.groupBox4.Controls.Add(this.txtZFW);
             this.groupBox4.Controls.Add(this.lblGrossWeight);
             this.groupBox4.Controls.Add(this.txtGrossWeight);
             this.groupBox4.Controls.Add(this.lblFuel);
@@ -593,6 +598,27 @@
             this.groupBox4.TabIndex = 42;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Aircraft Information";
+            // 
+            // lblZFW
+            // 
+            this.lblZFW.AutoSize = true;
+            this.lblZFW.Location = new System.Drawing.Point(89, 25);
+            this.lblZFW.Name = "lblZFW";
+            this.lblZFW.Size = new System.Drawing.Size(31, 13);
+            this.lblZFW.TabIndex = 34;
+            this.lblZFW.Text = "ZFW";
+            this.lblZFW.Click += new System.EventHandler(this.label3_Click);
+            // 
+            // txtZFW
+            // 
+            this.txtZFW.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtZFW.Enabled = false;
+            this.txtZFW.Location = new System.Drawing.Point(74, 41);
+            this.txtZFW.Name = "txtZFW";
+            this.txtZFW.Size = new System.Drawing.Size(59, 13);
+            this.txtZFW.TabIndex = 35;
+            this.txtZFW.Text = "----";
+            this.txtZFW.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // groupBox5
             // 
@@ -705,6 +731,8 @@
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.GroupBox groupBox5;
+        private System.Windows.Forms.Label lblZFW;
+        private System.Windows.Forms.TextBox txtZFW;
     }
 }
 

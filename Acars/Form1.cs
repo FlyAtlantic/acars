@@ -59,11 +59,11 @@ namespace Acars
         /// <summary>
         /// Gross Weight Pounds
         /// </summary>
-        static private Offset<Double> playerGW = new Offset<Double>(0x30C0);
+        static private Offset<double> playerGW = new Offset<double>(0x30C0);
         /// <summary>
         /// Zero Fuel Weight Pouds
         /// </summary>
-        static private Offset<Double> playerZFW = new Offset<Double>(0x3BFC);
+        static private Offset<int> playerZFW = new Offset<int>(0x3BFC);
         /// <summary>
         /// Simulator Hour
         /// </summary>
@@ -404,8 +404,9 @@ namespace Acars
                     }
 
                     // aircraft wieghts
-                    txtGrossWeight.Text = String.Format("{0} kg", (playerGW.Value / 2.2046226218487757).ToString("F0"));
-                    txtFuel.Text = String.Format("{0} kg", (playerGW.Value - playerZFW.Value).ToString("F0"));
+                    txtGrossWeight.Text = String.Format("{0} kg", ((playerGW.Value) * 0.45359237).ToString("F0"));
+                    txtZFW.Text = String.Format("{0} kg", ((playerZFW.Value / 256) * 0.45359237).ToString("F0"));                    
+                    txtFuel.Text = String.Format("{0} kg", ((playerGW.Value / 2.2046226218487757)-((playerZFW.Value / 256) * 0.45359237)).ToString("F0"));
 
                     // aircraft configuration
                     Console.WriteLine(FSUIPCConnection.FlightSimVersionConnected.ToString());
@@ -602,5 +603,14 @@ namespace Acars
 
         }
 
+        private void label3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtFuel_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }
