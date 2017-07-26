@@ -408,9 +408,6 @@ namespace Acars
                     txtZFW.Text = String.Format("{0} kg", ((playerZFW.Value / 256) * 0.45359237).ToString("F0"));                    
                     txtFuel.Text = String.Format("{0} kg", ((playerGW.Value / 2.2046226218487757)-((playerZFW.Value / 256) * 0.45359237)).ToString("F0"));
 
-                    // aircraft configuration
-                    Console.WriteLine(FSUIPCConnection.FlightSimVersionConnected.ToString());
-
                     //insere e verifica hora zulu no Simulador
 
                     int DayofYear = DateTime.UtcNow.DayOfYear;                 
