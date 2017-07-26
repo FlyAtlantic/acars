@@ -71,49 +71,49 @@ namespace Acars
         /// <summary>
         /// On Ground = 1 // Airborne = 0
         /// </summary>
-        static private new Offset<short> playerAircraftOnGround = new Offset<short>(0x0366, false);
+        static private Offset<short> playerAircraftOnGround = new Offset<short>(0x0366, false);
         /// <summary>
         /// Vertical Speed
         /// </summary>
-        static private new Offset<short> playerVerticalSpeed = new Offset<short>(0x0842);
+        static private Offset<short> playerVerticalSpeed = new Offset<short>(0x0842);
         /// <summary>
         /// Stall Warning (0=no, 1=stall) com erros quando overspeed
         /// </summary>
-        static private new Offset<short> playerStall = new Offset<short>(0x036C, false);
+        static private Offset<short> playerStall = new Offset<short>(0x036C, false);
         /// <summary>
         /// OverSpeed Warning (0=no, 1=overspeed) com erros quando overspeed
         /// </summary>
-        static private new Offset<short> playerOverSpeed = new Offset<short>(0x036D, false);
+        static private Offset<short> playerOverSpeed = new Offset<short>(0x036D, false);
         /// <summary>
         /// 	Slew mode (indicator and control), 0=off, 1=on. (See 05DE also).
         /// </summary>
-        static private new Offset<short> playerSlew = new Offset<short>(0x05DC, false);
+        static private Offset<short> playerSlew = new Offset<short>(0x05DC, false);
         /// <summary>
         /// 	Parking brake: 0=off, 32767=on
         /// </summary>
-        static private new Offset<short> playerParkingBrake = new Offset<short>(0x0BC8, false);
+        static private Offset<short> playerParkingBrake = new Offset<short>(0x0BC8, false);
         /// <summary>
         /// 		Gear control: 0=Up, 16383=Down
         /// </summary>
-        static private new Offset<short> playerGear = new Offset<short>(0x0BE8, false);
+        static private Offset<short> playerGear = new Offset<short>(0x0BE8, false);
         /// <summary>
         /// 		Wellcome Message
         /// </summary>
-        static private new Offset<string> messageWrite = new Offset<string>(0x3380, 128);
-        static private new Offset<short> messageDuration = new Offset<short>(0x32FA);
+        static private Offset<string> messageWrite = new Offset<string>(0x3380, 128);
+        static private Offset<short> messageDuration = new Offset<short>(0x32FA);
         /// <summary>
         /// 		Pause Control
         /// </summary>
-        static private new Offset<short> playerPauseControl = new Offset<short>(0x0262, false);
-        static private new Offset<short> playerPauseDisplay = new Offset<short>(0x0264, false);
+        static private Offset<short> playerPauseControl = new Offset<short>(0x0262, false);
+        static private Offset<short> playerPauseDisplay = new Offset<short>(0x0264, false);
         /// <summary>
         /// 		Pause Control
         /// </summary>
-        static private new Offset<short> playerBattery = new Offset<short>(0x3102, false);
+        static private Offset<short> playerBattery = new Offset<short>(0x3102, false);
         /// <summary>
         ///Landing Lights
         /// </summary>
-        static private new Offset<short> playerLandingLights = new Offset<short>(0x028C, false);
+        static private Offset<short> playerLandingLights = new Offset<short>(0x028C, false);
         /// </summary>
         ///  /// Simulator Hours
         /// </summary>
