@@ -32,6 +32,7 @@ namespace Acars
 
     public partial class Form1 : Form
     {
+        #region FSUIPC Offset declarations
         /// <summary>
         /// Offset for Lat features
         /// </summary>
@@ -134,16 +135,42 @@ namespace Acars
         ///  /// Simulator Menus
         /// </summary>
         static private Offset<byte[]> playerSimMenus = new Offset<byte[]>(0x32F1, 8);
-  
+        #endregion FSUIPC Offset declarations
+
+        #region Property declaration
+        /// <summary>
+        /// Reusable MySQL connection throughout the application
+        /// </summary>
         MySqlConnection conn;
-        bool FlightAssignedDone = false;
+        /// <summary>
+        /// User entered email
+        /// </summary>
         string email;
+        /// <summary>
+        /// User entered password
+        /// </summary>
         string password;
-
+        /// <summary>
+        /// Determines if a flight given by the Flight System database has been returned upon login
+        /// </summary>
+        bool FlightAssignedDone = false;
+        /// <summary>
+        /// Returns the current fligt phase
+        /// </summary>
         FlightPhases flightPhase;
-
+        /// <summary>
+        /// Returns last gear lift off time
+        /// </summary>
         DateTime departureTime;
+        /// <summary>
+        /// Returns last gear touch down time
+        /// </summary>
         DateTime arrivalTime;
+        /// <summary>
+        /// Gets computed flight time
+        /// 
+        /// Both departureTime and arrivalTime must be set, otherwise returns TimeSpan.MinValue
+        /// </summary>
         TimeSpan flightTime
         {
             get
@@ -153,22 +180,45 @@ namespace Acars
                 return arrivalTime - departureTime;
             }
         }
-
-        // FSUIPC information
-        bool onGround;
-        bool Gear;
-        bool ParkingBrake;
-        bool Slew;
-        bool OverSpeed;
-        bool Stall;
-        bool Battery;
-        bool LandingLights;
-
-        public Form1()
+        private string ConnectionString
         {
-            InitializeComponent();
+            get
+            {
+                return String.Format(
+                    "server={0};uid={1};pwd={2};database={3};",
+                    Properties.Settings.Default.Server,
+                    Properties.Settings.Default.Dbuser,
+                    Properties.Settings.Default.Dbpass,
+                    Properties.Settings.Default.Database);
+            }
         }
+        #endregion Property declaration
 
+        #region General Helper Function
+        /// <summary>
+        /// Returns the SHA1 hash string for a given string
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        private string StringToSha1Hash(string input)
+        {
+            using (SHA1Managed sha1 = new SHA1Managed())
+            {
+                var hash = sha1.ComputeHash(Encoding.UTF8.GetBytes(input));
+                var sb = new StringBuilder(hash.Length * 2);
+
+                foreach (byte b in hash)
+                {
+                    // can be "x2" if you want lowercase
+                    sb.Append(b.ToString("X2"));
+                }
+
+                return sb.ToString();
+            }
+        }
+        #endregion General Helper Function
+
+        #region Specific Helper Functions
         /// <summary>
         /// Prepares all variables for a fresh flight
         /// </summary>
@@ -178,7 +228,6 @@ namespace Acars
             flightPhase = FlightPhases.PREFLIGHT;
             onGround = true;
         }
-
         /// <summary>
         /// Handle flight phases
         /// </summary>
@@ -204,65 +253,6 @@ namespace Acars
             }
 
         }
-
-        private string StringToSha1Hash(string input)
-        {
-            using (SHA1Managed sha1 = new SHA1Managed())
-            {
-                var hash = sha1.ComputeHash(Encoding.UTF8.GetBytes(input));
-                var sb = new StringBuilder(hash.Length * 2);
-
-                foreach (byte b in hash)
-                {
-                    // can be "x2" if you want lowercase
-                    sb.Append(b.ToString("X2"));
-                }
-
-                return sb.ToString();
-            }
-        }
-
-        private void btnLogin_Click(object sender, EventArgs e)
-        {
-            if (FlightAssignedDone)
-            {
-                bool fsuipcOpen = false;
-           
-                while (!fsuipcOpen)
-                    try
-                    {
-                        FSUIPCConnection.Open();
-                        fsuipcOpen = true;                       
-                    }
-                    catch (Exception crap) { }             
-
-                string Message = "Welcome to FlyAtlantic Acars";
-                messageWrite.Value = Message;
-                messageDuration.Value = 10;
-                FSUIPCConnection.Process();
-
-                button1.Enabled = false;
-                button1.Text = "Flying...";
-                flightacars.Start();
-            }
-            else
-            {            
-                FlightAssignedDone = DoLogin(txtEmail.Text, txtPassword.Text);
-                if (FlightAssignedDone)
-                {
-                    // prepare current flight
-                    FlightStart();
-
-                    // save validated credentials
-                    Properties.Settings.Default.Email = txtEmail.Text;
-                    Properties.Settings.Default.Password = txtPassword.Text;
-                    Properties.Settings.Default.Save();
-                    email = txtEmail.Text;
-                    password = txtPassword.Text;
-                }
-            }
-        }
-
         /// <summary>
         /// Handle login and assigned flight confirmation
         /// </summary>
@@ -322,6 +312,63 @@ namespace Acars
                 MessageBox.Show(ex.Message);
             }
             return false;
+        }
+        #endregion Specific Helper Functions
+
+        // FSUIPC information
+        bool onGround;
+        bool Gear;
+        bool ParkingBrake;
+        bool Slew;
+        bool OverSpeed;
+        bool Stall;
+        bool Battery;
+        bool LandingLights;
+
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void btnLogin_Click(object sender, EventArgs e)
+        {
+            if (FlightAssignedDone)
+            {
+                bool fsuipcOpen = false;
+           
+                while (!fsuipcOpen)
+                    try
+                    {
+                        FSUIPCConnection.Open();
+                        fsuipcOpen = true;                       
+                    }
+                    catch (Exception crap) { }             
+
+                string Message = "Welcome to FlyAtlantic Acars";
+                messageWrite.Value = Message;
+                messageDuration.Value = 10;
+                FSUIPCConnection.Process();
+
+                button1.Enabled = false;
+                button1.Text = "Flying...";
+                flightacars.Start();
+            }
+            else
+            {            
+                FlightAssignedDone = DoLogin(txtEmail.Text, txtPassword.Text);
+                if (FlightAssignedDone)
+                {
+                    // prepare current flight
+                    FlightStart();
+
+                    // save validated credentials
+                    Properties.Settings.Default.Email = txtEmail.Text;
+                    Properties.Settings.Default.Password = txtPassword.Text;
+                    Properties.Settings.Default.Save();
+                    email = txtEmail.Text;
+                    password = txtPassword.Text;
+                }
+            }
         }
 
         private void flightacars_Tick(object sender, EventArgs e)
@@ -411,7 +458,7 @@ namespace Acars
                     byte[] arrMinute = BitConverter.GetBytes(Minute);
                     byte[] arrSecond = BitConverter.GetBytes(Year);
 
-                    if (playerHourSim.Value != (byte[])arrHour && playerMinuteSim.Value != (byte[])arrMinute)
+                    if (playerHourSim.Value != arrHour && playerMinuteSim.Value != arrMinute)
                     {
                         playerHourSim.Value = arrHour;
                         playerMinuteSim.Value = arrMinute;
@@ -560,7 +607,7 @@ namespace Acars
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            conn = new MySqlConnection(getConnectionString());
+            conn = new MySqlConnection(ConnectionString);
             try
             {
                 conn.Open();
@@ -581,12 +628,6 @@ namespace Acars
             chkAutoLogin.Checked = Properties.Settings.Default.autologin;
             // call function that handles login button clicks
             btnLogin_Click(this, e);
-        }
-
-       private string getConnectionString()
-        {
-            return String.Format("server={0};uid={1};pwd={2};database={3};", Properties.Settings.Default.Server, Properties.Settings.Default.Dbuser, Properties.Settings.Default.Dbpass, Properties.Settings.Default.Database);  
-            
         }
 
         private void chkAutoLogin_CheckedChanged(object sender, EventArgs e)
