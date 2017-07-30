@@ -136,6 +136,27 @@ namespace Acars
                 // add and return
                 return result.Add(new TimeSpan(dayOfYear - 1, 0, 0, 0));
             }
+            set
+            {
+                // convert offseted values to their own byte[] arrays
+                byte[] byteArrYear = BitConverter.GetBytes((short)value.Year);
+                byte[] byteArrDayOfYear = BitConverter.GetBytes((short)value.DayOfYear - 1);
+
+                // set year
+                environmentDateTime.Value[8] = byteArrYear[0];
+                environmentDateTime.Value[9] = byteArrYear[1];
+
+                // set day of year
+                environmentDateTime.Value[6] = byteArrDayOfYear[0];
+                environmentDateTime.Value[7] = byteArrDayOfYear[1];
+
+                // set hour, minute, and second
+                environmentDateTime.Value[0] = (byte)value.Hour;
+                environmentDateTime.Value[1] = (byte)value.Minute;
+                environmentDateTime.Value[2] = (byte)value.Second;
+
+                process();
+            }
         }
         #endregion warp property getters and setters
     }
