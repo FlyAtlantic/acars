@@ -289,16 +289,21 @@ namespace Acars
                     }
                     else
                     {
-                        sqlCommand = "SELECT `departure`, `destination`, `date_Assigned` FROM `pilotassignments` left join flights on pilotassignments.flightid = flights.idf left join utilizadores on pilotassignments.pilot = utilizadores.user_id WHERE utilizadores.user_email=@email";
+
+                        // get current assigned fligth information
+                        sqlCommand = "SELECT `flightnumber`, `departure`, `destination`, `alternate` FROM `pilotassignments` left join flights on pilotassignments.flightid = flights.idf left join utilizadores on pilotassignments.pilot = utilizadores.user_id WHERE utilizadores.user_email=@email";
                         cmd = new MySqlCommand(sqlCommand, conn);
                         cmd.Parameters.AddWithValue("@email", email);
                         MySqlDataReader result1 = cmd.ExecuteReader();
 
                         while (result1.Read())
                         {
-                            txtFlightInformation.Text = String.Format("Departure: {0} Destination: {1} Time Assigned: {2:HHmm}", result1[0], result1[1], result1[2]);
+                            txtCallsign.Text = String.Format("{0}", (result1[0]));
+                            txtDeparture.Text = String.Format("{0}", (result1[1]));
+                            txtArrival.Text = String.Format("{0}", (result1[2]));
+                            txtAlternate.Text = String.Format("{0}", (result1[3]));
+
                             button1.Text = "Start Flight";
-                            result1.Close();
                             return true;
 
                         }
@@ -306,7 +311,6 @@ namespace Acars
                         {
                             txtFlightInformation.Text = "No Flight Assigned";
                         }
-                        result1.Close();
                     }
 
                 }
@@ -337,6 +341,7 @@ namespace Acars
         private void btnLogin_Click(object sender, EventArgs e)
         {
             if (FlightAssignedDone)
+                // Start Flight
             {
                 // instanciate FS wrapper
                 while (fs == null)
@@ -362,7 +367,10 @@ namespace Acars
                 flightacars.Start();
             }
             else
-            {            
+                // Login
+            {
+                
+
                 FlightAssignedDone = DoLogin(txtEmail.Text, txtPassword.Text);
                 if (FlightAssignedDone)
                 {
@@ -414,157 +422,122 @@ namespace Acars
                 txtGroundSpeed.Text = String.Format("{0} kt", (airspeed.Value / 128).ToString(""));
                 txtVerticalSpeed.Text = String.Format("{0} ft/m", ((playerVerticalSpeed.Value * 3.28084) / -1).ToString("F0"));
 
-                // get current assigned fligth information
-                string sqlCommand1 = "SELECT `flightnumber`, `departure`, `destination`, `alternate` FROM `pilotassignments` left join flights on pilotassignments.flightid = flights.idf left join utilizadores on pilotassignments.pilot = utilizadores.user_id WHERE utilizadores.user_email=@email limit 1";
-                MySqlCommand cmd = new MySqlCommand(sqlCommand1, conn);
-                cmd.Parameters.AddWithValue("@email", email);
-                MySqlDataReader result2 = cmd.ExecuteReader();
-
-                // will only run once, due to query limit
-                while (result2.Read())
+                ///FSUIPC Permanent Actions
+                //Slew Mode Bloked
+                if (playerSlew.Value != 0)
                 {
-                    ///FSUIPC Permanent Actions
-                    //Slew Mode Bloked
-                    if (playerSlew.Value != 0)
-                    {
-                        playerSlew.Value = 0;
-                        string Message = "You can't use Slew Mode!";
-                        messageWrite.Value = Message;
-                        messageDuration.Value = 5;
-                        FSUIPCConnection.Process();
-                    }
-                    //Unpaused Action
-                    if (playerPauseDisplay.Value != 0)
-                    {
-                        playerPauseControl.Value = 0;
-                        string Message = "Simulator can't be paused!";
-                        messageWrite.Value = Message;
-                        messageDuration.Value = 5;
-                        FSUIPCConnection.Process();
-                    }
-
-                    // aircraft wieghts
-                    txtGrossWeight.Text = String.Format("{0} kg", ((playerGW.Value) * 0.45359237).ToString("F0"));
-                    txtZFW.Text = String.Format("{0} kg", ((playerZFW.Value / 256) * 0.45359237).ToString("F0"));                    
-                    txtFuel.Text = String.Format("{0} kg", ((playerGW.Value / 2.2046226218487757)-((playerZFW.Value / 256) * 0.45359237)).ToString("F0"));
-
-                    //insere e verifica hora zulu no Simulador
-                    fs.EnvironmentDateTime = DateTime.UtcNow;
-
-                    //Log Text
-                    txtLog.Text = String.Format("{0:dd-MM-yyyy HH:mm:ss}\r\n", DateTime.UtcNow);
-                    txtLog.Text = txtLog.Text + String.Format("Simulator: {0} \r\n", FSUIPCConnection.FlightSimVersionConnected);
-                    if (Gear) {
-                        txtLog.Text = txtLog.Text + String.Format("Gear Down at: {0} ft\r\n", (playerAltitude.Value * 3.2808399).ToString("F0"));
-                    }
-                    if (!Gear)
-                    {
-                        txtLog.Text = txtLog.Text + String.Format("Gear Up at: {0} ft\r\n", (playerAltitude.Value * 3.2808399).ToString("F0"));
-                    }
-
-                    if (ParkingBrake)
-                    {
-                        txtLog.Text = txtLog.Text + String.Format("Parking Brakes On: {0} \r\n", (playerParkingBrake.Value).ToString("F0"));
-                    }
-                    if (!ParkingBrake)
-                    {
-                        txtLog.Text = txtLog.Text + String.Format("Parking Brakes Off: {0} \r\n", (playerParkingBrake.Value).ToString("F0"));
-                    }
-
-                    if (Slew)
-                    {
-                        txtLog.Text = txtLog.Text + String.Format("Slew On: {0} \r\n", (playerSlew.Value).ToString("F0"));
-                    }
-                    if (!Slew)
-                    {
-                        txtLog.Text = txtLog.Text + String.Format("Slew Off: {0} \r\n", (playerSlew.Value).ToString("F0"));
-                    }
-
-                    if (OverSpeed)
-                    {
-                        txtLog.Text = txtLog.Text + String.Format("OverSpeed On: {0} \r\n", (playerOverSpeed.Value).ToString("F0"));
-                    }
-                    if (!OverSpeed)
-                    {
-                        txtLog.Text = txtLog.Text + String.Format("OverSpeed Off: {0} \r\n", (playerOverSpeed.Value).ToString("F0"));
-                    }
-
-
-                    if (Stall)
-                    {
-                        txtLog.Text = txtLog.Text + String.Format("Stall On: {0} \r\n", (playerStall.Value).ToString("F0"));
-                    }
-                    if (!Stall)
-                    {
-                        txtLog.Text = txtLog.Text + String.Format("Stall Off: {0} \r\n", (playerStall.Value).ToString("F0"));
-                    }
-
-                    if (playerBattery.Value == 257)
-                    {
-                        txtLog.Text = txtLog.Text + String.Format("Battery On: {0} \r\n", (playerBattery.Value).ToString("F0"));
-                    }
-                    if (playerBattery.Value == 256)
-                    {
-                        txtLog.Text = txtLog.Text + String.Format("Battery Off: {0} \r\n", (playerBattery.Value).ToString("F0"));
-                    }
-
-                    if (LandingLights)
-                    {
-                        txtLog.Text = txtLog.Text + String.Format("LandingLights On at: {0} ft\r\n", (playerAltitude.Value * 3.2808399).ToString("F0"));
-                    }
-                    if (!LandingLights)
-                    {
-                        txtLog.Text = txtLog.Text + String.Format("LandingLights Off at: {0} ft\r\n", (playerAltitude.Value * 3.2808399).ToString("F0"));
-                    }
-
-                    //Touch Down
-                    if (onGround && arrivalTime != null)
-                    {
-                        txtLog.Text = txtLog.Text + String.Format("TouchDown: {0} ft/min\r\n", (playerVerticalSpeed.Value).ToString("F0"));
-                    }
-
-                    // Compose a string that consists of three lines.
-                    string lines = txtLog.Text;
-
-                    // Write the string to a file.
-                    using (System.IO.StreamWriter file =
-                    new System.IO.StreamWriter(@"C:\Log.txt", true))
-                    {
-                        file.WriteLine(txtLog.Text);
-                    }
-
-
-                    txtSquawk.Text = String.Format("{0}", (playersquawk.Value).ToString("X").PadLeft(4, '0'));
-                    txtCallsign.Text = String.Format("{0}", (result2[0]));
-                    txtDeparture.Text = String.Format("{0}", (result2[1]));
-                    txtArrival.Text = String.Format("{0}", (result2[2]));
-                    txtAlternate.Text = String.Format("{0}", (result2[3]));
-
-                    // get sim time from FSUIPC, no date
-                    DateTime fsTime = new DateTime(DateTime.UtcNow.Year, 1, 1, playerSimTime.Value[0], playerSimTime.Value[1], playerSimTime.Value[2]);
-                    txtSimHour.Text = fsTime.ToShortTimeString();                 
-
-                    // only one assigned flight at a time is allowed
-                    break;
+                    playerSlew.Value = 0;
+                    string Message = "You can't use Slew Mode!";
+                    messageWrite.Value = Message;
+                    messageDuration.Value = 5;
+                    FSUIPCConnection.Process();
                 }
-                
-                // clean up
-                result2.Close();
+                //Unpaused Action
+                if (playerPauseDisplay.Value != 0)
+                {
+                    playerPauseControl.Value = 0;
+                    string Message = "Simulator can't be paused!";
+                    messageWrite.Value = Message;
+                    messageDuration.Value = 5;
+                    FSUIPCConnection.Process();
+                }
+
+                // aircraft wieghts
+                txtGrossWeight.Text = String.Format("{0} kg", ((playerGW.Value) * 0.45359237).ToString("F0"));
+                txtZFW.Text = String.Format("{0} kg", ((playerZFW.Value / 256) * 0.45359237).ToString("F0"));                    
+                txtFuel.Text = String.Format("{0} kg", ((playerGW.Value / 2.2046226218487757)-((playerZFW.Value / 256) * 0.45359237)).ToString("F0"));
+
+                //insere e verifica hora zulu no Simulador
+                fs.EnvironmentDateTime = DateTime.UtcNow;
+
+                //Log Text
+                txtLog.Text = String.Format("{0:dd-MM-yyyy HH:mm:ss}\r\n", DateTime.UtcNow);
+                txtLog.Text = txtLog.Text + String.Format("Simulator: {0} \r\n", FSUIPCConnection.FlightSimVersionConnected);
+                if (Gear) {
+                    txtLog.Text = txtLog.Text + String.Format("Gear Down at: {0} ft\r\n", (playerAltitude.Value * 3.2808399).ToString("F0"));
+                }
+                if (!Gear)
+                {
+                    txtLog.Text = txtLog.Text + String.Format("Gear Up at: {0} ft\r\n", (playerAltitude.Value * 3.2808399).ToString("F0"));
+                }
+
+                if (ParkingBrake)
+                {
+                    txtLog.Text = txtLog.Text + String.Format("Parking Brakes On: {0} \r\n", (playerParkingBrake.Value).ToString("F0"));
+                }
+                if (!ParkingBrake)
+                {
+                    txtLog.Text = txtLog.Text + String.Format("Parking Brakes Off: {0} \r\n", (playerParkingBrake.Value).ToString("F0"));
+                }
+
+                if (Slew)
+                {
+                    txtLog.Text = txtLog.Text + String.Format("Slew On: {0} \r\n", (playerSlew.Value).ToString("F0"));
+                }
+                if (!Slew)
+                {
+                    txtLog.Text = txtLog.Text + String.Format("Slew Off: {0} \r\n", (playerSlew.Value).ToString("F0"));
+                }
+
+                if (OverSpeed)
+                {
+                    txtLog.Text = txtLog.Text + String.Format("OverSpeed On: {0} \r\n", (playerOverSpeed.Value).ToString("F0"));
+                }
+                if (!OverSpeed)
+                {
+                    txtLog.Text = txtLog.Text + String.Format("OverSpeed Off: {0} \r\n", (playerOverSpeed.Value).ToString("F0"));
+                }
 
 
+                if (Stall)
+                {
+                    txtLog.Text = txtLog.Text + String.Format("Stall On: {0} \r\n", (playerStall.Value).ToString("F0"));
+                }
+                if (!Stall)
+                {
+                    txtLog.Text = txtLog.Text + String.Format("Stall Off: {0} \r\n", (playerStall.Value).ToString("F0"));
+                }
 
-                // validar email.password
-                // preparar a query
-                string sqlCommand = "insert into acarslogs values (@altitude)";
+                if (playerBattery.Value == 257)
+                {
+                    txtLog.Text = txtLog.Text + String.Format("Battery On: {0} \r\n", (playerBattery.Value).ToString("F0"));
+                }
+                if (playerBattery.Value == 256)
+                {
+                    txtLog.Text = txtLog.Text + String.Format("Battery Off: {0} \r\n", (playerBattery.Value).ToString("F0"));
+                }
 
-                // preencher os parametros
-                cmd.Parameters.AddWithValue("@altitude", (playerAltitude.Value * 3.2808399).ToString("F2"));
-                // executar a query
-                object sqlResult = cmd.ExecuteScalar();
+                if (LandingLights)
+                {
+                    txtLog.Text = txtLog.Text + String.Format("LandingLights On at: {0} ft\r\n", (playerAltitude.Value * 3.2808399).ToString("F0"));
+                }
+                if (!LandingLights)
+                {
+                    txtLog.Text = txtLog.Text + String.Format("LandingLights Off at: {0} ft\r\n", (playerAltitude.Value * 3.2808399).ToString("F0"));
+                }
 
-                
+                //Touch Down
+                if (onGround && arrivalTime != null)
+                {
+                    txtLog.Text = txtLog.Text + String.Format("TouchDown: {0} ft/min\r\n", (playerVerticalSpeed.Value).ToString("F0"));
+                }
+
+                // Compose a string that consists of three lines.
+                string lines = txtLog.Text;
+
+                // Write the string to a file.
+                using (System.IO.StreamWriter file =
+                new System.IO.StreamWriter(@"C:\Log.txt", true))
+                {
+                    file.WriteLine(txtLog.Text);
+                }
 
 
+                txtSquawk.Text = String.Format("{0}", (playersquawk.Value).ToString("X").PadLeft(4, '0'));
+
+                // get sim time from FSUIPC, no date
+                DateTime fsTime = new DateTime(DateTime.UtcNow.Year, 1, 1, playerSimTime.Value[0], playerSimTime.Value[1], playerSimTime.Value[2]);
+                txtSimHour.Text = fsTime.ToShortTimeString();
                 result = "[{";
 
                 // Latitude and Longitude 
