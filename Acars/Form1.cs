@@ -182,7 +182,7 @@ namespace Acars
         /// <summary>
         /// Handle flight phases
         /// </summary>
-        private void FlightRun()
+        private void HandleFlightPhases()
         {
             switch (flightPhase)
             {
@@ -331,7 +331,7 @@ namespace Acars
             try
             {
                 // handle flight phase changes
-                FlightRun();
+                HandleFlightPhases();
 
                 if (departureTime != null)
                     txtDepTime.Text = departureTime.ToString("HH:mm");
