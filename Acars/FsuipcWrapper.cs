@@ -7,6 +7,9 @@ using FSUIPC;
 
 namespace Acars
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class FsuipcWrapper
     {
         #region warpping process and open sequence
@@ -90,6 +93,9 @@ namespace Acars
         private Offset<long> characterLongitude = new Offset<long>(0x0568);
 
         private Offset<long> characterAltitude = new Offset<long>(0x0570);
+
+        // EnvironmentDateTime
+        private Offset<byte[]> environmentDateTime = new Offset<byte[]>(0x0238, 10);
         #endregion offset declarations
 
         #region warp property getters and setters
@@ -109,6 +115,26 @@ namespace Acars
             {
                 process();
                 return characterAltitude.Value;
+            }
+        }
+
+        public DateTime EnvironmentDateTime
+        {
+            get
+            {
+                process();
+
+                // get year in Simulator
+                short year = BitConverter.ToInt16(environmentDateTime.Value, 8);
+
+                // create a time based on Jan 1 of Simulator year
+                DateTime result = new DateTime(year, 1, 1, environmentDateTime.Value[0], environmentDateTime.Value[1], environmentDateTime.Value[2]);
+
+                // get day of year from Simulator, and add that to the above time
+                short dayOfYear = BitConverter.ToInt16(environmentDateTime.Value, 6);
+
+                // add and return
+                return result.Add(new TimeSpan(dayOfYear - 1, 0, 0, 0));
             }
         }
         #endregion warp property getters and setters
