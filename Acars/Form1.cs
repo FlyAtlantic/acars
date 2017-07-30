@@ -267,6 +267,18 @@ namespace Acars
         {
             try
             {
+                if (conn.State != ConnectionState.Open)
+                {
+                    conn = new MySqlConnection(ConnectionString);
+                    try
+                    {
+                        conn.Open();
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception("Conn State was not Open", ex);
+                    }
+                }
 
                 // validar email.password
                 // preparar a query
@@ -562,21 +574,6 @@ namespace Acars
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            conn = new MySqlConnection(ConnectionString);
-            try
-            {
-                conn.Open();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    ex.Message,
-                    "Closing",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-                Application.Exit();
-            }
-
             txtEmail.Text = Properties.Settings.Default.Email;
             txtPassword.Text = Properties.Settings.Default.Password;
 
