@@ -167,21 +167,6 @@ namespace Acars
         public Form1()
         {
             InitializeComponent();
-
-            conn = new MySqlConnection(getConnectionString());
-            try
-            {
-                conn.Open();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    ex.Message,
-                    "Closing",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-                Application.Exit();
-            }
         }
 
         /// <summary>
@@ -575,6 +560,21 @@ namespace Acars
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            conn = new MySqlConnection(getConnectionString());
+            try
+            {
+                conn.Open();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    ex.Message,
+                    "Closing",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                Application.Exit();
+            }
+
             txtEmail.Text = Properties.Settings.Default.Email;
             txtPassword.Text = Properties.Settings.Default.Password;
 
