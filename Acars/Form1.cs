@@ -267,7 +267,7 @@ namespace Acars
         {
             try
             {
-                if (conn.State != ConnectionState.Open)
+                if (conn == null || conn.State != ConnectionState.Open)
                 {
                     conn = new MySqlConnection(ConnectionString);
                     try
