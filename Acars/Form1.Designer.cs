@@ -392,7 +392,6 @@
             this.txtSimHour.TabIndex = 33;
             this.txtSimHour.Text = "----";
             this.txtSimHour.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.txtSimHour.TextChanged += new System.EventHandler(this.txtSimHour_TextChanged);
             // 
             // lblFuelRemaining
             // 
@@ -493,7 +492,6 @@
             this.txtFuel.TabIndex = 23;
             this.txtFuel.Text = "----";
             this.txtFuel.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.txtFuel.TextChanged += new System.EventHandler(this.txtFuel_TextChanged);
             // 
             // txtDeparture
             // 
@@ -607,7 +605,6 @@
             this.lblZFW.Size = new System.Drawing.Size(31, 13);
             this.lblZFW.TabIndex = 34;
             this.lblZFW.Text = "ZFW";
-            this.lblZFW.Click += new System.EventHandler(this.label3_Click);
             // 
             // txtZFW
             // 

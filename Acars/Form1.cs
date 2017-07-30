@@ -594,20 +594,5 @@ namespace Acars
             Properties.Settings.Default.autologin = chkAutoLogin.Checked;
             Properties.Settings.Default.Save();
         }
-
-        private void txtSimHour_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label3_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void txtFuel_TextChanged(object sender, EventArgs e)
-        {
-
-        }
     }
 }
