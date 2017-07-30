@@ -139,6 +139,10 @@ namespace Acars
 
         #region Property declaration
         /// <summary>
+        /// FSUIPC Wrapper
+        /// </summary>
+        private FsuipcWrapper fs;
+        /// <summary>
         /// Reusable MySQL connection throughout the application
         /// </summary>
         MySqlConnection conn;
@@ -334,6 +338,10 @@ namespace Acars
         {
             if (FlightAssignedDone)
             {
+                // instanciate FS wrapper
+                while (fs == null)
+                    fs = FsuipcWrapper.TryInstantiate();
+
                 bool fsuipcOpen = false;
            
                 while (!fsuipcOpen)
@@ -441,33 +449,7 @@ namespace Acars
                     txtFuel.Text = String.Format("{0} kg", ((playerGW.Value / 2.2046226218487757)-((playerZFW.Value / 256) * 0.45359237)).ToString("F0"));
 
                     //insere e verifica hora zulu no Simulador
-
-                    int DayofYear = DateTime.UtcNow.DayOfYear;                 
-                    int Hour = DateTime.UtcNow.Hour;
-                    int Minute = DateTime.UtcNow.Minute;
-                    int Year = DateTime.UtcNow.Year;
-                    int[] numbers = { DayofYear, Year };
-                    foreach (var value in numbers)
-                    {
-                        byte[] arrProp3 = BitConverter.GetBytes(value);
-                        playerDayOfYear.Value = arrProp3;
-                        FSUIPCConnection.Process();
-                    }
-
-                    byte[] arrHour = BitConverter.GetBytes(Hour);
-                    byte[] arrMinute = BitConverter.GetBytes(Minute);
-                    byte[] arrSecond = BitConverter.GetBytes(Year);
-
-                    if (playerHourSim.Value != arrHour && playerMinuteSim.Value != arrMinute)
-                    {
-                        playerHourSim.Value = arrHour;
-                        playerMinuteSim.Value = arrMinute;
-                        playerYearSim.Value = arrSecond;                        
-                        string Message1 = "Simulator Hour can not be changed!";
-                        messageWrite.Value = Message1;
-                        messageDuration.Value = 5;
-                        FSUIPCConnection.Process();
-                    }
+                    fs.EnvironmentDateTime = DateTime.UtcNow;
 
                     //Log Text
                     txtLog.Text = String.Format("{0:dd-MM-yyyy HH:mm:ss}\r\n", DateTime.UtcNow);
