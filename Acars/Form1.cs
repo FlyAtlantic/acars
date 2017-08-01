@@ -241,7 +241,6 @@ namespace Acars
             {
                 case FlightPhases.PREFLIGHT:
                     // check for airborne
-                    if (!onGround)
                     {
                         flightPhase = FlightPhases.CLIMBING;
                         departureTime = DateTime.UtcNow;
@@ -418,6 +417,7 @@ namespace Acars
                     txtFlightTime.Text = String.Format("{0:00}:{1:00}",
                                                        Math.Truncate(flightTime.TotalHours),
                                                        flightTime.Minutes);
+                else { };
 
                 // process FSUIPC data
                 onGround = (playerAircraftOnGround.Value == 0) ? false : true;
@@ -468,7 +468,7 @@ namespace Acars
                 if (Gear) {
                     txtLog.Text = txtLog.Text + String.Format("Gear Down at: {0} ft\r\n", (playerAltitude.Value * 3.2808399).ToString("F0"));
                 }
-                if (!Gear)
+                else
                 {
                     txtLog.Text = txtLog.Text + String.Format("Gear Up at: {0} ft\r\n", (playerAltitude.Value * 3.2808399).ToString("F0"));
                 }
@@ -477,7 +477,7 @@ namespace Acars
                 {
                     txtLog.Text = txtLog.Text + String.Format("Parking Brakes On: {0} \r\n", (playerParkingBrake.Value).ToString("F0"));
                 }
-                if (!ParkingBrake)
+                else
                 {
                     txtLog.Text = txtLog.Text + String.Format("Parking Brakes Off: {0} \r\n", (playerParkingBrake.Value).ToString("F0"));
                 }
@@ -486,7 +486,7 @@ namespace Acars
                 {
                     txtLog.Text = txtLog.Text + String.Format("Slew On: {0} \r\n", (playerSlew.Value).ToString("F0"));
                 }
-                if (!Slew)
+                else
                 {
                     txtLog.Text = txtLog.Text + String.Format("Slew Off: {0} \r\n", (playerSlew.Value).ToString("F0"));
                 }
@@ -495,7 +495,7 @@ namespace Acars
                 {
                     txtLog.Text = txtLog.Text + String.Format("OverSpeed On: {0} \r\n", (playerOverSpeed.Value).ToString("F0"));
                 }
-                if (!OverSpeed)
+                else
                 {
                     txtLog.Text = txtLog.Text + String.Format("OverSpeed Off: {0} \r\n", (playerOverSpeed.Value).ToString("F0"));
                 }
@@ -505,7 +505,7 @@ namespace Acars
                 {
                     txtLog.Text = txtLog.Text + String.Format("Stall On: {0} \r\n", (playerStall.Value).ToString("F0"));
                 }
-                if (!Stall)
+                else
                 {
                     txtLog.Text = txtLog.Text + String.Format("Stall Off: {0} \r\n", (playerStall.Value).ToString("F0"));
                 }
@@ -514,7 +514,7 @@ namespace Acars
                 {
                     txtLog.Text = txtLog.Text + String.Format("Battery On: {0} \r\n", (playerBattery.Value).ToString("F0"));
                 }
-                if (playerBattery.Value == 256)
+                else
                 {
                     txtLog.Text = txtLog.Text + String.Format("Battery Off: {0} \r\n", (playerBattery.Value).ToString("F0"));
                 }
@@ -523,7 +523,7 @@ namespace Acars
                 {
                     txtLog.Text = txtLog.Text + String.Format("LandingLights On at: {0} ft\r\n", (playerAltitude.Value * 3.2808399).ToString("F0"));
                 }
-                if (!LandingLights)
+                else
                 {
                     txtLog.Text = txtLog.Text + String.Format("LandingLights Off at: {0} ft\r\n", (playerAltitude.Value * 3.2808399).ToString("F0"));
                 }
