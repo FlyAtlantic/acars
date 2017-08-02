@@ -357,17 +357,7 @@ namespace Acars
             {
                 // instanciate FS wrapper
                 while (fs == null)
-                    fs = FsuipcWrapper.TryInstantiate();
-
-                bool fsuipcOpen = false;
-           
-                while (!fsuipcOpen)
-                    try
-                    {
-                        FSUIPCConnection.Open();
-                        fsuipcOpen = true;                       
-                    }
-                    catch (Exception crap) { }             
+                    fs = FsuipcWrapper.TryInstantiate();            
 
                 string Message = "Welcome to FlyAtlantic Acars";
                 messageWrite.Value = Message;
