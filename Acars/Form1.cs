@@ -300,19 +300,18 @@ namespace Acars
                     }
                     else
                     {
-
                         // get current assigned fligth information
-                        sqlCommand = "SELECT `flightnumber`, `departure`, `destination`, `alternate` FROM `pilotassignments` left join flights on pilotassignments.flightid = flights.idf left join utilizadores on pilotassignments.pilot = utilizadores.user_id WHERE utilizadores.user_email=@email";
+                        sqlCommand = "SELECT `flightnumber`, `departure`, `destination`, `alternate`, `date_assigned` FROM `pilotassignments` left join flights on pilotassignments.flightid = flights.idf left join utilizadores on pilotassignments.pilot = utilizadores.user_id WHERE utilizadores.user_email=@email";
                         cmd = new MySqlCommand(sqlCommand, conn);
                         cmd.Parameters.AddWithValue("@email", email);
                         MySqlDataReader result1 = cmd.ExecuteReader();
-
                         while (result1.Read())
                         {
                             txtCallsign.Text = String.Format("{0}", (result1[0]));
                             txtDeparture.Text = String.Format("{0}", (result1[1]));
                             txtArrival.Text = String.Format("{0}", (result1[2]));
                             txtAlternate.Text = String.Format("{0}", (result1[3]));
+                            txtFlightInformation.Text = String.Format("{0} {1} {2} {3:HH:mm}", (result1[0]), (result1[1]), (result1[2]), (result1[4]));
 
                             button1.Text = "Start Flight";
                             return true;
@@ -322,6 +321,7 @@ namespace Acars
                         {
                             txtFlightInformation.Text = "No Flight Assigned";
                         }
+                        conn.Close();
                     }
 
                 }
@@ -332,6 +332,7 @@ namespace Acars
             }
             return false;
         }
+
         #endregion Specific Helper Functions
 
         // FSUIPC information
