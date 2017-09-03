@@ -138,6 +138,7 @@ namespace Acars
         #endregion FSUIPC Offset declarations
 
         #region Property declaration
+        private int landingRate;
         /// <summary>
         /// FSUIPC Wrapper
         /// </summary>
@@ -366,6 +367,9 @@ namespace Acars
 
                 button1.Enabled = false;
                 button1.Text = "Flying...";
+
+                landingRate = int.MinValue;
+
                 flightacars.Start();
             }
             else
@@ -520,10 +524,10 @@ namespace Acars
                 }
 
                 //Touch Down
-                if (onGround && arrivalTime == null)
+                if (onGround && arrivalTime == null && landingRate == int.MinValue)
                 {
-                    txtLog.Text = txtLog.Text + String.Format("TouchDown: {0} ft/min\r\n", (playerVerticalSpeed.Value).ToString("F0"));
-                    arrivalTime = DateTime.UtcNow;
+                    landingRate = playerVerticalSpeed.Value;
+                    txtLog.Text = txtLog.Text + String.Format("TouchDown: {0} ft/min\r\n", landingRate.ToString("F0"));
                 }
 
                 // Compose a string that consists of three lines.
