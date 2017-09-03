@@ -373,8 +373,13 @@ namespace Acars
 
                 flightacars.Start();
             }
+            else if (arrivalTime != null)
+            // End Flight
+            {
+
+            }
             else
-                // Login
+            // Login
             {
                 
 
