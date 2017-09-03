@@ -524,7 +524,7 @@ namespace Acars
                 }
 
                 //Touch Down
-                if (onGround && arrivalTime == null && landingRate == int.MinValue)
+                if (onGround && landingRate == int.MinValue)
                 {
                     landingRate = playerVerticalSpeed.Value;
                     txtLog.Text = txtLog.Text + String.Format("TouchDown: {0} ft/min\r\n", landingRate.ToString("F0"));
