@@ -528,12 +528,12 @@ namespace Acars
                 if (onGround && landingRate == double.MinValue)
                 {
                     landingRate = (playerVerticalSpeed.Value * 3.28084) / -1;
-                    txtLandingRate2.Text = String.Format("{0} ft/min", landingRate.ToString("F0"));
+                    txtLandingRate.Text = String.Format("{0} ft/min", landingRate.ToString("F0"));
                     txtLog.Text = txtLog.Text + String.Format("TouchDown: {0} ft/min\r\n", landingRate.ToString("F0"));
                 } else if (!onGround)
                 {
                     landingRate = double.MinValue;
-                    txtLandingRate2.Text = "";
+                    txtLandingRate.Text = "";
                 }
 
                 // Compose a string that consists of three lines.
