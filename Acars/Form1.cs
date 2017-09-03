@@ -1,4 +1,4 @@
-﻿using System;
+﻿    using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -520,9 +520,10 @@ namespace Acars
                 }
 
                 //Touch Down
-                if (onGround && arrivalTime != null)
+                if (onGround && arrivalTime == null)
                 {
                     txtLog.Text = txtLog.Text + String.Format("TouchDown: {0} ft/min\r\n", (playerVerticalSpeed.Value).ToString("F0"));
+                    arrivalTime = DateTime.UtcNow;
                 }
 
                 // Compose a string that consists of three lines.
