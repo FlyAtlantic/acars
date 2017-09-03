@@ -430,7 +430,7 @@ namespace Acars
                     conn.Close();
                 }
 
-                transaction.Rollback();
+                transaction.Commit();
                 MessageBox.Show(String.Format("Flight approved, rating 100% {0} EP(s)", Math.Round(Math.Round(flightTime.TotalMinutes) / 10)),
                                 "Flight Approved",
                                 MessageBoxButtons.OK,
