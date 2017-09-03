@@ -530,15 +530,15 @@ namespace Acars
                 }
 
                 //Touch Down
-                if (onGround && landingRate == double.MinValue)
+                if (flightPhase == FlightPhases.TAXIOUT && landingRate == double.MinValue)
                 {
+                    // enable end flight
+                    button1.Text = "End flight";
+                    button1.Enabled = true;
+
                     landingRate = (playerVerticalSpeed.Value * 3.28084) / -1;
                     txtLandingRate.Text = String.Format("{0} ft/min", landingRate.ToString("F0"));
                     txtLog.Text = txtLog.Text + String.Format("TouchDown: {0} ft/min\r\n", landingRate.ToString("F0"));
-                } else if (!onGround)
-                {
-                    landingRate = double.MinValue;
-                    txtLandingRate.Text = "";
                 }
 
                 // Compose a string that consists of three lines.
