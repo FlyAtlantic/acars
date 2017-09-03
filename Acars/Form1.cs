@@ -138,6 +138,8 @@ namespace Acars
         #endregion FSUIPC Offset declarations
 
         #region Property declaration
+        private int flightId;
+        private int userId;
         private double landingRate;
         /// <summary>
         /// FSUIPC Wrapper
@@ -303,7 +305,7 @@ namespace Acars
                     else
                     {
                         // get current assigned fligth information
-                        sqlCommand = "SELECT `flightnumber`, `departure`, `destination`, `alternate`, `date_assigned` FROM `pilotassignments` left join flights on pilotassignments.flightid = flights.idf left join utilizadores on pilotassignments.pilot = utilizadores.user_id WHERE utilizadores.user_email=@email";
+                        sqlCommand = "SELECT `flightnumber`, `departure`, `destination`, `alternate`, `date_assigned`, `utilizadores`.`user_id`, `flights`.`id` FROM `pilotassignments` left join flights on pilotassignments.flightid = flights.idf left join utilizadores on pilotassignments.pilot = utilizadores.user_id WHERE utilizadores.user_email=@email";
                         cmd = new MySqlCommand(sqlCommand, conn);
                         cmd.Parameters.AddWithValue("@email", email);
                         MySqlDataReader result1 = cmd.ExecuteReader();
@@ -313,6 +315,8 @@ namespace Acars
                             txtDeparture.Text = String.Format("{0}", (result1[1]));
                             txtArrival.Text = String.Format("{0}", (result1[2]));
                             txtAlternate.Text = String.Format("{0}", (result1[3]));
+                            userId = (int)result1[5];
+                            flightId = (int)result1[6];
                             txtFlightInformation.Text = String.Format("{0} {1} {2} {3:HH:mm}", (result1[0]), (result1[1]), (result1[2]), (result1[4]));
 
                             button1.Text = "Start Flight";
@@ -376,7 +380,45 @@ namespace Acars
             else if (arrivalTime != null)
             // End Flight
             {
+                // prepare sql commands
+                MySqlCommand insertFlight = new MySqlCommand("INSERT INTO `pireps` (`date`, `flighttime`, `flightid`, `pilotid`, `ft/pm`, `sum`, `accepted`, `eps_granted`) VALUES (@date, @flighttime, @flightid, @pilotid, @landingrate, @sum, @accepted, @flighteps;", conn);
+                var dateParam = insertFlight.Parameters.Add("@date", MySqlDbType.Date);
+                dateParam.Value = DateTime.UtcNow;
+                insertFlight.Parameters.AddWithValue("@date", "");
+                insertFlight.Parameters.AddWithValue("@flighttime", flightTime.TotalMinutes);
+                insertFlight.Parameters.AddWithValue("@flightid", flightId);
+                insertFlight.Parameters.AddWithValue("@pilotid", userId);
+                insertFlight.Parameters.AddWithValue("@landingrate", landingRate);
+                insertFlight.Parameters.AddWithValue("@sum", 100);
+                insertFlight.Parameters.AddWithValue("@accepted", "1");
+                insertFlight.Parameters.AddWithValue("@flighteps", Math.Round(flightTime.TotalMinutes / 10));
 
+                MySqlCommand updatePilot = new MySqlCommand("UPDATE `utilizadores` SET `eps` = eps + @flighteps WHERE `user_id` = @pilotid;", conn);
+                insertFlight.Parameters.AddWithValue("@pilotid", userId);
+                insertFlight.Parameters.AddWithValue("@flighteps", Math.Round(flightTime.TotalMinutes / 10));
+
+                conn.Open();
+                try
+                {
+                    // insert flight
+                    int result = 0;
+                    while (result == 0)
+                        result = insertFlight.ExecuteNonQuery();
+
+                    // update pilot data
+                    result = 0;
+                    while (result == 0)
+                        result = updatePilot.ExecuteNonQuery();
+                }
+                finally
+                {
+                    conn.Close();
+                }
+
+                MessageBox.Show(String.Format("Flight approved, rating 100% {0} EP(s)", Math.Round(flightTime.TotalMinutes / 10)),
+                                "Flight Approved",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Information);
             }
             else
             // Login
