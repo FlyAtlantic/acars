@@ -398,6 +398,7 @@ namespace Acars
                 insertFlight.Parameters.AddWithValue("@flighteps", Math.Round(flightTime.TotalMinutes / 10));
 
                 conn.Open();
+                MySqlTransaction transaction = conn.BeginTransaction();
                 try
                 {
                     // insert flight
@@ -410,11 +411,17 @@ namespace Acars
                     while (result == 0)
                         result = updatePilot.ExecuteNonQuery();
                 }
+                catch (Exception crap)
+                {
+                    transaction.Rollback();
+                    MessageBox.Show(crap.Source, crap.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
                 finally
                 {
                     conn.Close();
                 }
 
+                transaction.Rollback();
                 MessageBox.Show(String.Format("Flight approved, rating 100% {0} EP(s)", Math.Round(flightTime.TotalMinutes / 10)),
                                 "Flight Approved",
                                 MessageBoxButtons.OK,
