@@ -49,6 +49,8 @@
             this.lblSquawk = new System.Windows.Forms.Label();
             this.txtSquawk = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.txtLandingRate = new System.Windows.Forms.TextBox();
             this.lblVerticalSpeed = new System.Windows.Forms.Label();
             this.txtVerticalSpeed = new System.Windows.Forms.TextBox();
             this.lblCallsign = new System.Windows.Forms.Label();
@@ -83,8 +85,6 @@
             this.lblZFW = new System.Windows.Forms.Label();
             this.txtZFW = new System.Windows.Forms.TextBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.txtLandingRate = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -276,6 +276,26 @@
             this.groupBox1.TabIndex = 20;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Flight Status";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(252, 26);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(69, 13);
+            this.label3.TabIndex = 40;
+            this.label3.Text = "Touch Down";
+            // 
+            // txtLandingRate
+            // 
+            this.txtLandingRate.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtLandingRate.Enabled = false;
+            this.txtLandingRate.Location = new System.Drawing.Point(259, 42);
+            this.txtLandingRate.Name = "txtLandingRate";
+            this.txtLandingRate.Size = new System.Drawing.Size(55, 13);
+            this.txtLandingRate.TabIndex = 41;
+            this.txtLandingRate.Text = "----";
+            this.txtLandingRate.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // lblVerticalSpeed
             // 
@@ -638,33 +658,13 @@
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Schedule Information";
             // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(252, 26);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(69, 13);
-            this.label3.TabIndex = 40;
-            this.label3.Text = "Touch Down";
-            // 
-            // txtLandingRate
-            // 
-            this.txtLandingRate.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txtLandingRate.Enabled = false;
-            this.txtLandingRate.Location = new System.Drawing.Point(259, 42);
-            this.txtLandingRate.Name = "txtLandingRate";
-            this.txtLandingRate.Size = new System.Drawing.Size(55, 13);
-            this.txtLandingRate.TabIndex = 41;
-            this.txtLandingRate.Text = "----";
-            this.txtLandingRate.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::Acars.Properties.Resources.banner;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.ClientSize = new System.Drawing.Size(765, 638);
+            this.ClientSize = new System.Drawing.Size(772, 638);
             this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -172,7 +173,7 @@ namespace Acars
         /// <summary>
         /// Returns last gear touch down time
         /// </summary>
-        DateTime arrivalTime;
+        DateTime arrivalTime = DateTime.MinValue;
         /// <summary>
         /// Gets computed flight time
         /// 
@@ -268,21 +269,10 @@ namespace Acars
         /// <returns></returns>
         private bool DoLogin(string email, string password)
         {
+            conn.Open();
+
             try
             {
-                if (conn == null || conn.State != ConnectionState.Open)
-                {
-                    conn = new MySqlConnection(ConnectionString);
-                    try
-                    {
-                        conn.Open();
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new Exception("Conn State was not Open", ex);
-                    }
-                }
-
                 // validar email.password
                 // preparar a query
                 string sqlCommand = "select count(*) from utilizadores where `user_email`=@email and `user_senha`=@password;";
@@ -305,7 +295,7 @@ namespace Acars
                     else
                     {
                         // get current assigned fligth information
-                        sqlCommand = "SELECT `flightnumber`, `departure`, `destination`, `alternate`, `date_assigned`, `utilizadores`.`user_id`, `flights`.`id` FROM `pilotassignments` left join flights on pilotassignments.flightid = flights.idf left join utilizadores on pilotassignments.pilot = utilizadores.user_id WHERE utilizadores.user_email=@email";
+                        sqlCommand = "SELECT `flightnumber`, `departure`, `destination`, `alternate`, `date_assigned`, `utilizadores`.`user_id`, `flights`.`idf` FROM `pilotassignments` left join flights on pilotassignments.flightid = flights.idf left join utilizadores on pilotassignments.pilot = utilizadores.user_id WHERE utilizadores.user_email=@email";
                         cmd = new MySqlCommand(sqlCommand, conn);
                         cmd.Parameters.AddWithValue("@email", email);
                         MySqlDataReader result1 = cmd.ExecuteReader();
@@ -336,6 +326,10 @@ namespace Acars
             {
                 MessageBox.Show(ex.Message);
             }
+            finally
+            {
+                conn.Close();
+            }
             return false;
         }
 
@@ -354,11 +348,19 @@ namespace Acars
         public Form1()
         {
             InitializeComponent();
+
+            conn = new MySqlConnection(ConnectionString);
+
+#if DEBUG
+            this.Width = 760;
+#else
+            this.Width = 387;
+#endif
         }
 
         private void btnLogin_Click(object sender, EventArgs e)
         {
-            if (FlightAssignedDone)
+            if (FlightAssignedDone && arrivalTime == DateTime.MinValue)
                 // Start Flight
             {
                 // instanciate FS wrapper
@@ -377,25 +379,24 @@ namespace Acars
 
                 flightacars.Start();
             }
-            else if (arrivalTime != null)
+            else if (arrivalTime != DateTime.MinValue)
             // End Flight
             {
                 // prepare sql commands
-                MySqlCommand insertFlight = new MySqlCommand("INSERT INTO `pireps` (`date`, `flighttime`, `flightid`, `pilotid`, `ft/pm`, `sum`, `accepted`, `eps_granted`) VALUES (@date, @flighttime, @flightid, @pilotid, @landingrate, @sum, @accepted, @flighteps;", conn);
+                MySqlCommand insertFlight = new MySqlCommand("INSERT INTO `pireps` (`date`, `flighttime`, `flightid`, `pilotid`, `ft/pm`, `sum`, `accepted`, `eps_granted`) VALUES (@date, @flighttime, @flightid, @pilotid, @landingrate, @sum, @accepted, @flighteps);", conn);
                 var dateParam = insertFlight.Parameters.Add("@date", MySqlDbType.Date);
                 dateParam.Value = DateTime.UtcNow;
-                insertFlight.Parameters.AddWithValue("@date", "");
-                insertFlight.Parameters.AddWithValue("@flighttime", flightTime.TotalMinutes);
+                insertFlight.Parameters.AddWithValue("@flighttime", Math.Round(flightTime.TotalMinutes));
                 insertFlight.Parameters.AddWithValue("@flightid", flightId);
                 insertFlight.Parameters.AddWithValue("@pilotid", userId);
-                insertFlight.Parameters.AddWithValue("@landingrate", landingRate);
+                insertFlight.Parameters.AddWithValue("@landingrate", Math.Round(landingRate));
                 insertFlight.Parameters.AddWithValue("@sum", 100);
                 insertFlight.Parameters.AddWithValue("@accepted", "1");
-                insertFlight.Parameters.AddWithValue("@flighteps", Math.Round(flightTime.TotalMinutes / 10));
+                insertFlight.Parameters.AddWithValue("@flighteps", Math.Round(Math.Round(flightTime.TotalMinutes) / 10));
 
                 MySqlCommand updatePilot = new MySqlCommand("UPDATE `utilizadores` SET `eps` = eps + @flighteps WHERE `user_id` = @pilotid;", conn);
-                insertFlight.Parameters.AddWithValue("@pilotid", userId);
-                insertFlight.Parameters.AddWithValue("@flighteps", Math.Round(flightTime.TotalMinutes / 10));
+                updatePilot.Parameters.AddWithValue("@pilotid", userId);
+                updatePilot.Parameters.AddWithValue("@flighteps", Math.Round(Math.Round(flightTime.TotalMinutes) / 10));
 
                 conn.Open();
                 try
@@ -410,12 +411,16 @@ namespace Acars
                     while (result == 0)
                         result = updatePilot.ExecuteNonQuery();
                 }
+                catch (Exception crap)
+                {
+                    Console.WriteLine(crap.Message);
+                }
                 finally
                 {
                     conn.Close();
                 }
 
-                MessageBox.Show(String.Format("Flight approved, rating 100% {0} EP(s)", Math.Round(flightTime.TotalMinutes / 10)),
+                MessageBox.Show(String.Format("Flight approved, rating 100% {0} EP(s)", Math.Round(Math.Round(flightTime.TotalMinutes) / 10)),
                                 "Flight Approved",
                                 MessageBoxButtons.OK,
                                 MessageBoxIcon.Information);
@@ -587,8 +592,11 @@ namespace Acars
                 string lines = txtLog.Text;
 
                 // Write the string to a file.
+                string logFilePath = String.Format("{0}log-flight-{1}.txt",
+                                                         Application.ExecutablePath.Replace("Acars.exe", ""),
+                                                         flightId);
                 using (System.IO.StreamWriter file =
-                new System.IO.StreamWriter(@"C:\Log.txt", true))
+                new System.IO.StreamWriter(logFilePath, true))
                 {
                     file.WriteLine(txtLog.Text);
                 }
@@ -617,6 +625,8 @@ namespace Acars
             catch (Exception crap)
             {
                 result = "";
+
+                Console.WriteLine(crap.Message);
             }
             Console.Write(result);
         }
