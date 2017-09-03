@@ -242,6 +242,7 @@ namespace Acars
             {
                 case FlightPhases.PREFLIGHT:
                     // check for airborne
+                    if (!onGround)
                     {
                         flightPhase = FlightPhases.CLIMBING;
                         departureTime = DateTime.UtcNow;
@@ -527,12 +528,12 @@ namespace Acars
                 if (onGround && landingRate == double.MinValue)
                 {
                     landingRate = (playerVerticalSpeed.Value * 3.28084) / -1;
-                    txtLandingRate.Text = String.Format("{0} ft/min", landingRate.ToString("F0"));
+                    txtLandingRate2.Text = String.Format("{0} ft/min", landingRate.ToString("F0"));
                     txtLog.Text = txtLog.Text + String.Format("TouchDown: {0} ft/min\r\n", landingRate.ToString("F0"));
                 } else if (!onGround)
                 {
                     landingRate = double.MinValue;
-                    txtLandingRate.Text = "";
+                    txtLandingRate2.Text = "";
                 }
 
                 // Compose a string that consists of three lines.
