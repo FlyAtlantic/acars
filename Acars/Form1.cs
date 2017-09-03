@@ -420,11 +420,6 @@ namespace Acars
                     while (result == 0)
                         result = deleteFlight.ExecuteNonQuery();
                 }
-
-                catch (Exception crap)
-                {
-                    Console.WriteLine(crap.Message);
-                }
                 catch (Exception crap)
                 {
                     transaction.Rollback();
