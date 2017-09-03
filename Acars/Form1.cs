@@ -398,6 +398,9 @@ namespace Acars
                 updatePilot.Parameters.AddWithValue("@pilotid", userId);
                 updatePilot.Parameters.AddWithValue("@flighteps", Math.Round(Math.Round(flightTime.TotalMinutes) / 10));
 
+                MySqlCommand deleteFlight = new MySqlCommand("DELETE from `pilotassignments` where `pilot` = @pilotid;", conn);
+                deleteFlight.Parameters.AddWithValue("@pilotid", userId);
+
                 conn.Open();
                 try
                 {
@@ -410,7 +413,13 @@ namespace Acars
                     result = 0;
                     while (result == 0)
                         result = updatePilot.ExecuteNonQuery();
+
+                    // delete flight
+                    result = 0;
+                    while (result == 0)
+                        result = deleteFlight.ExecuteNonQuery();
                 }
+
                 catch (Exception crap)
                 {
                     Console.WriteLine(crap.Message);
@@ -424,6 +433,7 @@ namespace Acars
                                 "Flight Approved",
                                 MessageBoxButtons.OK,
                                 MessageBoxIcon.Information);
+                Application.Exit();
             }
             else
             // Login
