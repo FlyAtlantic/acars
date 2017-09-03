@@ -83,6 +83,7 @@
             this.lblZFW = new System.Windows.Forms.Label();
             this.txtZFW = new System.Windows.Forms.TextBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.txtLandingRate = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -634,6 +635,13 @@
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Schedule Information";
             // 
+            // txtLandingRate
+            // 
+            this.txtLandingRate.Location = new System.Drawing.Point(499, 330);
+            this.txtLandingRate.Name = "txtLandingRate";
+            this.txtLandingRate.Size = new System.Drawing.Size(100, 20);
+            this.txtLandingRate.TabIndex = 44;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -641,6 +649,7 @@
             this.BackgroundImage = global::Acars.Properties.Resources.banner;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.ClientSize = new System.Drawing.Size(765, 638);
+            this.Controls.Add(this.txtLandingRate);
             this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
@@ -730,6 +739,7 @@
         private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.Label lblZFW;
         private System.Windows.Forms.TextBox txtZFW;
+        private System.Windows.Forms.TextBox txtLandingRate;
     }
 }
 
