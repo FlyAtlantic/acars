@@ -480,6 +480,7 @@ namespace Acars
                 while (result == 0)
                     result = updatePilotAssignment.ExecuteNonQuery();
 
+                transaction.Commit();
             }
             catch (Exception crap)
             {
@@ -490,7 +491,6 @@ namespace Acars
             {
                 conn.Close();
             }
-
         }
 
         private void flightacars_Tick(object sender, EventArgs e)
