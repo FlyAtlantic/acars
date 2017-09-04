@@ -173,6 +173,7 @@ namespace Acars
         /// </summary>
         static private Offset<int> playerIndicatedAirspeed = new Offset<int>(0x02BC);
         /// <summary>
+
         #endregion FSUIPC Offset declarations
 
         #region Property declaration
@@ -427,9 +428,6 @@ namespace Acars
                 conn.Close();
                 OnFlight.Start();
                 flightacars.Start();
-
-                
-                
             }
             else if (arrivalTime != DateTime.MinValue)
             // End Flight
@@ -620,7 +618,7 @@ namespace Acars
                 fs.EnvironmentDateTime = DateTime.UtcNow;
                 
                 //Log Text
-                 FsLongitude lon = new FsLongitude(playerLongitude.Value);
+                FsLongitude lon = new FsLongitude(playerLongitude.Value);
                 FsLatitude lat = new FsLatitude(playerLatitude.Value);
                 int turnRate = (((playerTurnRate.Value) / 360) / 65536) * 2;
                 Double intAltitude = (playerAltitude.Value * 3.2808399);
@@ -632,7 +630,7 @@ namespace Acars
                 txtLog.Text = txtLog.Text + String.Format("Latitude: {0} \r\n", lat.DecimalDegrees.ToString().Replace(',', '.'));
                 txtLog.Text = txtLog.Text + String.Format("Longitude: {0} \r\n\r\n", lon.DecimalDegrees.ToString().Replace(',', '.'));
                 
-                txtLog.Text = txtLog.Text + String.Format("Number of Engines: {0} \r\n", (playerEnginesNumber.Value).ToString("F0"));                
+                txtLog.Text = txtLog.Text + String.Format("Number of Engines: {0} \r\n", (playerEnginesNumber.Value).ToString("F0"));
                 if (playerEnginesNumber.Value == 1)
                 {
                     if (Engine1Start)
@@ -793,7 +791,7 @@ namespace Acars
                 {
                     txtPenalizations.Text = txtPenalizations.Text + String.Format("EVENT 3C : Speed above 250kt below 10.000ft\r\n");
                 }
-                if (onGround && GS >= 27)
+                if (onGround && flightPhase == FlightPhases.TAXIOUT && GS >= 27)
                 {
                     txtPenalizations.Text = txtPenalizations.Text + String.Format("EVENT 3D : Speed above 25kt on Taxi\r\n");
                 }
@@ -852,8 +850,7 @@ namespace Acars
                 Console.WriteLine(crap.Message);
             }
             Console.Write(result);
-        }
-
+        }               
         private void Form1_Load(object sender, EventArgs e)
         {
             txtEmail.Text = Properties.Settings.Default.Email;

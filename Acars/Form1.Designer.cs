@@ -583,7 +583,7 @@
             this.txtLog.Location = new System.Drawing.Point(13, 25);
             this.txtLog.Multiline = true;
             this.txtLog.Name = "txtLog";
-            this.txtLog.Size = new System.Drawing.Size(350, 337);
+            this.txtLog.Size = new System.Drawing.Size(350, 262);
             this.txtLog.TabIndex = 0;
             // 
             // groupBox3
@@ -668,10 +668,10 @@
             // 
             // txtPenalizations
             // 
-            this.txtPenalizations.Location = new System.Drawing.Point(13, 377);
+            this.txtPenalizations.Location = new System.Drawing.Point(13, 307);
             this.txtPenalizations.Multiline = true;
             this.txtPenalizations.Name = "txtPenalizations";
-            this.txtPenalizations.Size = new System.Drawing.Size(350, 142);
+            this.txtPenalizations.Size = new System.Drawing.Size(350, 212);
             this.txtPenalizations.TabIndex = 1;
             // 
             // Form1
