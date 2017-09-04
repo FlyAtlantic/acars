@@ -168,6 +168,11 @@ namespace Acars
         /// </summary>
         static private Offset<int> playerTurnRate = new Offset<int>(0x057C);
         /// <summary>
+        ///    /// <summary> 
+        ///  /// /// Indicated Airspeed
+        /// </summary>
+        static private Offset<int> playerIndicatedAirspeed = new Offset<int>(0x02BC);
+        /// <summary>
         #endregion FSUIPC Offset declarations
 
         #region Property declaration
@@ -593,6 +598,16 @@ namespace Acars
                     messageDuration.Value = 5;
                     FSUIPCConnection.Process();
                 }
+                int GS = (airspeed.Value / 128);
+                //Parking Brakes can not be set on the air
+                if (ParkingBrake && GS >= 10 )
+                {
+                    playerParkingBrake.Value = 0;
+                    string Message = "Parking Brakes can not be set with aircraft movement!";
+                    messageWrite.Value = Message;
+                    messageDuration.Value = 5;
+                    FSUIPCConnection.Process();
+                }
 
                 // aircraft wieghts
                 txtGrossWeight.Text = String.Format("{0} kg", ((playerGW.Value) * 0.45359237).ToString("F0"));
@@ -607,6 +622,7 @@ namespace Acars
                 FsLatitude lat = new FsLatitude(playerLatitude.Value);
                 int turnRate = (((playerTurnRate.Value) / 360) / 65536) * 2;
                 Double intAltitude = (playerAltitude.Value * 3.2808399);
+                int IAS = (playerIndicatedAirspeed.Value / 128);
 
                 txtLog.Text = String.Format("{0:dd-MM-yyyy HH:mm:ss}\r\n\r\n", DateTime.UtcNow);
                 txtLog.Text = txtLog.Text + String.Format("Simulator: {0} \r\n", FSUIPCConnection.FlightSimVersionConnected);
@@ -614,8 +630,7 @@ namespace Acars
                 txtLog.Text = txtLog.Text + String.Format("Latitude: {0} \r\n", lat.DecimalDegrees.ToString().Replace(',', '.'));
                 txtLog.Text = txtLog.Text + String.Format("Longitude: {0} \r\n\r\n", lon.DecimalDegrees.ToString().Replace(',', '.'));
                 
-                txtLog.Text = txtLog.Text + String.Format("Number of Engines: {0} \r\n", (playerEnginesNumber.Value).ToString("F0"));
-               
+                txtLog.Text = txtLog.Text + String.Format("Number of Engines: {0} \r\n", (playerEnginesNumber.Value).ToString("F0"));                
                 if (playerEnginesNumber.Value == 1)
                 {
                     if (Engine1Start)
@@ -712,6 +727,7 @@ namespace Acars
                     }
                 }
 
+                txtLog.Text = txtLog.Text + String.Format("IAS: {0} \r\n", (playerIndicatedAirspeed.Value / 128).ToString("F0"));
                 txtLog.Text = txtLog.Text + String.Format("QNH: {0} mbar \r\n\r\n", ((playerQNH.Value) / 16).ToString("F0"));
 
                 if (playerBattery.Value == 257)
@@ -724,11 +740,11 @@ namespace Acars
                 }                
                 if (ParkingBrake)
                 {
-                    txtLog.Text = txtLog.Text + String.Format("Parking Brakes On: {0} \r\n", (playerParkingBrake.Value).ToString("F0"));
+                    txtLog.Text = txtLog.Text + String.Format("Parking Brakes On \r\n");
                 }
                 else
                 {
-                    txtLog.Text = txtLog.Text + String.Format("Parking Brakes Off: {0} \r\n", (playerParkingBrake.Value).ToString("F0"));
+                    txtLog.Text = txtLog.Text + String.Format("Parking Brakes Off \r\n");
                 }
                 if (Gear)
                 {
@@ -743,32 +759,41 @@ namespace Acars
 
                 if (Slew)
                 {
-                    txtLog.Text = txtLog.Text + String.Format("EVENT : Slew On: {0} \r\n", (playerSlew.Value).ToString("F0"));
+                    txtLog.Text = txtLog.Text + String.Format("EVENT 1A : Slew On Flight \r\n");
                 }
                 if (Pause)
                 {
-                    txtLog.Text = txtLog.Text + String.Format("EVENT : Pause On: {0} \r\n", (playerPauseDisplay.Value).ToString("F0"));
+                    txtLog.Text = txtLog.Text + String.Format("EVENT 1B : Pause On Flight \r\n");
                 }
                 if (OverSpeed)
                 {
-                    txtLog.Text = txtLog.Text + String.Format("EVENT : OverSpeed On: {0} \r\n", (playerOverSpeed.Value).ToString("F0"));
+                    txtLog.Text = txtLog.Text + String.Format("EVENT 1C : OverSpeed On Flight \r\n");
                 }
                 if (Stall)
                 {
-                    txtLog.Text = txtLog.Text + String.Format("EVENT : Stall On: {0} \r\n", (playerStall.Value).ToString("F0"));
+                    txtLog.Text = txtLog.Text + String.Format("EVENT 1D : Stall On Flight \r\n");
                 }
                 if (turnRate >= 30)
                 {
-                    txtLog.Text = txtLog.Text + String.Format("EVENT : Bank Angle: {0} \r\n", (((playerTurnRate.Value) / 360) / 65536) * 2);
+                    txtLog.Text = txtLog.Text + String.Format("EVENT 2A: Bank Angle Exceeded: {0}º \r\n", (((playerTurnRate.Value) / 360) / 65536) * 2);
                 }
                 if (intAltitude >= 10000 && LandingLights)
                 {
-                    txtLog.Text = txtLog.Text + String.Format("EVENT : LandingLights On Above: {0} ft\r\n", (playerAltitude.Value * 3.2808399).ToString("F0"));
+                    txtLog.Text = txtLog.Text + String.Format("EVENT 3A: Landing Lights On Above 10.000ft\r\n");
                 }
                 if (intAltitude <= 3000 && !LandingLights)
                 {
-                    txtLog.Text = txtLog.Text + String.Format("EVENT : LandingLights Off Below: {0} ft\r\n", (playerAltitude.Value * 3.2808399).ToString("F0"));
+                    txtLog.Text = txtLog.Text + String.Format("EVENT 3B : Landing Lights Off Below 3.000ft\r\n");
                 }
+                if (intAltitude <= 10000 && IAS >= 255)
+                {
+                    txtLog.Text = txtLog.Text + String.Format("EVENT 3C : Speed above 250kt below 10.000ft\r\n");
+                }
+                if (onGround && GS >= 27)
+                {
+                    txtLog.Text = txtLog.Text + String.Format("EVENT 3D : Speed above 25kt on Taxi\r\n");
+                }
+
                 txtLog.Text = txtLog.Text + String.Format("---END PENALIZATIONS---- \r\n");
                 //Touch Down
                 if (flightPhase == FlightPhases.TAXIOUT && landingRate == double.MinValue)
