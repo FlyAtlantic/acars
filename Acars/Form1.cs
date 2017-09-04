@@ -606,59 +606,25 @@ namespace Acars
                  FsLongitude lon = new FsLongitude(playerLongitude.Value);
                 FsLatitude lat = new FsLatitude(playerLatitude.Value);
                 int turnRate = (((playerTurnRate.Value) / 360) / 65536) * 2;
-                txtLog.Text = String.Format("{0:dd-MM-yyyy HH:mm:ss}\r\n", DateTime.UtcNow);
+                Double intAltitude = (playerAltitude.Value * 3.2808399);
+
+                txtLog.Text = String.Format("{0:dd-MM-yyyy HH:mm:ss}\r\n\r\n", DateTime.UtcNow);
                 txtLog.Text = txtLog.Text + String.Format("Simulator: {0} \r\n", FSUIPCConnection.FlightSimVersionConnected);
-                txtLog.Text = txtLog.Text + String.Format("Simulator Rate: {0} X \r\n", ((playerSimRate.Value) / 256).ToString("F0"));              
+                txtLog.Text = txtLog.Text + String.Format("Simulator Rate: {0} X \r\n\r\n", ((playerSimRate.Value) / 256).ToString("F0"));              
                 txtLog.Text = txtLog.Text + String.Format("Latitude: {0} \r\n", lat.DecimalDegrees.ToString().Replace(',', '.'));
-                txtLog.Text = txtLog.Text + String.Format("Longitude: {0} \r\n", lon.DecimalDegrees.ToString().Replace(',', '.'));
-                txtLog.Text = txtLog.Text + String.Format("QNH: {0} mbar \r\n", ((playerQNH.Value)/16).ToString("F0"));
+                txtLog.Text = txtLog.Text + String.Format("Longitude: {0} \r\n\r\n", lon.DecimalDegrees.ToString().Replace(',', '.'));
+                
                 txtLog.Text = txtLog.Text + String.Format("Number of Engines: {0} \r\n", (playerEnginesNumber.Value).ToString("F0"));
-                txtLog.Text = txtLog.Text + String.Format("Turn Rate: {0}º \r\n", (((playerTurnRate.Value)/360)/ 65536)*2);
-
-                if (Gear) {
-                    txtLog.Text = txtLog.Text + String.Format("Gear Down at: {0} ft\r\n", (playerAltitude.Value * 3.2808399).ToString("F0"));
-                }
-                else
-                {
-                    txtLog.Text = txtLog.Text + String.Format("Gear Up at: {0} ft\r\n", (playerAltitude.Value * 3.2808399).ToString("F0"));
-                }
-
-                if (ParkingBrake)
-                {
-                    txtLog.Text = txtLog.Text + String.Format("Parking Brakes On: {0} \r\n", (playerParkingBrake.Value).ToString("F0"));
-                }
-                else
-                {
-                    txtLog.Text = txtLog.Text + String.Format("Parking Brakes Off: {0} \r\n", (playerParkingBrake.Value).ToString("F0"));
-                }               
-
-                if (playerBattery.Value == 257)
-                {
-                    txtLog.Text = txtLog.Text + String.Format("Battery On: {0} \r\n", (playerBattery.Value).ToString("F0"));
-                }
-                else
-                {
-                    txtLog.Text = txtLog.Text + String.Format("Battery Off: {0} \r\n", (playerBattery.Value).ToString("F0"));
-                }
-
-                if (LandingLights)
-                {
-                    txtLog.Text = txtLog.Text + String.Format("LandingLights On: {0} ft\r\n", (playerAltitude.Value * 3.2808399).ToString("F0"));
-                }
-                else
-                {
-                    txtLog.Text = txtLog.Text + String.Format("LandingLights Off: {0} ft\r\n", (playerAltitude.Value * 3.2808399).ToString("F0"));
-                }
-
+               
                 if (playerEnginesNumber.Value == 1)
                 {
                     if (Engine1Start)
                     {
-                        txtLog.Text = txtLog.Text + String.Format("Engine 1 On: {0} \r\n", playerEngine1start.Value.ToString("F0"));
+                        txtLog.Text = txtLog.Text + String.Format("Engine 1 On: {0} \r\n\r\n", playerEngine1start.Value.ToString("F0"));
                     }
                     else
                     {
-                        txtLog.Text = txtLog.Text + String.Format("Engine 2 Off: {0} \r\n", playerEngine1start.Value.ToString("F0"));
+                        txtLog.Text = txtLog.Text + String.Format("Engine 1 Off: {0} \r\n\r\n", playerEngine1start.Value.ToString("F0"));
                     }
                 }
 
@@ -674,11 +640,11 @@ namespace Acars
                     }
                     if (Engine2Start)
                     {
-                        txtLog.Text = txtLog.Text + String.Format("Engine 2 On: {0} \r\n", playerEngine2start.Value.ToString("F0"));
+                        txtLog.Text = txtLog.Text + String.Format("Engine 2 On: {0} \r\n\r\n", playerEngine2start.Value.ToString("F0"));
                     }
                     else
                     {
-                        txtLog.Text = txtLog.Text + String.Format("Engine 2 Off: {0} \r\n", playerEngine2start.Value.ToString("F0"));
+                        txtLog.Text = txtLog.Text + String.Format("Engine 2 Off: {0} \r\n\r\n", playerEngine2start.Value.ToString("F0"));
                     }
                 }
 
@@ -702,11 +668,11 @@ namespace Acars
                     }
                     if (Engine3Start)
                     {
-                        txtLog.Text = txtLog.Text + String.Format("Engine 3 On: {0} \r\n", playerEngine3start.Value.ToString("F0"));
+                        txtLog.Text = txtLog.Text + String.Format("Engine 3 On: {0} \r\n\r\n", playerEngine3start.Value.ToString("F0"));
                     }
                     else
                     {
-                        txtLog.Text = txtLog.Text + String.Format("Engine 3 Off: {0} \r\n", playerEngine3start.Value.ToString("F0"));
+                        txtLog.Text = txtLog.Text + String.Format("Engine 3 Off: {0} \r\n\r\n", playerEngine3start.Value.ToString("F0"));
                     }
                 }
 
@@ -738,14 +704,43 @@ namespace Acars
                     }
                     if (Engine4Start)
                     {
-                        txtLog.Text = txtLog.Text + String.Format("Engine 4 On: {0} \r\n", playerEngine4start.Value.ToString("F0"));
+                        txtLog.Text = txtLog.Text + String.Format("Engine 4 On: {0} \r\n\r\n", playerEngine4start.Value.ToString("F0"));
                     }
                     else
                     {
-                        txtLog.Text = txtLog.Text + String.Format("Engine 4 Off: {0} \r\n", playerEngine4start.Value.ToString("F0"));
+                        txtLog.Text = txtLog.Text + String.Format("Engine 4 Off: {0} \r\n\r\n", playerEngine4start.Value.ToString("F0"));
                     }
                 }
+
+                txtLog.Text = txtLog.Text + String.Format("QNH: {0} mbar \r\n\r\n", ((playerQNH.Value) / 16).ToString("F0"));
+
+                if (playerBattery.Value == 257)
+                {
+                    txtLog.Text = txtLog.Text + String.Format("Battery On: {0} \r\n", (playerBattery.Value).ToString("F0"));
+                }
+                else
+                {
+                    txtLog.Text = txtLog.Text + String.Format("Battery Off: {0} \r\n", (playerBattery.Value).ToString("F0"));
+                }                
+                if (ParkingBrake)
+                {
+                    txtLog.Text = txtLog.Text + String.Format("Parking Brakes On: {0} \r\n", (playerParkingBrake.Value).ToString("F0"));
+                }
+                else
+                {
+                    txtLog.Text = txtLog.Text + String.Format("Parking Brakes Off: {0} \r\n", (playerParkingBrake.Value).ToString("F0"));
+                }
+                if (Gear)
+                {
+                    txtLog.Text = txtLog.Text + String.Format("Gear Down at: {0} ft\r\n\r\n", (playerAltitude.Value * 3.2808399).ToString("F0"));
+                }
+                else
+                {
+                    txtLog.Text = txtLog.Text + String.Format("Gear Up at: {0} ft \r\n\r\n", (playerAltitude.Value * 3.2808399).ToString("F0"));
+                }
+
                 txtLog.Text = txtLog.Text + String.Format("---PENALIZATIONS---- \r\n");
+
                 if (Slew)
                 {
                     txtLog.Text = txtLog.Text + String.Format("EVENT : Slew On: {0} \r\n", (playerSlew.Value).ToString("F0"));
@@ -766,7 +761,15 @@ namespace Acars
                 {
                     txtLog.Text = txtLog.Text + String.Format("EVENT : Bank Angle: {0} \r\n", (((playerTurnRate.Value) / 360) / 65536) * 2);
                 }
-
+                if (intAltitude >= 10000 && LandingLights)
+                {
+                    txtLog.Text = txtLog.Text + String.Format("EVENT : LandingLights On Above: {0} ft\r\n", (playerAltitude.Value * 3.2808399).ToString("F0"));
+                }
+                if (intAltitude <= 3000 && !LandingLights)
+                {
+                    txtLog.Text = txtLog.Text + String.Format("EVENT : LandingLights Off Below: {0} ft\r\n", (playerAltitude.Value * 3.2808399).ToString("F0"));
+                }
+                txtLog.Text = txtLog.Text + String.Format("---END PENALIZATIONS---- \r\n");
                 //Touch Down
                 if (flightPhase == FlightPhases.TAXIOUT && landingRate == double.MinValue)
                 {
