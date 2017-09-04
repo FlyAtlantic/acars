@@ -136,6 +136,14 @@ namespace Acars
         ///  /// Simulator Menus
         /// </summary>
         static private Offset<byte[]> playerSimMenus = new Offset<byte[]>(0x32F1, 8);
+        /// Simulator Rate
+        /// </summary>
+        static private Offset<int> playerSimRate = new Offset<int>(0x0C1A);
+        /// <summary>
+        /// QNH Player
+        /// </summary>
+        static private Offset<short> playerQNH = new Offset<short>(0x0330);
+        /// <summary>
         #endregion FSUIPC Offset declarations
 
         #region Property declaration
@@ -457,6 +465,33 @@ namespace Acars
                 }
             }
         }
+        private void OnFlight_Tick(object sender, EventArgs e)
+        {
+            MySqlCommand updatePilotAssignment = new MySqlCommand("UPDATE `pilotassignments` SET `onflight` = @date WHERE `pilot` = @pilotid;", conn);
+            updatePilotAssignment.Parameters.AddWithValue("@pilotid", userId);
+            updatePilotAssignment.Parameters.AddWithValue("@date", DateTime.UtcNow);
+
+            conn.Open();
+            MySqlTransaction transaction = conn.BeginTransaction();
+            try
+            {
+                // update pilotassignment
+                int result = 0;
+                while (result == 0)
+                    result = updatePilotAssignment.ExecuteNonQuery();
+
+            }
+            catch (Exception crap)
+            {
+                transaction.Rollback();
+                MessageBox.Show(crap.Source, crap.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                conn.Close();
+            }
+
+        }
 
         private void flightacars_Tick(object sender, EventArgs e)
         {
@@ -513,6 +548,15 @@ namespace Acars
                     messageDuration.Value = 5;
                     FSUIPCConnection.Process();
                 }
+                //Simulator Rate Block Action
+                if (playerSimRate.Value != 256)
+                {
+                    playerSimRate.Value = 256;
+                    string Message = "Simulator Rate can't be changed!";
+                    messageWrite.Value = Message;
+                    messageDuration.Value = 5;
+                    FSUIPCConnection.Process();
+                }
 
                 // aircraft wieghts
                 txtGrossWeight.Text = String.Format("{0} kg", ((playerGW.Value) * 0.45359237).ToString("F0"));
@@ -521,10 +565,12 @@ namespace Acars
 
                 //insere e verifica hora zulu no Simulador
                 fs.EnvironmentDateTime = DateTime.UtcNow;
-
+                
                 //Log Text
                 txtLog.Text = String.Format("{0:dd-MM-yyyy HH:mm:ss}\r\n", DateTime.UtcNow);
                 txtLog.Text = txtLog.Text + String.Format("Simulator: {0} \r\n", FSUIPCConnection.FlightSimVersionConnected);
+                txtLog.Text = txtLog.Text + String.Format("Simulator Rate: {0} X \r\n", ((playerSimRate.Value) / 256).ToString("F0"));
+                txtLog.Text = txtLog.Text + String.Format("QNH: {0} mbar \r\n", ((playerQNH.Value)/16).ToString("F0"));
                 if (Gear) {
                     txtLog.Text = txtLog.Text + String.Format("Gear Down at: {0} ft\r\n", (playerAltitude.Value * 3.2808399).ToString("F0"));
                 }
@@ -658,5 +704,6 @@ namespace Acars
             Properties.Settings.Default.autologin = chkAutoLogin.Checked;
             Properties.Settings.Default.Save();
         }
+       
     }
 }

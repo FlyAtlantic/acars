@@ -85,6 +85,7 @@
             this.lblZFW = new System.Windows.Forms.Label();
             this.txtZFW = new System.Windows.Forms.TextBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.OnFlight = new System.Windows.Forms.Timer(this.components);
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -658,6 +659,11 @@
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Schedule Information";
             // 
+            // OnFlight
+            // 
+            this.OnFlight.Interval = 1000;
+            this.OnFlight.Tick += new System.EventHandler(this.OnFlight_Tick);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -756,6 +762,7 @@
         private System.Windows.Forms.TextBox txtZFW;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox txtLandingRate;
+        private System.Windows.Forms.Timer OnFlight;
     }
 }
 
