@@ -163,6 +163,10 @@ namespace Acars
         ///  /// /// Engine 4 start
         /// </summary>
         static private Offset<short> playerEngine4start = new Offset<short>(0x0A5C);
+        /// <summary> 
+        ///  /// /// Turn Rate (for turn coordinator). 0=level, –512=2min Left, +512=2min Right
+        /// </summary>
+        static private Offset<int> playerTurnRate = new Offset<int>(0x057C);
         /// <summary>
         #endregion FSUIPC Offset declarations
 
@@ -595,14 +599,20 @@ namespace Acars
 
                 //insere e verifica hora zulu no Simulador
                 fs.EnvironmentDateTime = DateTime.UtcNow;
-                
+
                 //Log Text
+                FsLongitude lon = new FsLongitude(playerLongitude.Value);
+                FsLatitude lat = new FsLatitude(playerLatitude.Value);
+
                 txtLog.Text = String.Format("{0:dd-MM-yyyy HH:mm:ss}\r\n", DateTime.UtcNow);
                 txtLog.Text = txtLog.Text + String.Format("Simulator: {0} \r\n", FSUIPCConnection.FlightSimVersionConnected);
-                txtLog.Text = txtLog.Text + String.Format("Simulator Rate: {0} X \r\n", ((playerSimRate.Value) / 256).ToString("F0"));
+                txtLog.Text = txtLog.Text + String.Format("Simulator Rate: {0} X \r\n", ((playerSimRate.Value) / 256).ToString("F0"));              
+                txtLog.Text = txtLog.Text + String.Format("Latitude: {0} \r\n", lat.DecimalDegrees.ToString().Replace(',', '.'));
+                txtLog.Text = txtLog.Text + String.Format("Longitude: {0} \r\n", lon.DecimalDegrees.ToString().Replace(',', '.'));
                 txtLog.Text = txtLog.Text + String.Format("QNH: {0} mbar \r\n", ((playerQNH.Value)/16).ToString("F0"));
                 txtLog.Text = txtLog.Text + String.Format("Number of Engines: {0} \r\n", (playerEnginesNumber.Value).ToString("F0"));
-                
+                txtLog.Text = txtLog.Text + String.Format("Turn Rate: {0}º \r\n", (((playerTurnRate.Value)/360)/ 65536)*2);
+
                 if (Gear) {
                     txtLog.Text = txtLog.Text + String.Format("Gear Down at: {0} ft\r\n", (playerAltitude.Value * 3.2808399).ToString("F0"));
                 }
@@ -798,8 +808,7 @@ namespace Acars
                 // Latitude and Longitude 
                 // Shows using the FsLongitude and FsLatitude classes to easily work with Lat/Lon
                 // Create new instances of FsLongitude and FsLatitude using the raw 8-Byte data from the FSUIPC Offsets
-                FsLongitude lon = new FsLongitude(playerLongitude.Value);
-                FsLatitude lat = new FsLatitude(playerLatitude.Value);
+
                 // Use the ToString() method to output in human readable form:
                 // (note that many other properties are avilable to get the Lat/Lon in different numerical formats)
                 result += String.Format("\"latitude\":\"{0}\",\"longitude\":\"{1}\"", lat.DecimalDegrees.ToString().Replace(',', '.'), lon.DecimalDegrees.ToString().Replace(',', '.'));
