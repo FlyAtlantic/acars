@@ -372,6 +372,7 @@ namespace Acars
         bool Gear;
         bool ParkingBrake;
         bool Slew;
+        bool Pause;
         bool OverSpeed;
         bool Stall;
         bool Battery;
@@ -547,6 +548,7 @@ namespace Acars
                 Gear = (playerGear.Value == 0) ? false : true;
                 ParkingBrake = (playerParkingBrake.Value == 0) ? false : true;
                 Slew = (playerSlew.Value == 0) ? false : true;
+                Pause = (playerPauseDisplay.Value == 0) ? false : true;
                 OverSpeed = (playerOverSpeed.Value == 0) ? false : true;
                 Stall = (playerStall.Value == 0) ? false : true;
                 Battery = (playerBattery.Value == 0) ? false : true;
@@ -599,11 +601,11 @@ namespace Acars
 
                 //insere e verifica hora zulu no Simulador
                 fs.EnvironmentDateTime = DateTime.UtcNow;
-
+                
                 //Log Text
-                FsLongitude lon = new FsLongitude(playerLongitude.Value);
+                 FsLongitude lon = new FsLongitude(playerLongitude.Value);
                 FsLatitude lat = new FsLatitude(playerLatitude.Value);
-
+                int turnRate = (((playerTurnRate.Value) / 360) / 65536) * 2;
                 txtLog.Text = String.Format("{0:dd-MM-yyyy HH:mm:ss}\r\n", DateTime.UtcNow);
                 txtLog.Text = txtLog.Text + String.Format("Simulator: {0} \r\n", FSUIPCConnection.FlightSimVersionConnected);
                 txtLog.Text = txtLog.Text + String.Format("Simulator Rate: {0} X \r\n", ((playerSimRate.Value) / 256).ToString("F0"));              
@@ -628,35 +630,7 @@ namespace Acars
                 else
                 {
                     txtLog.Text = txtLog.Text + String.Format("Parking Brakes Off: {0} \r\n", (playerParkingBrake.Value).ToString("F0"));
-                }
-
-                if (Slew)
-                {
-                    txtLog.Text = txtLog.Text + String.Format("Slew On: {0} \r\n", (playerSlew.Value).ToString("F0"));
-                }
-                else
-                {
-                    txtLog.Text = txtLog.Text + String.Format("Slew Off: {0} \r\n", (playerSlew.Value).ToString("F0"));
-                }
-
-                if (OverSpeed)
-                {
-                    txtLog.Text = txtLog.Text + String.Format("OverSpeed On: {0} \r\n", (playerOverSpeed.Value).ToString("F0"));
-                }
-                else
-                {
-                    txtLog.Text = txtLog.Text + String.Format("OverSpeed Off: {0} \r\n", (playerOverSpeed.Value).ToString("F0"));
-                }
-
-
-                if (Stall)
-                {
-                    txtLog.Text = txtLog.Text + String.Format("Stall On: {0} \r\n", (playerStall.Value).ToString("F0"));
-                }
-                else
-                {
-                    txtLog.Text = txtLog.Text + String.Format("Stall Off: {0} \r\n", (playerStall.Value).ToString("F0"));
-                }
+                }               
 
                 if (playerBattery.Value == 257)
                 {
@@ -669,22 +643,22 @@ namespace Acars
 
                 if (LandingLights)
                 {
-                    txtLog.Text = txtLog.Text + String.Format("LandingLights On at: {0} ft\r\n", (playerAltitude.Value * 3.2808399).ToString("F0"));
+                    txtLog.Text = txtLog.Text + String.Format("LandingLights On: {0} ft\r\n", (playerAltitude.Value * 3.2808399).ToString("F0"));
                 }
                 else
                 {
-                    txtLog.Text = txtLog.Text + String.Format("LandingLights Off at: {0} ft\r\n", (playerAltitude.Value * 3.2808399).ToString("F0"));
+                    txtLog.Text = txtLog.Text + String.Format("LandingLights Off: {0} ft\r\n", (playerAltitude.Value * 3.2808399).ToString("F0"));
                 }
 
                 if (playerEnginesNumber.Value == 1)
                 {
                     if (Engine1Start)
                     {
-                        txtLog.Text = txtLog.Text + String.Format("Engine 1 On at: {0} \r\n", playerEngine1start.Value.ToString("F0"));
+                        txtLog.Text = txtLog.Text + String.Format("Engine 1 On: {0} \r\n", playerEngine1start.Value.ToString("F0"));
                     }
                     else
                     {
-                        txtLog.Text = txtLog.Text + String.Format("Engine 2 Off at: {0} \r\n", playerEngine1start.Value.ToString("F0"));
+                        txtLog.Text = txtLog.Text + String.Format("Engine 2 Off: {0} \r\n", playerEngine1start.Value.ToString("F0"));
                     }
                 }
 
@@ -692,19 +666,19 @@ namespace Acars
                 {
                     if (Engine1Start)
                     {
-                        txtLog.Text = txtLog.Text + String.Format("Engine 1 On at: {0} \r\n", playerEngine1start.Value.ToString("F0"));
+                        txtLog.Text = txtLog.Text + String.Format("Engine 1 On: {0} \r\n", playerEngine1start.Value.ToString("F0"));
                     }
                     else
                     {
-                        txtLog.Text = txtLog.Text + String.Format("Engine 1 Off at: {0} \r\n", playerEngine1start.Value.ToString("F0"));
+                        txtLog.Text = txtLog.Text + String.Format("Engine 1 Off: {0} \r\n", playerEngine1start.Value.ToString("F0"));
                     }
                     if (Engine2Start)
                     {
-                        txtLog.Text = txtLog.Text + String.Format("Engine 2 On at: {0} \r\n", playerEngine2start.Value.ToString("F0"));
+                        txtLog.Text = txtLog.Text + String.Format("Engine 2 On: {0} \r\n", playerEngine2start.Value.ToString("F0"));
                     }
                     else
                     {
-                        txtLog.Text = txtLog.Text + String.Format("Engine 2 Off at: {0} \r\n", playerEngine2start.Value.ToString("F0"));
+                        txtLog.Text = txtLog.Text + String.Format("Engine 2 Off: {0} \r\n", playerEngine2start.Value.ToString("F0"));
                     }
                 }
 
@@ -712,27 +686,27 @@ namespace Acars
                 {
                     if (Engine1Start)
                     {
-                        txtLog.Text = txtLog.Text + String.Format("Engine 1 On at: {0} \r\n", playerEngine1start.Value.ToString("F0"));
+                        txtLog.Text = txtLog.Text + String.Format("Engine 1 On: {0} \r\n", playerEngine1start.Value.ToString("F0"));
                     }
                     else
                     {
-                        txtLog.Text = txtLog.Text + String.Format("Engine 1 Off at: {0} \r\n", playerEngine1start.Value.ToString("F0"));
+                        txtLog.Text = txtLog.Text + String.Format("Engine 1 Off: {0} \r\n", playerEngine1start.Value.ToString("F0"));
                     }
                     if (Engine2Start)
                     {
-                        txtLog.Text = txtLog.Text + String.Format("Engine 2 On at: {0} \r\n", playerEngine2start.Value.ToString("F0"));
+                        txtLog.Text = txtLog.Text + String.Format("Engine 2 On: {0} \r\n", playerEngine2start.Value.ToString("F0"));
                     }
                     else
                     {
-                        txtLog.Text = txtLog.Text + String.Format("Engine 2 Off at: {0} \r\n", playerEngine2start.Value.ToString("F0"));
+                        txtLog.Text = txtLog.Text + String.Format("Engine 2 Off: {0} \r\n", playerEngine2start.Value.ToString("F0"));
                     }
                     if (Engine3Start)
                     {
-                        txtLog.Text = txtLog.Text + String.Format("Engine 3 On at: {0} \r\n", playerEngine3start.Value.ToString("F0"));
+                        txtLog.Text = txtLog.Text + String.Format("Engine 3 On: {0} \r\n", playerEngine3start.Value.ToString("F0"));
                     }
                     else
                     {
-                        txtLog.Text = txtLog.Text + String.Format("Engine 3 Off at: {0} \r\n", playerEngine3start.Value.ToString("F0"));
+                        txtLog.Text = txtLog.Text + String.Format("Engine 3 Off: {0} \r\n", playerEngine3start.Value.ToString("F0"));
                     }
                 }
 
@@ -740,36 +714,57 @@ namespace Acars
                 {
                     if (Engine1Start)
                     {
-                        txtLog.Text = txtLog.Text + String.Format("Engine 1 On at: {0} \r\n", playerEngine1start.Value.ToString("F0"));
+                        txtLog.Text = txtLog.Text + String.Format("Engine 1 On: {0} \r\n", playerEngine1start.Value.ToString("F0"));
                     }
                     else
                     {
-                        txtLog.Text = txtLog.Text + String.Format("Engine 1 Off at: {0} \r\n", playerEngine1start.Value.ToString("F0"));
+                        txtLog.Text = txtLog.Text + String.Format("Engine 1 Off: {0} \r\n", playerEngine1start.Value.ToString("F0"));
                     }
                     if (Engine2Start)
                     {
-                        txtLog.Text = txtLog.Text + String.Format("Engine 2 On at: {0} \r\n", playerEngine2start.Value.ToString("F0"));
+                        txtLog.Text = txtLog.Text + String.Format("Engine 2 On: {0} \r\n", playerEngine2start.Value.ToString("F0"));
                     }
                     else
                     {
-                        txtLog.Text = txtLog.Text + String.Format("Engine 2 Off at: {0} \r\n", playerEngine2start.Value.ToString("F0"));
+                        txtLog.Text = txtLog.Text + String.Format("Engine 2 Off: {0} \r\n", playerEngine2start.Value.ToString("F0"));
                     }
                     if (Engine3Start)
                     {
-                        txtLog.Text = txtLog.Text + String.Format("Engine 3 On at: {0} \r\n", playerEngine3start.Value.ToString("F0"));
+                        txtLog.Text = txtLog.Text + String.Format("Engine 3 On: {0} \r\n", playerEngine3start.Value.ToString("F0"));
                     }
                     else
                     {
-                        txtLog.Text = txtLog.Text + String.Format("Engine 3 Off at: {0} \r\n", playerEngine3start.Value.ToString("F0"));
+                        txtLog.Text = txtLog.Text + String.Format("Engine 3 Off: {0} \r\n", playerEngine3start.Value.ToString("F0"));
                     }
                     if (Engine4Start)
                     {
-                        txtLog.Text = txtLog.Text + String.Format("Engine 4 On at: {0} \r\n", playerEngine4start.Value.ToString("F0"));
+                        txtLog.Text = txtLog.Text + String.Format("Engine 4 On: {0} \r\n", playerEngine4start.Value.ToString("F0"));
                     }
                     else
                     {
-                        txtLog.Text = txtLog.Text + String.Format("Engine 4 Off at: {0} \r\n", playerEngine4start.Value.ToString("F0"));
+                        txtLog.Text = txtLog.Text + String.Format("Engine 4 Off: {0} \r\n", playerEngine4start.Value.ToString("F0"));
                     }
+                }
+                txtLog.Text = txtLog.Text + String.Format("---PENALIZATIONS---- \r\n");
+                if (Slew)
+                {
+                    txtLog.Text = txtLog.Text + String.Format("EVENT : Slew On: {0} \r\n", (playerSlew.Value).ToString("F0"));
+                }
+                if (Pause)
+                {
+                    txtLog.Text = txtLog.Text + String.Format("EVENT : Pause On: {0} \r\n", (playerPauseDisplay.Value).ToString("F0"));
+                }
+                if (OverSpeed)
+                {
+                    txtLog.Text = txtLog.Text + String.Format("EVENT : OverSpeed On: {0} \r\n", (playerOverSpeed.Value).ToString("F0"));
+                }
+                if (Stall)
+                {
+                    txtLog.Text = txtLog.Text + String.Format("EVENT : Stall On: {0} \r\n", (playerStall.Value).ToString("F0"));
+                }
+                if (turnRate >= 30)
+                {
+                    txtLog.Text = txtLog.Text + String.Format("EVENT : Bank Angle: {0} \r\n", (((playerTurnRate.Value) / 360) / 65536) * 2);
                 }
 
                 //Touch Down
