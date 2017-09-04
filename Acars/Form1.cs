@@ -791,7 +791,7 @@ namespace Acars
                 {
                     txtPenalizations.Text = txtPenalizations.Text + String.Format("EVENT 3C : Speed above 250kt below 10.000ft\r\n");
                 }
-                if (onGround && flightPhase == FlightPhases.TAXIOUT && GS >= 27)
+                if (onGround && GS >= 27)
                 {
                     txtPenalizations.Text = txtPenalizations.Text + String.Format("EVENT 3D : Speed above 25kt on Taxi\r\n");
                 }
