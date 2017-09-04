@@ -571,7 +571,7 @@
             this.groupBox2.Controls.Add(this.txtLog);
             this.groupBox2.Location = new System.Drawing.Point(365, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(374, 224);
+            this.groupBox2.Size = new System.Drawing.Size(374, 463);
             this.groupBox2.TabIndex = 25;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Flight Log";
@@ -581,7 +581,7 @@
             this.txtLog.Location = new System.Drawing.Point(13, 25);
             this.txtLog.Multiline = true;
             this.txtLog.Name = "txtLog";
-            this.txtLog.Size = new System.Drawing.Size(350, 184);
+            this.txtLog.Size = new System.Drawing.Size(350, 432);
             this.txtLog.TabIndex = 0;
             // 
             // groupBox3
