@@ -332,7 +332,7 @@ namespace Acars
                     else
                     {
                         // get current assigned fligth information
-                        sqlCommand = "SELECT `flightnumber`, `departure`, `destination`, `alternate`, `date_assigned`, `utilizadores`.`user_id`, `flights`.`idf` FROM `pilotassignments` left join flights on pilotassignments.flightid = flights.idf left join utilizadores on pilotassignments.pilot = utilizadores.user_id WHERE utilizadores.user_email=@email";
+                        sqlCommand = "SELECT `flightnumber`, `departure`, `destination`, `alternate`, `date_assigned`, `utilizadores`.`user_id`, `flights`.`idf`, `flights`.`flighttime` FROM `pilotassignments` left join flights on pilotassignments.flightid = flights.idf left join utilizadores on pilotassignments.pilot = utilizadores.user_id WHERE utilizadores.user_email=@email";
                         cmd = new MySqlCommand(sqlCommand, conn);
                         cmd.Parameters.AddWithValue("@email", email);
                         MySqlDataReader result1 = cmd.ExecuteReader();
@@ -345,6 +345,7 @@ namespace Acars
                             userId = (int)result1[5];
                             flightId = (int)result1[6];
                             txtFlightInformation.Text = String.Format("{0} {1} {2} {3:HH:mm}", (result1[0]), (result1[1]), (result1[2]), (result1[4]));
+                            txtTimeEnroute.Text = String.Format("{0}", (result1[7])); 
 
                             button1.Text = "Start Flight";
                             return true;
@@ -419,7 +420,16 @@ namespace Acars
 
                 landingRate = double.MinValue;
 
+                MySqlCommand updatePilotAssignment = new MySqlCommand("UPDATE `pilotassignments` SET `onflight` = NOW() WHERE `pilot` = @pilotid;", conn);
+                updatePilotAssignment.Parameters.AddWithValue("@pilotid", userId);
+                conn.Open();
+                updatePilotAssignment.ExecuteNonQuery();
+                conn.Close();
+                OnFlight.Start();
                 flightacars.Start();
+
+                
+                
             }
             else if (arrivalTime != DateTime.MinValue)
             // End Flight
@@ -500,31 +510,13 @@ namespace Acars
             }
         }
         private void OnFlight_Tick(object sender, EventArgs e)
-        {
-            MySqlCommand updatePilotAssignment = new MySqlCommand("UPDATE `pilotassignments` SET `onflight` = @date WHERE `pilot` = @pilotid;", conn);
+        {            
+            MySqlCommand updatePilotAssignment = new MySqlCommand("UPDATE `pilotassignments` SET `onflight` = NOW() WHERE `pilot` = @pilotid;", conn);
             updatePilotAssignment.Parameters.AddWithValue("@pilotid", userId);
-            updatePilotAssignment.Parameters.AddWithValue("@date", DateTime.UtcNow);
-
             conn.Open();
-            MySqlTransaction transaction = conn.BeginTransaction();
-            try
-            {
-                // update pilotassignment
-                int result = 0;
-                while (result == 0)
-                    result = updatePilotAssignment.ExecuteNonQuery();
-
-                transaction.Commit();
-            }
-            catch (Exception crap)
-            {
-                transaction.Rollback();
-                MessageBox.Show(crap.Source, crap.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            finally
-            {
-                conn.Close();
-            }
+            updatePilotAssignment.ExecuteNonQuery();
+            conn.Close();
+            
         }
 
         private void flightacars_Tick(object sender, EventArgs e)
@@ -543,9 +535,19 @@ namespace Acars
                     txtArrTime.Text = arrivalTime.ToString("HH:mm");
 
                 if (flightTime != TimeSpan.MinValue)
-                    txtFlightTime.Text = String.Format("{0:00}:{1:00}",
+                {
+                    if (flightTime <= TimeSpan.Zero)
+                    {
+                        txtFlightTime.Text = String.Format("00:00");
+                    }
+                    else
+                    {
+
+                        txtFlightTime.Text = String.Format("{0:00}:{1:00}",
                                                        Math.Truncate(flightTime.TotalHours),
                                                        flightTime.Minutes);
+                    }
+                }
                 else { };
 
                 // process FSUIPC data
@@ -755,46 +757,49 @@ namespace Acars
                     txtLog.Text = txtLog.Text + String.Format("Gear Up at: {0} ft \r\n\r\n", (playerAltitude.Value * 3.2808399).ToString("F0"));
                 }
 
-                txtLog.Text = txtLog.Text + String.Format("---PENALIZATIONS---- \r\n");
 
+
+                txtPenalizations.Text = String.Format("{0:dd-MM-yyyy HH:mm:ss}\r\n", DateTime.UtcNow);
+                txtPenalizations.Text = txtPenalizations.Text + String.Format("---PENALIZATIONS---- \r\n");
                 if (Slew)
                 {
-                    txtLog.Text = txtLog.Text + String.Format("EVENT 1A : Slew On Flight \r\n");
+                    txtPenalizations.Text = txtPenalizations.Text + String.Format("EVENT 1A : Slew On Flight \r\n");
                 }
                 if (Pause)
                 {
-                    txtLog.Text = txtLog.Text + String.Format("EVENT 1B : Pause On Flight \r\n");
+                    txtPenalizations.Text = txtPenalizations.Text + String.Format("EVENT 1B : Pause On Flight \r\n");
                 }
                 if (OverSpeed)
                 {
-                    txtLog.Text = txtLog.Text + String.Format("EVENT 1C : OverSpeed On Flight \r\n");
+                    txtPenalizations.Text = txtPenalizations.Text + String.Format("EVENT 1C : OverSpeed On Flight \r\n");
                 }
                 if (Stall)
                 {
-                    txtLog.Text = txtLog.Text + String.Format("EVENT 1D : Stall On Flight \r\n");
+                    txtPenalizations.Text = txtPenalizations.Text + String.Format("EVENT 1D : Stall On Flight \r\n");
                 }
                 if (turnRate >= 30)
                 {
-                    txtLog.Text = txtLog.Text + String.Format("EVENT 2A: Bank Angle Exceeded: {0}º \r\n", (((playerTurnRate.Value) / 360) / 65536) * 2);
+                    txtPenalizations.Text = txtPenalizations.Text + String.Format("EVENT 2A: Bank Angle Exceeded: {0}º \r\n", (((playerTurnRate.Value) / 360) / 65536) * 2);
                 }
                 if (intAltitude >= 10000 && LandingLights)
                 {
-                    txtLog.Text = txtLog.Text + String.Format("EVENT 3A: Landing Lights On Above 10.000ft\r\n");
+                    txtPenalizations.Text = txtPenalizations.Text + String.Format("EVENT 3A: Landing Lights On Above 10.000ft\r\n");
                 }
-                if (intAltitude <= 3000 && !LandingLights)
+                if (intAltitude <= 3000 && !LandingLights && !onGround)
                 {
-                    txtLog.Text = txtLog.Text + String.Format("EVENT 3B : Landing Lights Off Below 3.000ft\r\n");
+                    txtPenalizations.Text = txtPenalizations.Text + String.Format("EVENT 3B : Landing Lights Off Below 3.000ft\r\n");
                 }
                 if (intAltitude <= 10000 && IAS >= 255)
                 {
-                    txtLog.Text = txtLog.Text + String.Format("EVENT 3C : Speed above 250kt below 10.000ft\r\n");
+                    txtPenalizations.Text = txtPenalizations.Text + String.Format("EVENT 3C : Speed above 250kt below 10.000ft\r\n");
                 }
                 if (onGround && GS >= 27)
                 {
-                    txtLog.Text = txtLog.Text + String.Format("EVENT 3D : Speed above 25kt on Taxi\r\n");
+                    txtPenalizations.Text = txtPenalizations.Text + String.Format("EVENT 3D : Speed above 25kt on Taxi\r\n");
                 }
 
-                txtLog.Text = txtLog.Text + String.Format("---END PENALIZATIONS---- \r\n");
+                txtPenalizations.Text = txtPenalizations.Text + String.Format("---END PENALIZATIONS---- \r\n\r\n");
+
                 //Touch Down
                 if (flightPhase == FlightPhases.TAXIOUT && landingRate == double.MinValue && ParkingBrake)
                 {
@@ -817,7 +822,7 @@ namespace Acars
                 using (System.IO.StreamWriter file =
                 new System.IO.StreamWriter(logFilePath, true))
                 {
-                    file.WriteLine(txtLog.Text);
+                    file.WriteLine(txtPenalizations.Text);
                 }
 
 

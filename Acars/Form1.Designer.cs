@@ -63,8 +63,8 @@
             this.txtDepTime = new System.Windows.Forms.TextBox();
             this.lblSimulatorHour = new System.Windows.Forms.Label();
             this.txtSimHour = new System.Windows.Forms.TextBox();
-            this.lblFuelRemaining = new System.Windows.Forms.Label();
-            this.txtFuelRemaining = new System.Windows.Forms.TextBox();
+            this.lblTimeEnroute = new System.Windows.Forms.Label();
+            this.txtTimeEnroute = new System.Windows.Forms.TextBox();
             this.lblArrival = new System.Windows.Forms.Label();
             this.txtAlternate = new System.Windows.Forms.TextBox();
             this.lblGrossWeight = new System.Windows.Forms.Label();
@@ -86,6 +86,7 @@
             this.txtZFW = new System.Windows.Forms.TextBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.OnFlight = new System.Windows.Forms.Timer(this.components);
+            this.txtPenalizations = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -418,25 +419,25 @@
             this.txtSimHour.Text = "----";
             this.txtSimHour.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // lblFuelRemaining
+            // lblTimeEnroute
             // 
-            this.lblFuelRemaining.AutoSize = true;
-            this.lblFuelRemaining.Location = new System.Drawing.Point(90, 27);
-            this.lblFuelRemaining.Name = "lblFuelRemaining";
-            this.lblFuelRemaining.Size = new System.Drawing.Size(28, 13);
-            this.lblFuelRemaining.TabIndex = 30;
-            this.lblFuelRemaining.Text = "ETA";
+            this.lblTimeEnroute.AutoSize = true;
+            this.lblTimeEnroute.Location = new System.Drawing.Point(90, 27);
+            this.lblTimeEnroute.Name = "lblTimeEnroute";
+            this.lblTimeEnroute.Size = new System.Drawing.Size(28, 13);
+            this.lblTimeEnroute.TabIndex = 30;
+            this.lblTimeEnroute.Text = "ETE";
             // 
-            // txtFuelRemaining
+            // txtTimeEnroute
             // 
-            this.txtFuelRemaining.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txtFuelRemaining.Enabled = false;
-            this.txtFuelRemaining.Location = new System.Drawing.Point(77, 43);
-            this.txtFuelRemaining.Name = "txtFuelRemaining";
-            this.txtFuelRemaining.Size = new System.Drawing.Size(55, 13);
-            this.txtFuelRemaining.TabIndex = 31;
-            this.txtFuelRemaining.Text = "01:45";
-            this.txtFuelRemaining.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txtTimeEnroute.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtTimeEnroute.Enabled = false;
+            this.txtTimeEnroute.Location = new System.Drawing.Point(77, 43);
+            this.txtTimeEnroute.Name = "txtTimeEnroute";
+            this.txtTimeEnroute.Size = new System.Drawing.Size(55, 13);
+            this.txtTimeEnroute.TabIndex = 31;
+            this.txtTimeEnroute.Text = "----";
+            this.txtTimeEnroute.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // lblArrival
             // 
@@ -568,10 +569,11 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.txtPenalizations);
             this.groupBox2.Controls.Add(this.txtLog);
             this.groupBox2.Location = new System.Drawing.Point(365, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(374, 463);
+            this.groupBox2.Size = new System.Drawing.Size(374, 545);
             this.groupBox2.TabIndex = 25;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Flight Log";
@@ -581,7 +583,7 @@
             this.txtLog.Location = new System.Drawing.Point(13, 25);
             this.txtLog.Multiline = true;
             this.txtLog.Name = "txtLog";
-            this.txtLog.Size = new System.Drawing.Size(350, 432);
+            this.txtLog.Size = new System.Drawing.Size(350, 337);
             this.txtLog.TabIndex = 0;
             // 
             // groupBox3
@@ -646,8 +648,8 @@
             // 
             this.groupBox5.Controls.Add(this.lblDepTime);
             this.groupBox5.Controls.Add(this.txtDepTime);
-            this.groupBox5.Controls.Add(this.lblFuelRemaining);
-            this.groupBox5.Controls.Add(this.txtFuelRemaining);
+            this.groupBox5.Controls.Add(this.lblTimeEnroute);
+            this.groupBox5.Controls.Add(this.txtTimeEnroute);
             this.groupBox5.Controls.Add(this.lblFlightTime);
             this.groupBox5.Controls.Add(this.txtArrTime);
             this.groupBox5.Controls.Add(this.txtFlightTime);
@@ -661,8 +663,16 @@
             // 
             // OnFlight
             // 
-            this.OnFlight.Interval = 1000;
+            this.OnFlight.Interval = 300000;
             this.OnFlight.Tick += new System.EventHandler(this.OnFlight_Tick);
+            // 
+            // txtPenalizations
+            // 
+            this.txtPenalizations.Location = new System.Drawing.Point(13, 377);
+            this.txtPenalizations.Multiline = true;
+            this.txtPenalizations.Name = "txtPenalizations";
+            this.txtPenalizations.Size = new System.Drawing.Size(350, 142);
+            this.txtPenalizations.TabIndex = 1;
             // 
             // Form1
             // 
@@ -737,8 +747,8 @@
         private System.Windows.Forms.TextBox txtDeparture;
         private System.Windows.Forms.Label lblDeparture;
         private System.Windows.Forms.ProgressBar progressBar;
-        private System.Windows.Forms.Label lblFuelRemaining;
-        private System.Windows.Forms.TextBox txtFuelRemaining;
+        private System.Windows.Forms.Label lblTimeEnroute;
+        private System.Windows.Forms.TextBox txtTimeEnroute;
         private System.Windows.Forms.Label lblCallsign;
         private System.Windows.Forms.TextBox txtCallsign;
         private System.Windows.Forms.Label lblFlightTime;
@@ -763,6 +773,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox txtLandingRate;
         private System.Windows.Forms.Timer OnFlight;
+        private System.Windows.Forms.TextBox txtPenalizations;
     }
 }
 
