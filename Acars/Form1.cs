@@ -799,7 +799,7 @@ namespace Acars
                 txtPenalizations.Text = txtPenalizations.Text + String.Format("---END PENALIZATIONS---- \r\n\r\n");
 
                 //Touch Down
-                if (flightPhase == FlightPhases.TAXIOUT && landingRate == double.MinValue && ParkingBrake)
+                if (flightPhase == FlightPhases.TAXIOUT && landingRate == double.MinValue)
                 {
                     // enable end flight
                     button1.Text = "End flight";
