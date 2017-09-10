@@ -799,12 +799,13 @@ namespace Acars
                 txtPenalizations.Text = txtPenalizations.Text + String.Format("---END PENALIZATIONS---- \r\n\r\n");
 
                 //Touch Down
-                if (flightPhase == FlightPhases.TAXIOUT && landingRate == double.MinValue)
+                if (flightPhase == FlightPhases.TAXIOUT && landingRate == double.MinValue && ParkingBrake)
                 {
                     // enable end flight
                     button1.Text = "End flight";
                     button1.Enabled = true;
-
+                }
+                if (flightPhase == FlightPhases.TAXIOUT && landingRate == double.MinValue) { 
                     landingRate = (playerVerticalSpeed.Value * 3.28084) / -1;
                     txtLandingRate.Text = String.Format("{0} ft/min", landingRate.ToString("F0"));
                     txtLog.Text = txtLog.Text + String.Format("TouchDown: {0} ft/min\r\n", landingRate.ToString("F0"));
