@@ -452,9 +452,8 @@ namespace Acars
                 deleteFlight.Parameters.AddWithValue("@pilotid", userId);
 
                 conn.Open();
-                MySqlTransaction transaction = conn.BeginTransaction();
-                try
-                {
+              
+
                     // insert flight
                     int result = 0;
                     while (result == 0)
@@ -469,18 +468,9 @@ namespace Acars
                     result = 0;
                     while (result == 0)
                         result = deleteFlight.ExecuteNonQuery();
-                }
-                catch (Exception crap)
-                {
-                    transaction.Rollback();
-                    MessageBox.Show(crap.Source, crap.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                finally
-                {
+              
                     conn.Close();
-                }
 
-                transaction.Commit();
                 MessageBox.Show(String.Format("Flight approved, rating 100% {0} EP(s)", Math.Round(Math.Round(flightTime.TotalMinutes) / 10)),
                                 "Flight Approved",
                                 MessageBoxButtons.OK,
@@ -799,18 +789,21 @@ namespace Acars
                 txtPenalizations.Text = txtPenalizations.Text + String.Format("---END PENALIZATIONS---- \r\n\r\n");
 
                 //Touch Down
-                if (flightPhase == FlightPhases.TAXIOUT && landingRate == double.MinValue && ParkingBrake)
+                if (flightPhase == FlightPhases.TAXIOUT && landingRate == double.MinValue)
                 {
-                    // enable end flight
-                    button1.Text = "End flight";
-                    button1.Enabled = true;
-                }
-                if (flightPhase == FlightPhases.TAXIOUT && landingRate == double.MinValue) { 
+            
                     landingRate = (playerVerticalSpeed.Value * 3.28084) / -1;
                     txtLandingRate.Text = String.Format("{0} ft/min", landingRate.ToString("F0"));
                     txtLog.Text = txtLog.Text + String.Format("TouchDown: {0} ft/min\r\n", landingRate.ToString("F0"));
                 }
 
+                if (flightPhase == FlightPhases.TAXIOUT && ParkingBrake)
+                {
+                    // enable end flight
+                    button1.Text = "End flight";
+                    button1.Enabled = true;
+
+                }
                 // Compose a string that consists of three lines.
                 string lines = txtLog.Text;
 
