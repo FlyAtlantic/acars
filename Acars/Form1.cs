@@ -179,6 +179,8 @@ namespace Acars
         /// </summary>
         static private Offset<short> playerThrottle = new Offset<short>(0x088C);
         /// <summary>
+        /// 
+        static private String debugLogText = null;
 
         #endregion FSUIPC Offset declarations
 
@@ -867,44 +869,87 @@ namespace Acars
                     txtLog.Text = txtLog.Text + String.Format("Gear Up at: {0} ft \r\n\r\n", (playerAltitude.Value * 3.2808399).ToString("F0"));
                 }
 
-
-
+                String tempLogData = debugLogText;
+                if (debugLogText == null) { debugLogText += "---PENALIZATIONS---- \r\n"; }
                 txtPenalizations.Text = String.Format("{0:dd-MM-yyyy HH:mm:ss}\r\n", DateTime.UtcNow);
                 txtPenalizations.Text = txtPenalizations.Text + String.Format("---PENALIZATIONS---- \r\n");
                 if (Slew)
-                {
+                { if (!debugLogText.EndsWith(String.Format("EVENT 1A : Slew On Flight \r\n"))){ 
+                    debugLogText += String.Format("{0:dd-MM-yyyy HH:mm:ss}", DateTime.UtcNow) + " >> " + String.Format("EVENT 1A : Slew On Flight \r\n");
                     txtPenalizations.Text = txtPenalizations.Text + String.Format("EVENT 1A : Slew On Flight \r\n");
+                }
                 }
                 if (Pause)
                 {
+                    if (!debugLogText.EndsWith(String.Format("EVENT 1B : Pause On Flight \r\n")))
+                    {
+                        Console.WriteLine("pause logged");
+                        debugLogText += String.Format("{0:dd-MM-yyyy HH:mm:ss}", DateTime.UtcNow) + " >> " + String.Format("EVENT 1B : Pause On Flight \r\n");
+                        
+                    }
                     txtPenalizations.Text = txtPenalizations.Text + String.Format("EVENT 1B : Pause On Flight \r\n");
                 }
                 if (OverSpeed)
                 {
+                    if (!debugLogText.EndsWith(String.Format("EVENT 1C : OverSpeed On Flight \r\n")))
+                    {
+                        debugLogText += String.Format("{0:dd-MM-yyyy HH:mm:ss}", DateTime.UtcNow) + " >> " + String.Format("EVENT 1C : OverSpeed On Flight \r\n");
+                        
+                    }
                     txtPenalizations.Text = txtPenalizations.Text + String.Format("EVENT 1C : OverSpeed On Flight \r\n");
                 }
                 if (Stall)
                 {
+                    if (!debugLogText.EndsWith(String.Format("EVENT 1D : Stall On Flight \r\n")))
+                    {
+                        debugLogText += String.Format("{0:dd-MM-yyyy HH:mm:ss}", DateTime.UtcNow) + " >> " + String.Format("EVENT 1D : Stall On Flight \r\n");
+                       
+                    }
                     txtPenalizations.Text = txtPenalizations.Text + String.Format("EVENT 1D : Stall On Flight \r\n");
                 }
                 if (turnRate >= 30)
                 {
+                    if (!debugLogText.EndsWith(String.Format("EVENT 2A: Bank Angle Exceeded: {0}º \r\n", (((playerTurnRate.Value) / 360) / 65536) * 2)))
+                    {
+                        debugLogText += String.Format("{0:dd-MM-yyyy HH:mm:ss}", DateTime.UtcNow) + " >> " + String.Format("EVENT 2A: Bank Angle Exceeded: {0}º \r\n", (((playerTurnRate.Value) / 360) / 65536) * 2);
+                       
+                    }
                     txtPenalizations.Text = txtPenalizations.Text + String.Format("EVENT 2A: Bank Angle Exceeded: {0}º \r\n", (((playerTurnRate.Value) / 360) / 65536) * 2);
                 }
                 if (intAltitude >= 10000 && LandingLights)
                 {
+                    if (!debugLogText.EndsWith(String.Format("EVENT 3A: Landing Lights On Above 10.000ft\r\n")))
+                    {
+                        debugLogText += String.Format("{0:dd-MM-yyyy HH:mm:ss}", DateTime.UtcNow) + " >> " + String.Format("EVENT 3A: Landing Lights On Above 10.000ft\r\n");
+                      
+                    }
                     txtPenalizations.Text = txtPenalizations.Text + String.Format("EVENT 3A: Landing Lights On Above 10.000ft\r\n");
                 }
                 if (intAltitude <= 3000 && !LandingLights && !onGround)
                 {
+                    if (!debugLogText.EndsWith(String.Format("EVENT 3B : Landing Lights Off Below 3.000ft\r\n")))
+                    {
+                        debugLogText += String.Format("{0:dd-MM-yyyy HH:mm:ss}", DateTime.UtcNow) + " >> " + String.Format("EVENT 3B : Landing Lights Off Below 3.000ft\r\n");
+                      
+                    }
                     txtPenalizations.Text = txtPenalizations.Text + String.Format("EVENT 3B : Landing Lights Off Below 3.000ft\r\n");
                 }
                 if (intAltitude <= 10000 && IAS >= 255)
                 {
-                    txtPenalizations.Text = txtPenalizations.Text + String.Format("EVENT 3C : Speed above 250kt below 10.000ft\r\n");
+                    if (!debugLogText.EndsWith(String.Format("EVENT 3C : Speed above 250kt below 10.000ft\r\n")))
+                    {
+                        debugLogText += String.Format("{0:dd-MM-yyyy HH:mm:ss}", DateTime.UtcNow) + " >> " + String.Format("EVENT 3C : Speed above 250kt below 10.000ft\r\n");
+                       
+                    }
+                     txtPenalizations.Text = txtPenalizations.Text + String.Format("EVENT 3C : Speed above 250kt below 10.000ft\r\n");
                 }
                 if (onGround && GS >= 30 && txtStatus.Text == "TaxiOut")
                 {
+                    if (!debugLogText.EndsWith(String.Format("EVENT 3D : Speed above 25kt on Taxi\r\n")))
+                    {
+                        debugLogText += String.Format("{0:dd-MM-yyyy HH:mm:ss}", DateTime.UtcNow) + " >> " + String.Format("EVENT 3D : Speed above 25kt on Taxi\r\n");
+                       
+                    }
                     txtPenalizations.Text = txtPenalizations.Text + String.Format("EVENT 3D : Speed above 25kt on Taxi\r\n");
                 }
 
@@ -918,7 +963,7 @@ namespace Acars
                     txtLandingRate.Text = String.Format("{0} ft/min", landingRate.ToString("F0"));
                     txtLog.Text = txtLog.Text + String.Format("TouchDown: {0} ft/min\r\n", landingRate.ToString("F0"));
                 }
-
+               
                 if (flightPhase == FlightPhases.TAXIOUT && ParkingBrake)
                 {
                     // enable end flight
@@ -933,12 +978,17 @@ namespace Acars
                 string logFilePath = String.Format("{0}log-flight-{1}.txt",
                                                          Application.ExecutablePath.Replace("Acars.exe", ""),
                                                          flightId);
-                using (System.IO.StreamWriter file =
-                new System.IO.StreamWriter(logFilePath, true))
+                //Write to file only if there is new data
+                if (!tempLogData.Equals(debugLogText))
                 {
-                    file.WriteLine(txtPenalizations.Text);
-                }
 
+                    using (System.IO.StreamWriter file =
+                    new System.IO.StreamWriter(logFilePath, true))
+                    {
+                        //file.WriteLine(txtPenalizations.Text);
+                       file.WriteLine(debugLogText);
+                    }
+                }
 
                 txtSquawk.Text = String.Format("{0}", (playersquawk.Value).ToString("X").PadLeft(4, '0'));
 
