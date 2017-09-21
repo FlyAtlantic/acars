@@ -177,7 +177,7 @@ namespace Acars
         ///    /// <summary> 
         ///  /// /// Throtle Position
         /// </summary>
-        static private Offset<int> playerThrottle = new Offset<int>(0x088C);
+        static private Offset<short> playerThrottle = new Offset<short>(0x088C);
         /// <summary>
 
         #endregion FSUIPC Offset declarations
@@ -580,6 +580,16 @@ namespace Acars
                     FlightStatus = FlightPhases.TAXIOUT;
                 }
 
+                if (FlightStatus == FlightPhases.TAXIOUT && Engine1Start && !ParkingBrake && GroundSpeed >= 27 && playerThrottle.Value >= 10000 )
+                {
+                    FlightStatus = FlightPhases.TAKEOFF;
+                }
+
+                if (FlightStatus == FlightPhases.TAKEOFF && ((playerVerticalSpeed.Value * 3.28084) / -1) >= 100 && !onGround)
+                {
+                    FlightStatus = FlightPhases.CLIMBING;
+                }
+
                 //Text Status
                 if (FlightStatus == FlightPhases.PREFLIGHT && txtStatus.Text == "----") {
 
@@ -595,7 +605,18 @@ namespace Acars
                 {
                     txtStatus.Text = String.Format("TaxiOut");
                 }
-                Console.WriteLine("Throttle Position: {0}", playerThrottle.Value);
+
+                if (FlightStatus == FlightPhases.TAKEOFF && txtStatus.Text == "TaxiOut")
+                {
+                    txtStatus.Text = String.Format("Taking Off");
+                }
+
+                if (FlightStatus == FlightPhases.CLIMBING && txtStatus.Text == "Taking Off")
+                {
+                    txtStatus.Text = String.Format("Climbing");
+                }
+
+
                 //Acars informations
                 txtAltitude.Text = String.Format("{0} ft", (playerAltitude.Value * 3.2808399).ToString("F0"));
                 txtHeading.Text = String.Format("{0} º", (compass.Value).ToString("F0"));
@@ -641,20 +662,14 @@ namespace Acars
                     FSUIPCConnection.Process();
                 }
                 //verifica hora e corrige hora
-                DateTime SimulatorTime = new DateTime(DateTime.UtcNow.Year, 1, 1, playerSimTime.Value[0], playerSimTime.Value[1], playerSimTime.Value[2]);               
-                int diffhour = 0;
-                int diffminpositive = 2;
-                int diffminnegative = -2;
+                DateTime SimulatorTime = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, playerSimTime.Value[0], playerSimTime.Value[1], playerSimTime.Value[2]);
+                TimeSpan Time1 = SimulatorTime - DateTime.UtcNow;
+                Console.WriteLine("Total Seconds: {0}" ,Time1.TotalSeconds);
+                Console.WriteLine("Simulator Time: {0}", SimulatorTime);
+                int diffsecpositive = 100;
+                int diffsecnegative = -100;
 
-                int diffHourResult = SimulatorTime.Hour - DateTime.UtcNow.Hour;
-                int diffMinuteResult = SimulatorTime.Minute - DateTime.UtcNow.Minute;
-
-                if (diffMinuteResult >= diffminpositive || diffMinuteResult <= diffminnegative)
-                {
-                    fs.EnvironmentDateTime = DateTime.UtcNow;
-                }
-
-                if (diffHourResult != diffhour)
+                if (Time1.TotalSeconds >= diffsecpositive || Time1.TotalSeconds <= diffsecnegative)
                 {
                     fs.EnvironmentDateTime = DateTime.UtcNow;
                 }
