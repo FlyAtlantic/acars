@@ -585,9 +585,34 @@ namespace Acars
                     FlightStatus = FlightPhases.TAKEOFF;
                 }
 
-                if (FlightStatus == FlightPhases.TAKEOFF && ((playerVerticalSpeed.Value * 3.28084) / -1) >= 100 && !onGround)
+                if (((playerVerticalSpeed.Value * 3.28084) / -1) >= 100 && !onGround)
                 {
                     FlightStatus = FlightPhases.CLIMBING;
+                }
+
+                if (((playerVerticalSpeed.Value * 3.28084) / -1) <= 100 && ((playerVerticalSpeed.Value * 3.28084) / -1) >= -100 && !onGround)
+                {
+                    FlightStatus = FlightPhases.CRUISE;
+                }
+
+                if (((playerVerticalSpeed.Value * 3.28084) / -1) <= 100 && !onGround)
+                {
+                    FlightStatus = FlightPhases.DESCENDING;
+                }
+
+                if (FlightStatus == FlightPhases.CRUISE || FlightStatus == FlightPhases.DESCENDING && !onGround && GroundSpeed <= 200 && (playerAltitude.Value * 3.2808399) <= 6000)
+                {
+                    FlightStatus = FlightPhases.APPROACH;
+                }
+
+                if (FlightStatus == FlightPhases.APPROACH && txtLandingRate != null && onGround)
+                {
+                    FlightStatus = FlightPhases.LANDING;
+                }
+
+                if (FlightStatus == FlightPhases.LANDING && GroundSpeed <= 40 && onGround)
+                {
+                    FlightStatus = FlightPhases.TAXIIN;
                 }
 
                 //Text Status
@@ -611,9 +636,34 @@ namespace Acars
                     txtStatus.Text = String.Format("Taking Off");
                 }
 
-                if (FlightStatus == FlightPhases.CLIMBING && txtStatus.Text == "Taking Off")
+                if (FlightStatus == FlightPhases.CLIMBING)
                 {
                     txtStatus.Text = String.Format("Climbing");
+                }
+
+                if (FlightStatus == FlightPhases.CRUISE)
+                {
+                    txtStatus.Text = String.Format("Cruise");
+                }
+
+                if (FlightStatus == FlightPhases.DESCENDING)
+                {
+                    txtStatus.Text = String.Format("Descending");
+                }
+
+                if (FlightStatus == FlightPhases.APPROACH)
+                {
+                    txtStatus.Text = String.Format("Approaching");
+                }
+
+                if (FlightStatus == FlightPhases.LANDING && txtStatus.Text == "Approaching")
+                {
+                    txtStatus.Text = String.Format("Landing");
+                }
+
+                if (FlightStatus == FlightPhases.TAXIIN && txtStatus.Text == "Landing")
+                {
+                    txtStatus.Text = String.Format("TaxiIn");
                 }
 
 
@@ -853,7 +903,7 @@ namespace Acars
                 {
                     txtPenalizations.Text = txtPenalizations.Text + String.Format("EVENT 3C : Speed above 250kt below 10.000ft\r\n");
                 }
-                if (onGround && GS >= 27)
+                if (onGround && GS >= 30 && txtStatus.Text == "TaxiOut")
                 {
                     txtPenalizations.Text = txtPenalizations.Text + String.Format("EVENT 3D : Speed above 25kt on Taxi\r\n");
                 }
