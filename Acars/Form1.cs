@@ -23,12 +23,13 @@ namespace Acars
         /// <summary>
         /// Happens first at airborne time
         /// </summary>
-        CLIMBING = 3,
-        CRUISE = 4,
-        DESCENDING = 5,
-        APPROACH = 6,
-        LANDING = 7,
-        TAXIIN = 8
+        PUSHBACK = 3,
+        CLIMBING = 4,
+        CRUISE = 5,
+        DESCENDING = 6,
+        APPROACH = 7,
+        LANDING = 8,
+        TAXIIN = 9
     }
 
     public partial class Form1 : Form
@@ -172,6 +173,11 @@ namespace Acars
         ///  /// /// Indicated Airspeed
         /// </summary>
         static private Offset<int> playerIndicatedAirspeed = new Offset<int>(0x02BC);
+        /// <summary>
+        ///    /// <summary> 
+        ///  /// /// Throtle Position
+        /// </summary>
+        static private Offset<int> playerThrottle = new Offset<int>(0x088C);
         /// <summary>
 
         #endregion FSUIPC Offset declarations
@@ -555,19 +561,41 @@ namespace Acars
                 Engine4Start = (playerEngine4start.Value == 0) ? false : true;
 
                 //Flight Phases
-                FlightPhases FlightPhases1;
-                FlightPhases1 = 0;
-                if (txtStatus.Text == null && !ParkingBrake)
+                FlightPhases FlightStatus;
+                FlightStatus = 0;
+                int GroundSpeed = ((airspeed.Value / 128));
+
+                if (txtStatus.Text == null && playerEngine1start.Value == 0)
                 {
-                    FlightPhases1 = FlightPhases.PREFLIGHT;                    
+                    FlightStatus = FlightPhases.PREFLIGHT;                    
+                }
+
+                if(FlightStatus == FlightPhases.PREFLIGHT && Engine1Start && !ParkingBrake)
+                {
+                    FlightStatus = FlightPhases.PUSHBACK;
+                }
+
+                if (FlightStatus == FlightPhases.PUSHBACK && Engine1Start && !ParkingBrake && GroundSpeed >= 10)
+                {
+                    FlightStatus = FlightPhases.TAXIOUT;
                 }
 
                 //Text Status
-                if (FlightPhases1 == FlightPhases.PREFLIGHT) {
+                if (FlightStatus == FlightPhases.PREFLIGHT && txtStatus.Text == "----") {
 
                     txtStatus.Text = String.Format("PreFlight");
                 }
 
+                if (FlightStatus == FlightPhases.PUSHBACK && txtStatus.Text == "PreFlight")
+                {
+                    txtStatus.Text = String.Format("PushBack");
+                }
+
+                if (FlightStatus == FlightPhases.TAXIOUT && txtStatus.Text == "PushBack")
+                {
+                    txtStatus.Text = String.Format("TaxiOut");
+                }
+                Console.WriteLine("Throttle Position: {0}", playerThrottle.Value);
                 //Acars informations
                 txtAltitude.Text = String.Format("{0} ft", (playerAltitude.Value * 3.2808399).ToString("F0"));
                 txtHeading.Text = String.Format("{0} º", (compass.Value).ToString("F0"));

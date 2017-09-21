@@ -237,7 +237,7 @@
             this.txtStatus.Name = "txtStatus";
             this.txtStatus.Size = new System.Drawing.Size(78, 13);
             this.txtStatus.TabIndex = 17;
-            this.txtStatus.Text = "Taking Off";
+            this.txtStatus.Text = "----";
             this.txtStatus.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // lblSquawk
