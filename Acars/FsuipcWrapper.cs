@@ -96,6 +96,10 @@ namespace Acars
 
         // EnvironmentDateTime
         private Offset<byte[]> environmentDateTime = new Offset<byte[]>(0x0238, 10);
+        static private Offset<byte[]> environmentDateTimeDayOfYear = new Offset<byte[]>(0x023E, 4);
+        static private Offset<byte[]> environmentDateTimeHour = new Offset<byte[]>(0x023B, 4);
+        static private Offset<byte[]> environmentDateTimeMinute = new Offset<byte[]>(0x023C, 4);
+        static private Offset<byte[]> environmentDateTimeYear = new Offset<byte[]>(0x0240, 4);
         #endregion offset declarations
 
         #region warp property getters and setters
@@ -137,23 +141,11 @@ namespace Acars
                 return result.Add(new TimeSpan(dayOfYear - 1, 0, 0, 0));
             }
             set
-            {
-                // convert offseted values to their own byte[] arrays
-                byte[] byteArrYear = BitConverter.GetBytes((short)value.Year);
-                byte[] byteArrDayOfYear = BitConverter.GetBytes((short)value.DayOfYear - 1);
-
-                // set year
-                environmentDateTime.Value[8] = byteArrYear[0];
-                environmentDateTime.Value[9] = byteArrYear[1];
-
-                // set day of year
-                environmentDateTime.Value[6] = byteArrDayOfYear[0];
-                environmentDateTime.Value[7] = byteArrDayOfYear[1];
-
-                // set hour, minute, and second
-                environmentDateTime.Value[0] = (byte)value.Hour;
-                environmentDateTime.Value[1] = (byte)value.Minute;
-                environmentDateTime.Value[2] = (byte)value.Second;
+            {	
+                environmentDateTimeDayOfYear.Value = BitConverter.GetBytes(value.DayOfYear);
+                environmentDateTimeHour.Value = BitConverter.GetBytes(value.Hour);
+                environmentDateTimeMinute.Value = BitConverter.GetBytes(value.Minute);
+                environmentDateTimeYear.Value = BitConverter.GetBytes(value.Year);
 
                 process();
             }
