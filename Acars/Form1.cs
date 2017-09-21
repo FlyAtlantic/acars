@@ -387,7 +387,7 @@ namespace Acars
         bool Engine1Start;
         bool Engine2Start;
         bool Engine3Start;
-        bool Engine4Start;
+        bool Engine4Start;      
 
         public Form1()
         {
@@ -428,6 +428,8 @@ namespace Acars
                 conn.Close();
                 OnFlight.Start();
                 flightacars.Start();
+                //insere e verifica hora zulu no Simulador
+                fs.EnvironmentDateTime = DateTime.UtcNow;
             }
             else if (arrivalTime != DateTime.MinValue)
             // End Flight
@@ -486,8 +488,7 @@ namespace Acars
                 if (FlightAssignedDone)
                 {
                     // prepare current flight
-                    FlightStart();
-
+                    FlightStart();                  
                     // save validated credentials
                     Properties.Settings.Default.Email = txtEmail.Text;
                     Properties.Settings.Default.Password = txtPassword.Text;
@@ -537,7 +538,7 @@ namespace Acars
                     }
                 }
                 else { };
-
+                
                 // process FSUIPC data
                 onGround = (playerAircraftOnGround.Value == 0) ? false : true;
                 Gear = (playerGear.Value == 0) ? false : true;
@@ -553,8 +554,21 @@ namespace Acars
                 Engine3Start = (playerEngine3start.Value == 0) ? false : true;
                 Engine4Start = (playerEngine4start.Value == 0) ? false : true;
 
+                //Flight Phases
+                FlightPhases FlightPhases1;
+                FlightPhases1 = 0;
+                if (txtStatus.Text == null && !ParkingBrake)
+                {
+                    FlightPhases1 = FlightPhases.PREFLIGHT;                    
+                }
 
+                //Text Status
+                if (FlightPhases1 == FlightPhases.PREFLIGHT) {
 
+                    txtStatus.Text = String.Format("PreFlight");
+                }
+
+                //Acars informations
                 txtAltitude.Text = String.Format("{0} ft", (playerAltitude.Value * 3.2808399).ToString("F0"));
                 txtHeading.Text = String.Format("{0} º", (compass.Value).ToString("F0"));
                 txtGroundSpeed.Text = String.Format("{0} kt", (airspeed.Value / 128).ToString(""));
@@ -598,14 +612,29 @@ namespace Acars
                     messageDuration.Value = 5;
                     FSUIPCConnection.Process();
                 }
+                //verifica hora e corrige hora
+                DateTime SimulatorTime = new DateTime(DateTime.UtcNow.Year, 1, 1, playerSimTime.Value[0], playerSimTime.Value[1], playerSimTime.Value[2]);               
+                int diffhour = 0;
+                int diffminpositive = 2;
+                int diffminnegative = -2;
+
+                int diffHourResult = SimulatorTime.Hour - DateTime.UtcNow.Hour;
+                int diffMinuteResult = SimulatorTime.Minute - DateTime.UtcNow.Minute;
+
+                if (diffMinuteResult >= diffminpositive || diffMinuteResult <= diffminnegative)
+                {
+                    fs.EnvironmentDateTime = DateTime.UtcNow;
+                }
+
+                if (diffHourResult != diffhour)
+                {
+                    fs.EnvironmentDateTime = DateTime.UtcNow;
+                }
 
                 // aircraft wieghts
                 txtGrossWeight.Text = String.Format("{0} kg", ((playerGW.Value) * 0.45359237).ToString("F0"));
                 txtZFW.Text = String.Format("{0} kg", ((playerZFW.Value / 256) * 0.45359237).ToString("F0"));                    
-                txtFuel.Text = String.Format("{0} kg", ((playerGW.Value / 2.2046226218487757)-((playerZFW.Value / 256) * 0.45359237)).ToString("F0"));
-
-                //insere e verifica hora zulu no Simulador
-                fs.EnvironmentDateTime = DateTime.UtcNow;
+                txtFuel.Text = String.Format("{0} kg", ((playerGW.Value / 2.2046226218487757)-((playerZFW.Value / 256) * 0.45359237)).ToString("F0"));              
                 
                 //Log Text
                 FsLongitude lon = new FsLongitude(playerLongitude.Value);

@@ -45,7 +45,7 @@
             this.lblGroundSpeed = new System.Windows.Forms.Label();
             this.txtGroundSpeed = new System.Windows.Forms.TextBox();
             this.lblStatus = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.txtStatus = new System.Windows.Forms.TextBox();
             this.lblSquawk = new System.Windows.Forms.Label();
             this.txtSquawk = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -79,6 +79,7 @@
             this.lblProgressBar = new System.Windows.Forms.Label();
             this.chkAutoLogin = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.txtPenalizations = new System.Windows.Forms.TextBox();
             this.txtLog = new System.Windows.Forms.TextBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
@@ -86,7 +87,6 @@
             this.txtZFW = new System.Windows.Forms.TextBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.OnFlight = new System.Windows.Forms.Timer(this.components);
-            this.txtPenalizations = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -229,16 +229,16 @@
             this.lblStatus.TabIndex = 16;
             this.lblStatus.Text = "Status";
             // 
-            // textBox1
+            // txtStatus
             // 
-            this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBox1.Enabled = false;
-            this.textBox1.Location = new System.Drawing.Point(260, 42);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(78, 13);
-            this.textBox1.TabIndex = 17;
-            this.textBox1.Text = "Taking Off";
-            this.textBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txtStatus.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtStatus.Enabled = false;
+            this.txtStatus.Location = new System.Drawing.Point(260, 42);
+            this.txtStatus.Name = "txtStatus";
+            this.txtStatus.Size = new System.Drawing.Size(78, 13);
+            this.txtStatus.TabIndex = 17;
+            this.txtStatus.Text = "Taking Off";
+            this.txtStatus.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // lblSquawk
             // 
@@ -578,6 +578,14 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Flight Log";
             // 
+            // txtPenalizations
+            // 
+            this.txtPenalizations.Location = new System.Drawing.Point(13, 307);
+            this.txtPenalizations.Multiline = true;
+            this.txtPenalizations.Name = "txtPenalizations";
+            this.txtPenalizations.Size = new System.Drawing.Size(350, 212);
+            this.txtPenalizations.TabIndex = 1;
+            // 
             // txtLog
             // 
             this.txtLog.Location = new System.Drawing.Point(13, 25);
@@ -597,7 +605,7 @@
             this.groupBox3.Controls.Add(this.lblAlternate);
             this.groupBox3.Controls.Add(this.txtAlternate);
             this.groupBox3.Controls.Add(this.lblStatus);
-            this.groupBox3.Controls.Add(this.textBox1);
+            this.groupBox3.Controls.Add(this.txtStatus);
             this.groupBox3.Location = new System.Drawing.Point(12, 91);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(347, 70);
@@ -666,14 +674,6 @@
             this.OnFlight.Interval = 300000;
             this.OnFlight.Tick += new System.EventHandler(this.OnFlight_Tick);
             // 
-            // txtPenalizations
-            // 
-            this.txtPenalizations.Location = new System.Drawing.Point(13, 307);
-            this.txtPenalizations.Multiline = true;
-            this.txtPenalizations.Name = "txtPenalizations";
-            this.txtPenalizations.Size = new System.Drawing.Size(350, 212);
-            this.txtPenalizations.TabIndex = 1;
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -732,7 +732,7 @@
         private System.Windows.Forms.Label lblGroundSpeed;
         private System.Windows.Forms.TextBox txtGroundSpeed;
         private System.Windows.Forms.Label lblStatus;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox txtStatus;
         private System.Windows.Forms.Label lblSquawk;
         private System.Windows.Forms.TextBox txtSquawk;
         private System.Windows.Forms.GroupBox groupBox1;
