@@ -618,7 +618,7 @@ namespace Acars
                     FlightStatus = FlightPhases.APPROACH;
                 }
 
-                if (FlightStatus == FlightPhases.APPROACH && txtLandingRate != null && onGround)
+                if (onGround && txtLandingRate.Text != "----")
                 {
                     FlightStatus = FlightPhases.LANDING;
                 }
@@ -669,7 +669,7 @@ namespace Acars
                     txtStatus.Text = String.Format("Approaching");
                 }
 
-                if (FlightStatus == FlightPhases.LANDING && txtStatus.Text == "Approaching")
+                if (txtLandingRate.Text != "----" && txtStatus.Text == "Approaching")
                 {
                     txtStatus.Text = String.Format("Landing");
                 }
@@ -904,7 +904,17 @@ namespace Acars
                     }
                     txtPenalizations.Text = txtPenalizations.Text + String.Format("TakeOff: Pitch {0}º // IAS: {1}kt \r\n", Pitch, IAS);
                 }
+                // When Landing
+                if (txtLandingRate.Text != "----" && txtArrTime.Text == "00:00")
+                {
+                    if (!debugLogText.EndsWith(String.Format("TouchDown: Pitch {0}º // IAS: {1}kt // Touch: {2} ft/min \r\n", Pitch, IAS, txtLandingRate.Text)))
+                    {
+                        Console.WriteLine("TouchDown");
+                        debugLogText += String.Format("{0:dd-MM-yyyy HH:mm:ss}", DateTime.UtcNow) + " >> " + String.Format("TouchDown: Pitch {0}º // IAS: {1}kt // Touch: {2} ft/min \r\n", Pitch, IAS, txtLandingRate.Text);
 
+                    }
+                    txtPenalizations.Text = txtPenalizations.Text + String.Format("TouchDown: Pitch {0}º // IAS: {1}kt // Touch: {2} ft/min \r\n", Pitch, IAS, txtLandingRate.Text);
+                }
 
                 //Penalizations 
                 //Pause after departure
@@ -993,7 +1003,7 @@ namespace Acars
                 txtPenalizations.Text = txtPenalizations.Text + String.Format("---END PENALIZATIONS---- \r\n\r\n");
 
                 //Touch Down
-                if (flightPhase == FlightPhases.TAXIIN && landingRate == double.MinValue)
+                if (txtStatus.Text == "Approaching" && onGround && landingRate == double.MinValue)
                 {
             
                     landingRate = (playerVerticalSpeed.Value * 3.28084) / -1;
