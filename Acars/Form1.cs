@@ -180,6 +180,12 @@ namespace Acars
         static private Offset<short> playerThrottle = new Offset<short>(0x088C);
         /// <summary>
         /// 
+        ///  /// /// Pitch position º
+        /// </summary>
+        static private Offset<int> playerPitch = new Offset<int>(0x0578);
+        /// <summary>
+        /// 
+        
         static private String debugLogText = null;
 
         #endregion FSUIPC Offset declarations
@@ -422,6 +428,11 @@ namespace Acars
                 string Message = "Welcome to FlyAtlantic Acars";
                 messageWrite.Value = Message;
                 messageDuration.Value = 10;
+                playerEngine1start.Value = 0;
+                playerEngine2start.Value = 0;
+                playerEngine3start.Value = 0;
+                playerEngine4start.Value = 0;
+                playerParkingBrake.Value = 1;
                 FSUIPCConnection.Process();
 
                 button1.Enabled = false;
@@ -718,8 +729,9 @@ namespace Acars
                 TimeSpan Time1 = SimulatorTime - DateTime.UtcNow;
                 Console.WriteLine("Total Seconds: {0}" ,Time1.TotalSeconds);
                 Console.WriteLine("Simulator Time: {0}", SimulatorTime);
-                int diffsecpositive = 100;
-                int diffsecnegative = -100;
+                Console.WriteLine("Pitch: {0}º", ((((playerPitch.Value) / 360) / 65536) *2)/-1);
+                int diffsecpositive = 300;
+                int diffsecnegative = -300;
 
                 if (Time1.TotalSeconds >= diffsecpositive || Time1.TotalSeconds <= diffsecnegative)
                 {
@@ -737,6 +749,7 @@ namespace Acars
                 int turnRate = (((playerTurnRate.Value) / 360) / 65536) * 2;
                 Double intAltitude = (playerAltitude.Value * 3.2808399);
                 int IAS = (playerIndicatedAirspeed.Value / 128);
+                int Pitch = (((((playerPitch.Value) / 360) / 65536) * 2) / -1);
 
                 txtLog.Text = String.Format("{0:dd-MM-yyyy HH:mm:ss}\r\n\r\n", DateTime.UtcNow);
                 txtLog.Text = txtLog.Text + String.Format("Simulator: {0} \r\n", FSUIPCConnection.FlightSimVersionConnected);
@@ -879,7 +892,23 @@ namespace Acars
                     txtPenalizations.Text = txtPenalizations.Text + String.Format("EVENT 1A : Slew On Flight \r\n");
                 }
                 }
-                if (Pause)
+                //Log Informations
+                // When TakingOff
+                if (txtStatus.Text == "Climbing" && txtDepTime.Text == "00:00")
+                    {
+                    if (!debugLogText.EndsWith(String.Format("TakeOff: Pitch {0}º // IAS: {1}kt \r\n", Pitch, IAS)))
+                    {
+                        Console.WriteLine("Taking Off");
+                        debugLogText += String.Format("{0:dd-MM-yyyy HH:mm:ss}", DateTime.UtcNow) + " >> " + String.Format("TakeOff: Pitch {0}º // IAS: {1}kt \r\n", Pitch, IAS);
+
+                    }
+                    txtPenalizations.Text = txtPenalizations.Text + String.Format("TakeOff: Pitch {0}º // IAS: {1}kt \r\n", Pitch, IAS);
+                }
+
+
+                //Penalizations 
+                //Pause after departure
+                if (Pause && !onGround)
                 {
                     if (!debugLogText.EndsWith(String.Format("EVENT 1B : Pause On Flight \r\n")))
                     {
@@ -889,24 +918,28 @@ namespace Acars
                     }
                     txtPenalizations.Text = txtPenalizations.Text + String.Format("EVENT 1B : Pause On Flight \r\n");
                 }
-                if (OverSpeed)
-                {
-                    if (!debugLogText.EndsWith(String.Format("EVENT 1C : OverSpeed On Flight \r\n")))
-                    {
-                        debugLogText += String.Format("{0:dd-MM-yyyy HH:mm:ss}", DateTime.UtcNow) + " >> " + String.Format("EVENT 1C : OverSpeed On Flight \r\n");
+
+                //Overspeed
+                //if (OverSpeed)
+                //{
+                   // if (!debugLogText.EndsWith(String.Format("EVENT 1C : OverSpeed On Flight \r\n")))
+                    //{
+                       // debugLogText += String.Format("{0:dd-MM-yyyy HH:mm:ss}", DateTime.UtcNow) + " >> " + String.Format("EVENT 1C : OverSpeed On Flight \r\n");
                         
-                    }
-                    txtPenalizations.Text = txtPenalizations.Text + String.Format("EVENT 1C : OverSpeed On Flight \r\n");
-                }
-                if (Stall)
-                {
-                    if (!debugLogText.EndsWith(String.Format("EVENT 1D : Stall On Flight \r\n")))
-                    {
-                        debugLogText += String.Format("{0:dd-MM-yyyy HH:mm:ss}", DateTime.UtcNow) + " >> " + String.Format("EVENT 1D : Stall On Flight \r\n");
+                    //}
+                    //txtPenalizations.Text = txtPenalizations.Text + String.Format("EVENT 1C : OverSpeed On Flight \r\n");
+                //}
+                //Stall
+                //if (Stall)
+               // {
+                    //if (!debugLogText.EndsWith(String.Format("EVENT 1D : Stall On Flight \r\n")))
+                   // {
+                      //  debugLogText += String.Format("{0:dd-MM-yyyy HH:mm:ss}", DateTime.UtcNow) + " >> " + String.Format("EVENT 1D : Stall On Flight \r\n");
                        
-                    }
-                    txtPenalizations.Text = txtPenalizations.Text + String.Format("EVENT 1D : Stall On Flight \r\n");
-                }
+                   // }
+                   // txtPenalizations.Text = txtPenalizations.Text + String.Format("EVENT 1D : Stall On Flight \r\n");
+                //}
+                //Turn Rate Above 30º
                 if (turnRate >= 30)
                 {
                     if (!debugLogText.EndsWith(String.Format("EVENT 2A: Bank Angle Exceeded: {0}º \r\n", (((playerTurnRate.Value) / 360) / 65536) * 2)))
@@ -916,6 +949,7 @@ namespace Acars
                     }
                     txtPenalizations.Text = txtPenalizations.Text + String.Format("EVENT 2A: Bank Angle Exceeded: {0}º \r\n", (((playerTurnRate.Value) / 360) / 65536) * 2);
                 }
+                //Landing Ligts on above 1000ft
                 if (intAltitude >= 10000 && LandingLights)
                 {
                     if (!debugLogText.EndsWith(String.Format("EVENT 3A: Landing Lights On Above 10.000ft\r\n")))
@@ -925,6 +959,7 @@ namespace Acars
                     }
                     txtPenalizations.Text = txtPenalizations.Text + String.Format("EVENT 3A: Landing Lights On Above 10.000ft\r\n");
                 }
+                // Landing Lights Off Below 3000ft
                 if (intAltitude <= 3000 && !LandingLights && !onGround)
                 {
                     if (!debugLogText.EndsWith(String.Format("EVENT 3B : Landing Lights Off Below 3.000ft\r\n")))
@@ -934,6 +969,7 @@ namespace Acars
                     }
                     txtPenalizations.Text = txtPenalizations.Text + String.Format("EVENT 3B : Landing Lights Off Below 3.000ft\r\n");
                 }
+                //Speed Above 250kt below 1000ft
                 if (intAltitude <= 10000 && IAS >= 255)
                 {
                     if (!debugLogText.EndsWith(String.Format("EVENT 3C : Speed above 250kt below 10.000ft\r\n")))
@@ -943,6 +979,7 @@ namespace Acars
                     }
                      txtPenalizations.Text = txtPenalizations.Text + String.Format("EVENT 3C : Speed above 250kt below 10.000ft\r\n");
                 }
+                //Overspeed taxi
                 if (onGround && GS >= 30 && txtStatus.Text == "TaxiOut")
                 {
                     if (!debugLogText.EndsWith(String.Format("EVENT 3D : Speed above 25kt on Taxi\r\n")))
@@ -956,7 +993,7 @@ namespace Acars
                 txtPenalizations.Text = txtPenalizations.Text + String.Format("---END PENALIZATIONS---- \r\n\r\n");
 
                 //Touch Down
-                if (flightPhase == FlightPhases.TAXIOUT && landingRate == double.MinValue)
+                if (flightPhase == FlightPhases.TAXIIN && landingRate == double.MinValue)
                 {
             
                     landingRate = (playerVerticalSpeed.Value * 3.28084) / -1;
@@ -964,7 +1001,7 @@ namespace Acars
                     txtLog.Text = txtLog.Text + String.Format("TouchDown: {0} ft/min\r\n", landingRate.ToString("F0"));
                 }
                
-                if (flightPhase == FlightPhases.TAXIOUT && ParkingBrake)
+                if (flightPhase == FlightPhases.TAXIIN && ParkingBrake)
                 {
                     // enable end flight
                     button1.Text = "End flight";
