@@ -87,6 +87,8 @@ namespace Acars
         {
             phase = initialPhase;
 
+            TelemetryLog = new List<Telemetry>();
+
             ActualArrivalTime = null;
             ActualDepartureTime = null;
         }
