@@ -1,5 +1,6 @@
 ﻿using FSUIPC;
 using System;
+using System.Collections.Generic;
 
 namespace Acars
 {
@@ -126,6 +127,12 @@ namespace Acars
                 return ActualArrivalTime.Timestamp - ActualDepartureTime.Timestamp;
             }
         }
+
+        public List<Telemetry> TelemetryLog
+        {
+            get;
+            private set;
+        }
         #endregion Properties
 
         /// <summary>
@@ -135,6 +142,7 @@ namespace Acars
         {
             // calculate all telemetry data we need
             Telemetry currentTelemetry = Telemetry.GetCurrent();
+            TelemetryLog.Add(currentTelemetry);
 
             // handle switching phase
             switch (phase)
@@ -172,7 +180,7 @@ namespace Acars
                     break;
                 case FlightPhases.APPROACH:
                     if (currentTelemetry.OnGround)
-                        ActualArrivalTime = Telemetry.GetCurrent();
+                        ActualArrivalTime = currentTelemetry;
                         phase = FlightPhases.LANDING;
                     break;
                 case FlightPhases.LANDING:

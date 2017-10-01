@@ -880,6 +880,7 @@ namespace Acars
                 if (flightPhase == FlightPhases.TAXIIN && ParkingBrake)
                 {
                     // enable end flight
+                    flight.HandleFlightPhases();
                     button1.Text = "End flight";
                     button1.Enabled = true;
 
