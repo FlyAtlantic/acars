@@ -15,23 +15,6 @@ using static System.Resources.ResXFileRef;
 
 namespace Acars
 {
-    public enum FlightPhases
-    {
-        PREFLIGHT = 0,
-        TAXIOUT = 1,
-        TAKEOFF = 2,
-        /// <summary>
-        /// Happens first at airborne time
-        /// </summary>
-        PUSHBACK = 3,
-        CLIMBING = 4,
-        CRUISE = 5,
-        DESCENDING = 6,
-        APPROACH = 7,
-        LANDING = 8,
-        TAXIIN = 9
-    }
-
     public partial class Form1 : Form
     {
         #region FSUIPC Offset declarations
@@ -291,7 +274,7 @@ namespace Acars
         /// <summary>
         /// Handle flight phases
         /// </summary>
-        private void HandleFlightPhases()
+        private FlightPhases HandleFlightPhases()
         {
             bool engine1Start = (playerEngine1start.Value == 0) ? false : true;
             bool parkingBrake = (playerParkingBrake.Value == 0) ? false : true;
@@ -339,7 +322,7 @@ namespace Acars
                         flightPhase = FlightPhases.TAXIIN;
                     break;
             }
-
+            return flightPhase;
         }
         /// <summary>
         /// Handle login and assigned flight confirmation
@@ -437,11 +420,13 @@ namespace Acars
 
             conn = new MySqlConnection(ConnectionString);
 
+            #region DEBUG
 #if DEBUG
             this.Width = 760;
 #else
             this.Width = 387;
 #endif
+            #endregion DEBUG
         }
 
         private void btnLogin_Click(object sender, EventArgs e)
@@ -498,7 +483,6 @@ namespace Acars
             }
         }
 
-
         /// <summary>
         /// Actualiza a hora do avião na base de dados, constamente ?de 5 em 5 minutos?
         /// </summary>
@@ -522,6 +506,7 @@ namespace Acars
             {
                 // handle flight phase changes
                 HandleFlightPhases();
+
                 txtStatus.Text = flightPhase.ToString();
 
                 // Actual times of Departure, Arrival, Flight Time
@@ -756,6 +741,14 @@ namespace Acars
                 {
                     txtLog.Text = txtLog.Text + String.Format("Gear Up at: {0} ft \r\n\r\n", (playerAltitude.Value * 3.2808399).ToString("F0"));
                 }
+                //Touch Down
+                if (txtStatus.Text == "Approaching" && onGround && landingRate == double.MinValue)
+                {
+
+                    landingRate = (playerVerticalSpeed.Value * 3.28084) / -1;
+                    txtLandingRate.Text = String.Format("{0} ft/min", landingRate.ToString("F0"));
+                    txtLog.Text = txtLog.Text + String.Format("TouchDown: {0} ft/min\r\n", landingRate.ToString("F0"));
+                }
                 #endregion logging info for debugging
 
                 #region penalties
@@ -772,7 +765,7 @@ namespace Acars
                 //Log Informations
                 // When TakingOff
                 if (txtStatus.Text == "Climbing" && txtDepTime.Text == "00:00")
-                    {
+                {
                     if (!debugLogText.EndsWith(String.Format("TakeOff: Pitch {0}º // IAS: {1}kt \r\n", Pitch, IAS)))
                     {
                         Console.WriteLine("Taking Off");
@@ -879,15 +872,6 @@ namespace Acars
 
                 txtPenalizations.Text = txtPenalizations.Text + String.Format("---END PENALIZATIONS---- \r\n\r\n");
                 #endregion penalties
-
-                //Touch Down
-                if (txtStatus.Text == "Approaching" && onGround && landingRate == double.MinValue)
-                {
-            
-                    landingRate = (playerVerticalSpeed.Value * 3.28084) / -1;
-                    txtLandingRate.Text = String.Format("{0} ft/min", landingRate.ToString("F0"));
-                    txtLog.Text = txtLog.Text + String.Format("TouchDown: {0} ft/min\r\n", landingRate.ToString("F0"));
-                }
                
                 if (flightPhase == FlightPhases.TAXIIN && ParkingBrake)
                 {
