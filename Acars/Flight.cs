@@ -3,7 +3,7 @@ using System;
 
 namespace Acars
 {
-    public struct Telemetry
+    public class Telemetry
     {
         /// <summary>
         /// UTC time of collection
@@ -85,6 +85,9 @@ namespace Acars
         public Flight(FlightPhases initialPhase = FlightPhases.PREFLIGHT)
         {
             phase = initialPhase;
+
+            ActualArrivalTime = null;
+            ActualDepartureTime = null;
         }
 
         #region variables
@@ -113,21 +116,22 @@ namespace Acars
             get;
             private set;
         }
-        #endregion Properties
 
-        /// <summary>
-        /// Prepares all variables for a fresh flight
-        /// </summary>
-        /// <returns></returns>
-        private void FlightStart()
+        public TimeSpan ActualTimeEnRoute
         {
-            phase = FlightPhases.PREFLIGHT;
+            get
+            {
+                if (ActualDepartureTime == null || ActualArrivalTime == null)
+                    return TimeSpan.MinValue;
+                return ActualArrivalTime.Timestamp - ActualDepartureTime.Timestamp;
+            }
         }
+        #endregion Properties
 
         /// <summary>
         /// Handle flight phases
         /// </summary>
-        private FlightPhases HandleFlightPhases()
+        public FlightPhases HandleFlightPhases()
         {
             // calculate all telemetry data we need
             Telemetry currentTelemetry = Telemetry.GetCurrent();
