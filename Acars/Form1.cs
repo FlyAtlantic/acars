@@ -174,6 +174,8 @@ namespace Acars
         #endregion FSUIPC Offset declarations
 
         #region Property declaration
+        Flight flight;
+
         private int flightId;
         private int userId;
         private double landingRate;
@@ -472,6 +474,7 @@ namespace Acars
                 if (FlightAssignedDone)
                 {
                     // prepare current flight
+                    flight = new Flight();
                     FlightStart();                  
                     // save validated credentials
                     Properties.Settings.Default.Email = txtEmail.Text;
@@ -506,21 +509,22 @@ namespace Acars
             {
                 // handle flight phase changes
                 HandleFlightPhases();
+                flight.HandleFlightPhases();
 
                 txtStatus.Text = flightPhase.ToString();
 
                 // Actual times of Departure, Arrival, Flight Time
-                if (departureTime != null)
-                    txtDepTime.Text = departureTime.ToString("HH:mm");
-                if (arrivalTime != null)
-                    txtArrTime.Text = arrivalTime.ToString("HH:mm");
-                if (flightTime != TimeSpan.MinValue)
-                    if (flightTime <= TimeSpan.Zero)
+                if (flight.ActualDepartureTime != null)
+                    txtDepTime.Text = flight.ActualDepartureTime.Timestamp.ToString("HH:mm");
+                if (flight.ActualArrivalTime != null)
+                    txtArrTime.Text = flight.ActualArrivalTime.Timestamp.ToString("HH:mm");
+                if (flight.ActualTimeEnRoute != TimeSpan.MinValue)
+                    if (flight.ActualTimeEnRoute <= TimeSpan.Zero)
                         txtFlightTime.Text = String.Format("00:00");
                     else
                         txtFlightTime.Text = String.Format("{0:00}:{1:00}",
-                                                       Math.Truncate(flightTime.TotalHours),
-                                                       flightTime.Minutes);
+                                                           Math.Truncate(flight.ActualTimeEnRoute.TotalHours),
+                                                           flight.ActualTimeEnRoute.Minutes);
                 
                 // process FSUIPC data
                 onGround = (playerAircraftOnGround.Value == 0) ? false : true;
