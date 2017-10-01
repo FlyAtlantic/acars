@@ -157,8 +157,10 @@ namespace Acars
                     break;
                 case FlightPhases.TAXIOUT:
                     if (currentTelemetry.Engine1 && !currentTelemetry.ParkingBrake && currentTelemetry.IndicatedAirSpeed >= 27 && currentTelemetry.Throttle >= 10000)
+                    {
                         ActualDepartureTime = currentTelemetry;
                         phase = FlightPhases.TAKEOFF;
+                    }
                     break;
                 case FlightPhases.TAKEOFF:
                     if (currentTelemetry.VerticalSpeed >= 100 && !currentTelemetry.OnGround)
@@ -167,6 +169,8 @@ namespace Acars
                 case FlightPhases.CLIMBING:
                     if (currentTelemetry.VerticalSpeed <= 100 && currentTelemetry.VerticalSpeed >= -100 && !currentTelemetry.OnGround)
                         phase = FlightPhases.CRUISE;
+                    else if (currentTelemetry.VerticalSpeed <= 100 && !currentTelemetry.OnGround)
+                        phase = FlightPhases.DESCENDING;
                     break;
                 case FlightPhases.CRUISE:
                     if (currentTelemetry.VerticalSpeed <= 100 && !currentTelemetry.OnGround)
@@ -177,11 +181,17 @@ namespace Acars
                 case FlightPhases.DESCENDING:
                     if (!currentTelemetry.OnGround && currentTelemetry.IndicatedAirSpeed <= 200 && currentTelemetry.Altitude <= 6000)
                         phase = FlightPhases.APPROACH;
+                    else if (currentTelemetry.VerticalSpeed >= 100 && !currentTelemetry.OnGround)
+                        phase = FlightPhases.CLIMBING;
                     break;
                 case FlightPhases.APPROACH:
                     if (currentTelemetry.OnGround)
+                    {
                         ActualArrivalTime = currentTelemetry;
                         phase = FlightPhases.LANDING;
+                    }
+                    else if (currentTelemetry.VerticalSpeed >= 100 && !currentTelemetry.OnGround)
+                        phase = FlightPhases.CLIMBING;
                     break;
                 case FlightPhases.LANDING:
                     if (currentTelemetry.IndicatedAirSpeed <= 40 && currentTelemetry.OnGround)
