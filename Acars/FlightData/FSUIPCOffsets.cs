@@ -27,5 +27,10 @@ namespace Acars.FlightData
         static public Offset<short> landingLights = new Offset<short>(0x028C, false);
         static public Offset<double> grossWeight = new Offset<double>(0x30C0);
         static public Offset<int> zeroFuelWeight = new Offset<int>(0x3BFC);
+        static public Offset<short> squawk = new Offset<short>(0x0354);
+        static public Offset<byte[]> SimTime = new Offset<byte[]>(0x023B, 10);
+        static public Offset<int> SimRate = new Offset<int>(0x0C1A);
+        static public Offset<short> QNH = new Offset<short>(0x0330);
+        static public Offset<int> EnginesNumber = new Offset<int>(0x0AEC);
     }
 }
