@@ -58,7 +58,7 @@ namespace Acars
                         int[] I = { eventStart, eventEnd };
                         result.Add(I);
                         eventStart = -1;
-                        EventEnd = -1;
+                        eventEnd = -1;
                     }
                 }
 
