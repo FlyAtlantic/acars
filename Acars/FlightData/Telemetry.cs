@@ -101,27 +101,27 @@ namespace Acars.FlightData
         /// <summary>
         /// Landing lights switch
         /// </summary>
-        bool LandingLights;
+        public bool LandingLights;
         /// <summary>
         /// Squawk
         /// </summary>
-        short Squawk;
+        public short Squawk;
         /// <summary>
         /// SimTime
         /// </summary>
-        byte[] SimTime;
+        public byte[] SimTime;
         /// <summary>
         /// SimRate
         /// </summary>
-        int SimRate;
+        public int SimRate;
         /// <summary>
         /// Number f Engines
         /// </summary>
-        int EnginesNumber;
+        public int EnginesNumber;
         /// <summary>
         /// QNH
         /// </summary>
-        short QNH;
+        public int QNH;
 
         public double GrossWeight;
 
