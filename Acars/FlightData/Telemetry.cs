@@ -7,6 +7,22 @@ namespace Acars.FlightData
     {
         #region Properties
         /// <summary>
+        /// Offset for Airspeed
+        /// </summary>
+        public int airspeed;
+        /// <summary>
+        /// Offset for Compass
+        /// </summary>
+        public Double Compass;
+        /// <summary>
+        /// Offset for Lon features
+        /// </summary>
+        public long Longitude;
+        /// <summary>
+        /// Offset for Lat features
+        /// </summary>
+        public long Latitude;
+        /// <summary>
         /// UTC time of collection
         /// </summary>
         public DateTime Timestamp;
@@ -90,6 +106,26 @@ namespace Acars.FlightData
         /// Landing lights switch
         /// </summary>
         bool LandingLights;
+        /// <summary>
+        /// Squawk
+        /// </summary>
+        short Squawk;
+        /// <summary>
+        /// SimTime
+        /// </summary>
+        byte[] SimTime;
+        /// <summary>
+        /// SimRate
+        /// </summary>
+        int SimRate;
+        /// <summary>
+        /// Number f Engines
+        /// </summary>
+        int EnginesNumber;
+        /// <summary>
+        /// QNH
+        /// </summary>
+        short QNH;
 
         public double GrossWeight;
 
@@ -126,6 +162,11 @@ namespace Acars.FlightData
             result.LandingLights = (FSUIPCOffsets.landingLights.Value == 0) ? false : true;
             result.GrossWeight = (FSUIPCOffsets.grossWeight.Value) * 0.45359237;
             result.ZeroFuelWeight = (FSUIPCOffsets.zeroFuelWeight.Value / 256) * 0.45359237;
+            result.Squawk = FSUIPCOffsets.squawk.Value;
+            result.SimTime = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, FSUIPCOffsets.SimTime.Value[0], FSUIPCOffsets.SimTime.Value[1], FSUIPCOffsets.SimTime.Value[2]);
+            result.SimRate = FSUIPCOffsets.SimRate.Value;
+            result.QNH = FSUIPCOffsets.QNH.Value / 16;
+            result.EnginesNumber = FSUIPCOffsets.EnginesNumber.Value;
 
             return result;
         }
