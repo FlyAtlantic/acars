@@ -10,6 +10,8 @@ namespace Acars.FlightData
         {
             phase = initialPhase;
 
+            TelemetryLog = new List<Telemetry>();
+
             ActualArrivalTime = null;
             ActualDepartureTime = null;
         }
