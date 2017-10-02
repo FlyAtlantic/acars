@@ -72,8 +72,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FlightPhases.cs" />
-    <Compile Include="Flight.cs" />
+    <Compile Include="Events\MaxBankAngleExceeded.cs" />
+    <Compile Include="Events\FlightEvent.cs" />
+    <Compile Include="FlightData\FlightPhases.cs" />
+    <Compile Include="FlightData\Flight.cs" />
+    <Compile Include="FlightData\Telemetry.cs" />
     <Compile Include="FlyAtlanticHelpers.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
