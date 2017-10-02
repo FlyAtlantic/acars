@@ -109,7 +109,7 @@ namespace Acars.FlightData
         /// <summary>
         /// SimTime
         /// </summary>
-        public byte[] SimTime;
+        public DateTime SimTime;
         /// <summary>
         /// SimRate
         /// </summary>
@@ -117,7 +117,7 @@ namespace Acars.FlightData
         /// <summary>
         /// Number f Engines
         /// </summary>
-        public int EnginesNumber;
+        public int EngineCount;
         /// <summary>
         /// QNH
         /// </summary>
@@ -159,13 +159,13 @@ namespace Acars.FlightData
             result.GrossWeight = (FSUIPCOffsets.grossWeight.Value) * 0.45359237;
             result.ZeroFuelWeight = (FSUIPCOffsets.zeroFuelWeight.Value / 256) * 0.45359237;
             result.Squawk = FSUIPCOffsets.squawk.Value;
-            result.SimTime = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, FSUIPCOffsets.SimTime.Value[0], FSUIPCOffsets.SimTime.Value[1], FSUIPCOffsets.SimTime.Value[2]);
-            result.SimRate = FSUIPCOffsets.SimRate.Value;
-            result.QNH = FSUIPCOffsets.QNH.Value / 16;
-            result.EnginesNumber = FSUIPCOffsets.EnginesNumber.Value;
+            result.SimTime = (new DateTime(BitConverter.ToInt16(FSUIPCOffsets.simTime.Value, 8), 1, 1, FSUIPCOffsets.simTime.Value[0], FSUIPCOffsets.simTime.Value[1], FSUIPCOffsets.simTime.Value[2])).Add(new TimeSpan(BitConverter.ToInt16(FSUIPCOffsets.simTime.Value, 6) - 1, 0, 0, 0));
+            result.SimRate = FSUIPCOffsets.simRate.Value;
+            result.QNH = FSUIPCOffsets.qnh.Value / 16;
+            result.EngineCount = FSUIPCOffsets.engineCount.Value;
             result.Compass = FSUIPCOffsets.compass.Value;
-            result.Latitude = FSUIPCOffsets.Latitude.Value;
-            result.Longitude = FSUIPCOffsets.Longitude.Value;
+            result.Latitude = FSUIPCOffsets.latitude.Value;
+            result.Longitude = FSUIPCOffsets.longitude.Value;
 
             return result;
         }
