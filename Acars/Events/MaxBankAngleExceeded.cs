@@ -1,4 +1,6 @@
-﻿namespace Acars.Events
+﻿using Acars.FlightData;
+
+namespace Acars.Events
 {
     public class MaxBankAngleExceeded : FlightEvent
     {
