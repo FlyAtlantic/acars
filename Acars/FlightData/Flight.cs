@@ -63,11 +63,10 @@ namespace Acars.FlightData
         /// <summary>
         /// Handle flight phases
         /// </summary>
-        public FlightPhases HandleFlightPhases()
+        public Telemetry HandleFlightPhases()
         {
             // calculate all telemetry data we need
             Telemetry currentTelemetry = Telemetry.GetCurrent();
-            TelemetryLog.Add(currentTelemetry);
 
             // handle switching phase
             switch (phase)
@@ -123,7 +122,10 @@ namespace Acars.FlightData
                         phase = FlightPhases.TAXIIN;
                     break;
             }
-            return phase;
+
+            currentTelemetry.FlightPhase = phase;
+            TelemetryLog.Add(currentTelemetry);
+            return currentTelemetry;
         }
     }
 }

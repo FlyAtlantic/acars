@@ -5,10 +5,15 @@ namespace Acars.FlightData
 {
     public class Telemetry
     {
+        #region Properties
         /// <summary>
         /// UTC time of collection
         /// </summary>
         public DateTime Timestamp;
+        /// <summary>
+        /// Flgiht phase
+        /// </summary>
+        public FlightPhases FlightPhase;
         /// <summary>
         /// Kts
         /// </summary>
@@ -25,6 +30,18 @@ namespace Acars.FlightData
         /// Engine 1 running state
         /// </summary>
         public bool Engine1;
+        /// <summary>
+        /// Engine 2 running state
+        /// </summary>
+        public bool Engine2;
+        /// <summary>
+        /// Engine 3 running state
+        /// </summary>
+        public bool Engine3;
+        /// <summary>
+        /// Engine 4 running state
+        /// </summary>
+        public bool Engine4;
         /// <summary>
         /// Parking Brake state
         /// </summary>
@@ -45,6 +62,35 @@ namespace Acars.FlightData
         /// Altitude? MSL AGL ... ?, in ft most likely
         /// </summary>
         public double Altitude;
+        /// <summary>
+        /// Landing gear state, (true = down, false = up, ? = off)
+        /// </summary>
+        public bool Gear;
+        /// <summary>
+        /// Slew mode active
+        /// </summary>
+        public bool Slew;
+        /// <summary>
+        /// Pause state
+        /// </summary>
+        public bool Pause;
+        /// <summary>
+        /// Is aircraft in overspeed
+        /// </summary>
+        public bool OverSpeed;
+        /// <summary>
+        /// Is aircraft in stall condition
+        /// </summary>
+        public bool Stall;
+        /// <summary>
+        /// Battery switch position
+        /// </summary>
+        public bool Battery;
+        /// <summary>
+        /// Landing lights switch
+        /// </summary>
+        bool LandingLights;
+        #endregion Properties
 
         public static Telemetry GetCurrent()
         {
@@ -55,28 +101,27 @@ namespace Acars.FlightData
             result.Timestamp = DateTime.UtcNow;
 
             // capture values
-            result.IndicatedAirSpeed = (indicatedAirSpeed.Value / 128);
-            result.Pitch = ((((pitch.Value) / 360) / 65536) * 2) / -1;
-            result.Bank = (((bank.Value) / 360) / 65536) * 2;
-            result.Engine1 = (engine1.Value == 0) ? false : true;
-            result.ParkingBrake = (parkingBrake.Value == 0) ? false : true;
-            result.OnGround = (onGround.Value == 0) ? false : true;
-            result.VerticalSpeed = (verticalSpeed.Value * 3.28084) / -1;
-            result.Throttle = throttle.Value;
-            result.Altitude = (altitude.Value * 3.2808399);
+            result.IndicatedAirSpeed = (FSUIPCOffsets.indicatedAirSpeed.Value / 128);
+            result.Pitch = ((((FSUIPCOffsets.pitch.Value) / 360) / 65536) * 2) / -1;
+            result.Bank = (((FSUIPCOffsets.bank.Value) / 360) / 65536) * 2;
+            result.Engine1 = (FSUIPCOffsets.engine1.Value == 0) ? false : true;
+            result.Engine2 = (FSUIPCOffsets.engine2.Value == 0) ? false : true;
+            result.Engine3 = (FSUIPCOffsets.engine3.Value == 0) ? false : true;
+            result.Engine4 = (FSUIPCOffsets.engine4.Value == 0) ? false : true;
+            result.ParkingBrake = (FSUIPCOffsets.parkingBrake.Value == 0) ? false : true;
+            result.OnGround = (FSUIPCOffsets.onGround.Value == 0) ? false : true;
+            result.VerticalSpeed = (FSUIPCOffsets.verticalSpeed.Value * 3.28084) / -1;
+            result.Throttle = FSUIPCOffsets.throttle.Value;
+            result.Altitude = (FSUIPCOffsets.altitude.Value * 3.2808399);
+            result.Gear = (FSUIPCOffsets.gear.Value == 0) ? false : true;
+            result.Slew = (FSUIPCOffsets.slew.Value == 0) ? false : true;
+            result.Pause = (FSUIPCOffsets.pause.Value == 0) ? false : true;
+            result.OverSpeed = (FSUIPCOffsets.overSpeed.Value == 0) ? false : true;
+            result.Stall = (FSUIPCOffsets.stall.Value == 0) ? false : true;
+            result.Battery = (FSUIPCOffsets.battery.Value == 0) ? false : true;
+            result.LandingLights = (FSUIPCOffsets.landingLights.Value == 0) ? false : true;
 
             return result;
         }
-
-        private static Offset<int> indicatedAirSpeed = new Offset<int>(0x02BC);
-        static private Offset<int> pitch = new Offset<int>(0x0578);
-        static private Offset<int> bank = new Offset<int>(0x057C);
-        static private Offset<short> engine1 = new Offset<short>(0x0894);
-        static private Offset<short> parkingBrake = new Offset<short>(0x0BC8, false);
-        static private Offset<int> airspeed = new Offset<int>(0x02BC);
-        static private Offset<short> onGround = new Offset<short>(0x0366, false);
-        static private Offset<short> verticalSpeed = new Offset<short>(0x0842);
-        static private Offset<short> throttle = new Offset<short>(0x088C);
-        static private Offset<Double> altitude = new Offset<Double>(0x6020);
     }
 }
