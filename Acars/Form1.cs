@@ -1,17 +1,10 @@
-﻿    using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using Acars.FlightData;
 using FSUIPC;
 using MySql.Data.MySqlClient;
-using static System.Resources.ResXFileRef;
+using System;
+using System.Security.Cryptography;
+using System.Text;
+using System.Windows.Forms;
 
 namespace Acars
 {
