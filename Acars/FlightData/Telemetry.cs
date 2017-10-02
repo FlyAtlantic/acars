@@ -7,10 +7,6 @@ namespace Acars.FlightData
     {
         #region Properties
         /// <summary>
-        /// Offset for Airspeed
-        /// </summary>
-        public int airspeed;
-        /// <summary>
         /// Offset for Compass
         /// </summary>
         public Double Compass;
@@ -167,6 +163,9 @@ namespace Acars.FlightData
             result.SimRate = FSUIPCOffsets.SimRate.Value;
             result.QNH = FSUIPCOffsets.QNH.Value / 16;
             result.EnginesNumber = FSUIPCOffsets.EnginesNumber.Value;
+            result.Compass = FSUIPCOffsets.compass.Value;
+            result.Latitude = FSUIPCOffsets.Latitude.Value;
+            result.Longitude = FSUIPCOffsets.Longitude.Value;
 
             return result;
         }

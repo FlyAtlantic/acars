@@ -32,5 +32,8 @@ namespace Acars.FlightData
         static public Offset<int> SimRate = new Offset<int>(0x0C1A);
         static public Offset<short> QNH = new Offset<short>(0x0330);
         static public Offset<int> EnginesNumber = new Offset<int>(0x0AEC);
+        static public Offset<Double> compass = new Offset<double>(0x02CC);
+        static public Offset<long> Longitude = new Offset<long>(0x0568);
+        static public Offset<long> Latitude = new Offset<long>(0x0560);
     }
 }
