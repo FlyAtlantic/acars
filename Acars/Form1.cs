@@ -168,14 +168,10 @@ namespace Acars
 
         #region Property declaration
         Flight flight;
-
+        private FsuipcWrapper fs;
         private int flightId;
         private int userId;
         private double landingRate;
-        /// <summary>
-        /// FSUIPC Wrapper
-        /// </summary>
-        private FsuipcWrapper fs;
         /// <summary>
         /// Reusable MySQL connection throughout the application
         /// </summary>
@@ -192,32 +188,6 @@ namespace Acars
         /// Determines if a flight given by the Flight System database has been returned upon login
         /// </summary>
         bool FlightAssignedDone = false;
-        /// <summary>
-        /// Returns the current fligt phase
-        /// </summary>
-        FlightPhases flightPhase;
-        /// <summary>
-        /// Returns last gear lift off time
-        /// </summary>
-        DateTime departureTime;
-        /// <summary>
-        /// Returns last gear touch down time
-        /// </summary>
-        DateTime arrivalTime = DateTime.MinValue;
-        /// <summary>
-        /// Gets computed flight time
-        /// 
-        /// Both departureTime and arrivalTime must be set, otherwise returns TimeSpan.MinValue
-        /// </summary>
-        TimeSpan flightTime
-        {
-            get
-            {
-                if (departureTime == null || arrivalTime == null)
-                    return TimeSpan.MinValue;
-                return arrivalTime - departureTime;
-            }
-        }
         private string ConnectionString
         {
             get
@@ -263,62 +233,9 @@ namespace Acars
         /// <returns></returns>
         private void FlightStart()
         {
-            flightPhase = FlightPhases.PREFLIGHT;
             onGround = true;
         }
-        /// <summary>
-        /// Handle flight phases
-        /// </summary>
-        private FlightPhases HandleFlightPhases()
-        {
-            bool engine1Start = (playerEngine1start.Value == 0) ? false : true;
-            bool parkingBrake = (playerParkingBrake.Value == 0) ? false : true;
-            int groundSpeed = ((airspeed.Value / 128));
-            bool onGround = (playerAircraftOnGround.Value == 0) ? false : true;
-
-            switch (flightPhase)
-            {
-                case FlightPhases.PREFLIGHT:
-                    if (engine1Start && !parkingBrake)
-                        flightPhase = FlightPhases.PUSHBACK;
-                    break;
-                case FlightPhases.PUSHBACK:
-                    if (Engine1Start && !parkingBrake && groundSpeed >= 10)
-                        flightPhase = FlightPhases.TAXIOUT;
-                    break;
-                case FlightPhases.TAXIOUT:
-                    if (engine1Start && !parkingBrake && groundSpeed >= 27 && playerThrottle.Value >= 10000)
-                        flightPhase = FlightPhases.TAKEOFF;
-                    break;
-                case FlightPhases.TAKEOFF:
-                    if (((playerVerticalSpeed.Value * 3.28084) / -1) >= 100 && !onGround)
-                        flightPhase = FlightPhases.CLIMBING;
-                    break;
-                case FlightPhases.CLIMBING:
-                    if (((playerVerticalSpeed.Value * 3.28084) / -1) <= 100 && ((playerVerticalSpeed.Value * 3.28084) / -1) >= -100 && !onGround)
-                        flightPhase = FlightPhases.CRUISE;
-                        break;
-                case FlightPhases.CRUISE:
-                    if (((playerVerticalSpeed.Value * 3.28084) / -1) <= 100 && !onGround)
-                        flightPhase = FlightPhases.DESCENDING;
-                    else if (((playerVerticalSpeed.Value * 3.28084) / -1) >= 100 && !onGround)
-                        flightPhase = FlightPhases.CLIMBING;
-                    break;
-                case FlightPhases.DESCENDING:
-                    if (!onGround && groundSpeed <= 200 && (playerAltitude.Value * 3.2808399) <= 6000)
-                        flightPhase = FlightPhases.APPROACH;
-                    break;
-                case FlightPhases.APPROACH:
-                    if (onGround)
-                        flightPhase = FlightPhases.LANDING;
-                    break;
-                case FlightPhases.LANDING:
-                    if (groundSpeed <= 40 && onGround)
-                        flightPhase = FlightPhases.TAXIIN;
-                    break;
-            }
-            return flightPhase;
-        }
+        
         /// <summary>
         /// Handle login and assigned flight confirmation
         /// </summary>
@@ -426,7 +343,34 @@ namespace Acars
 
         private void btnLogin_Click(object sender, EventArgs e)
         {
-            if (FlightAssignedDone && arrivalTime == DateTime.MinValue)
+            if (flight == null)
+            {
+                // Login
+                if(DoLogin(txtEmail.Text, txtPassword.Text))               
+                {
+                    // prepare current flight
+                    flight = new Flight();
+                    FlightStart();
+                    // save validated credentials
+                    Properties.Settings.Default.Email = txtEmail.Text;
+                    Properties.Settings.Default.Password = txtPassword.Text;
+                    Properties.Settings.Default.Save();
+                    email = txtEmail.Text;
+                    password = txtPassword.Text;
+                }
+            }
+            else if (flight.ActualArrivalTime != null)
+            {
+                if (FlyAtlanticHelpers.EndFlight(conn, userId, flight.ActualTimeEnRoute.TotalMinutes, flightId, landingRate))
+                {
+                    MessageBox.Show(String.Format("Flight approved, rating 100% {0} EP(s)", Math.Round(Math.Round(flight.ActualTimeEnRoute.TotalMinutes) / 10)),
+                                    "Flight Approved",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Information);
+                    Application.Exit();
+                }
+            }
+            else
             {
                 if (FlyAtlanticHelpers.StartFlight(conn, fs, userId))
                 {
@@ -449,34 +393,6 @@ namespace Acars
                     flightacars.Start();
                 }
             }
-            else if (arrivalTime != DateTime.MinValue)
-            {
-                if (FlyAtlanticHelpers.EndFlight(conn, userId, flightTime.TotalMinutes, flightId, landingRate))
-                {
-                    MessageBox.Show(String.Format("Flight approved, rating 100% {0} EP(s)", Math.Round(Math.Round(flightTime.TotalMinutes) / 10)),
-                                    "Flight Approved",
-                                    MessageBoxButtons.OK,
-                                    MessageBoxIcon.Information);
-                    Application.Exit();
-                }
-            }
-            else
-            {
-                // Login
-                FlightAssignedDone = DoLogin(txtEmail.Text, txtPassword.Text);
-                if (FlightAssignedDone)
-                {
-                    // prepare current flight
-                    flight = new Flight();
-                    FlightStart();                  
-                    // save validated credentials
-                    Properties.Settings.Default.Email = txtEmail.Text;
-                    Properties.Settings.Default.Password = txtPassword.Text;
-                    Properties.Settings.Default.Save();
-                    email = txtEmail.Text;
-                    password = txtPassword.Text;
-                }
-            }
         }
 
         /// <summary>
@@ -496,12 +412,10 @@ namespace Acars
 
         private void flightacars_Tick(object sender, EventArgs e)
         {
-            FSUIPCConnection.Process();
             string result = "";
             try
             {
                 // handle flight phase changes
-                HandleFlightPhases();
                 Telemetry lastTelemetry = flight.HandleFlightPhases();
 
                 txtStatus.Text = lastTelemetry.FlightPhase.ToString();
@@ -510,7 +424,10 @@ namespace Acars
                 if (flight.ActualDepartureTime != null)
                     txtDepTime.Text = flight.ActualDepartureTime.Timestamp.ToString("HH:mm");
                 if (flight.ActualArrivalTime != null)
+                {
                     txtArrTime.Text = flight.ActualArrivalTime.Timestamp.ToString("HH:mm");
+                    txtLandingRate.Text = flight.ActualArrivalTime.VerticalSpeed.ToString("F0");
+                }
                 if (flight.ActualTimeEnRoute != TimeSpan.MinValue)
                     if (flight.ActualTimeEnRoute <= TimeSpan.Zero)
                         txtFlightTime.Text = String.Format("00:00");
@@ -535,10 +452,10 @@ namespace Acars
                 Engine4Start = (playerEngine4start.Value == 0) ? false : true;
 
                 //Acars informations
-                txtAltitude.Text = String.Format("{0} ft", lastTelemetry.Altitude);
+                txtAltitude.Text = String.Format("{0} ft", lastTelemetry.Altitude.ToString("F0"));
                 txtHeading.Text = String.Format("{0} º", (compass.Value).ToString("F0"));
                 txtGroundSpeed.Text = String.Format("{0} kt", lastTelemetry.IndicatedAirSpeed);
-                txtVerticalSpeed.Text = String.Format("{0} ft/m", lastTelemetry.VerticalSpeed);
+                txtVerticalSpeed.Text = String.Format("{0} ft/m", lastTelemetry.VerticalSpeed.ToString("F0"));
 
                 #region disabled pilot actions
                 ///FSUIPC Permanent Actions
@@ -741,18 +658,11 @@ namespace Acars
                 {
                     sb.AppendFormat("Gear Up at: {0} ft \r\n\r\n", (playerAltitude.Value * 3.2808399).ToString("F0"));
                 }
-                //Touch Down
-                if (txtStatus.Text == "Approaching" && onGround && landingRate == double.MinValue)
-                {
-
-                    landingRate = (playerVerticalSpeed.Value * 3.28084) / -1;
-                    txtLandingRate.Text = String.Format("{0} ft/min", landingRate.ToString("F0"));
-                    sb.AppendFormat("TouchDown: {0} ft/min\r\n", landingRate.ToString("F0"));
-                }
+               
                 #endregion logging info for debugging
                 txtLog.Text = sb.ToString();
                
-                if (flightPhase == FlightPhases.TAXIIN && ParkingBrake)
+                if (lastTelemetry.FlightPhase == FlightPhases.TAXIIN && ParkingBrake)
                 {
                     // enable end flight
                     button1.Text = "End flight";
