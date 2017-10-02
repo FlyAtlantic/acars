@@ -502,9 +502,9 @@ namespace Acars
             {
                 // handle flight phase changes
                 HandleFlightPhases();
-                flight.HandleFlightPhases();
+                Telemetry lastTelemetry = flight.HandleFlightPhases();
 
-                txtStatus.Text = flightPhase.ToString();
+                txtStatus.Text = lastTelemetry.FlightPhase.ToString();
 
                 // Actual times of Departure, Arrival, Flight Time
                 if (flight.ActualDepartureTime != null)
@@ -535,10 +535,10 @@ namespace Acars
                 Engine4Start = (playerEngine4start.Value == 0) ? false : true;
 
                 //Acars informations
-                txtAltitude.Text = String.Format("{0} ft", (playerAltitude.Value * 3.2808399).ToString("F0"));
+                txtAltitude.Text = String.Format("{0} ft", lastTelemetry.Altitude);
                 txtHeading.Text = String.Format("{0} º", (compass.Value).ToString("F0"));
-                txtGroundSpeed.Text = String.Format("{0} kt", (airspeed.Value / 128).ToString(""));
-                txtVerticalSpeed.Text = String.Format("{0} ft/m", ((playerVerticalSpeed.Value * 3.28084) / -1).ToString("F0"));
+                txtGroundSpeed.Text = String.Format("{0} kt", lastTelemetry.IndicatedAirSpeed);
+                txtVerticalSpeed.Text = String.Format("{0} ft/m", lastTelemetry.VerticalSpeed);
 
                 #region disabled pilot actions
                 ///FSUIPC Permanent Actions
@@ -594,11 +594,13 @@ namespace Acars
                 }
                 #endregion disabled pilot actions
 
+                // Info and realtime debugging data
+                StringBuilder sb = new StringBuilder();
                 #region logging info for debugging
                 // aircraft wieghts
-                txtGrossWeight.Text = String.Format("{0} kg", ((playerGW.Value) * 0.45359237).ToString("F0"));
-                txtZFW.Text = String.Format("{0} kg", ((playerZFW.Value / 256) * 0.45359237).ToString("F0"));                    
-                txtFuel.Text = String.Format("{0} kg", ((playerGW.Value / 2.2046226218487757)-((playerZFW.Value / 256) * 0.45359237)).ToString("F0"));              
+                txtGrossWeight.Text = String.Format("{0} kg", lastTelemetry.GrossWeight.ToString("F0"));
+                txtZFW.Text = String.Format("{0} kg", lastTelemetry.ZeroFuelWeight.ToString("F0"));                    
+                txtFuel.Text = String.Format("{0} kg", (lastTelemetry.GrossWeight - lastTelemetry.ZeroFuelWeight).ToString("F0"));              
                 
                 //Log Text
                 FsLongitude lon = new FsLongitude(playerLongitude.Value);
@@ -607,23 +609,24 @@ namespace Acars
                 Double intAltitude = (playerAltitude.Value * 3.2808399);
                 int IAS = (playerIndicatedAirspeed.Value / 128);
                 int Pitch = (((((playerPitch.Value) / 360) / 65536) * 2) / -1);
-
-                txtLog.Text = String.Format("{0:dd-MM-yyyy HH:mm:ss}\r\n\r\n", DateTime.UtcNow);
-                txtLog.Text = txtLog.Text + String.Format("Simulator: {0} \r\n", FSUIPCConnection.FlightSimVersionConnected);
-                txtLog.Text = txtLog.Text + String.Format("Simulator Rate: {0} X \r\n\r\n", ((playerSimRate.Value) / 256).ToString("F0"));              
-                txtLog.Text = txtLog.Text + String.Format("Latitude: {0} \r\n", lat.DecimalDegrees.ToString().Replace(',', '.'));
-                txtLog.Text = txtLog.Text + String.Format("Longitude: {0} \r\n\r\n", lon.DecimalDegrees.ToString().Replace(',', '.'));
                 
-                txtLog.Text = txtLog.Text + String.Format("Number of Engines: {0} \r\n", (playerEnginesNumber.Value).ToString("F0"));
+                sb.AppendFormat("{0:dd-MM-yyyy HH:mm:ss}\r\n\r\n", lastTelemetry.Timestamp);
+
+                sb.AppendFormat("Simulator: {0} \r\n", FSUIPCConnection.FlightSimVersionConnected);
+                sb.AppendFormat("Simulator Rate: {0} X \r\n\r\n", ((playerSimRate.Value) / 256).ToString("F0"));
+                sb.AppendFormat("Latitude: {0} \r\n", lat.DecimalDegrees.ToString().Replace(',', '.'));
+                sb.AppendFormat("Longitude: {0} \r\n\r\n", lon.DecimalDegrees.ToString().Replace(',', '.'));
+
+                sb.AppendFormat("Number of Engines: {0} \r\n", (playerEnginesNumber.Value).ToString("F0"));
                 if (playerEnginesNumber.Value == 1)
                 {
                     if (Engine1Start)
                     {
-                        txtLog.Text = txtLog.Text + String.Format("Engine 1 On: {0} \r\n\r\n", playerEngine1start.Value.ToString("F0"));
+                        sb.AppendFormat("Engine 1 On: {0} \r\n\r\n", playerEngine1start.Value.ToString("F0"));
                     }
                     else
                     {
-                        txtLog.Text = txtLog.Text + String.Format("Engine 1 Off: {0} \r\n\r\n", playerEngine1start.Value.ToString("F0"));
+                        sb.AppendFormat("Engine 1 Off: {0} \r\n\r\n", playerEngine1start.Value.ToString("F0"));
                     }
                 }
 
@@ -631,19 +634,19 @@ namespace Acars
                 {
                     if (Engine1Start)
                     {
-                        txtLog.Text = txtLog.Text + String.Format("Engine 1 On: {0} \r\n", playerEngine1start.Value.ToString("F0"));
+                        sb.AppendFormat("Engine 1 On: {0} \r\n", playerEngine1start.Value.ToString("F0"));
                     }
                     else
                     {
-                        txtLog.Text = txtLog.Text + String.Format("Engine 1 Off: {0} \r\n", playerEngine1start.Value.ToString("F0"));
+                        sb.AppendFormat("Engine 1 Off: {0} \r\n", playerEngine1start.Value.ToString("F0"));
                     }
                     if (Engine2Start)
                     {
-                        txtLog.Text = txtLog.Text + String.Format("Engine 2 On: {0} \r\n\r\n", playerEngine2start.Value.ToString("F0"));
+                        sb.AppendFormat("Engine 2 On: {0} \r\n\r\n", playerEngine2start.Value.ToString("F0"));
                     }
                     else
                     {
-                        txtLog.Text = txtLog.Text + String.Format("Engine 2 Off: {0} \r\n\r\n", playerEngine2start.Value.ToString("F0"));
+                        sb.AppendFormat("Engine 2 Off: {0} \r\n\r\n", playerEngine2start.Value.ToString("F0"));
                     }
                 }
 
@@ -651,27 +654,27 @@ namespace Acars
                 {
                     if (Engine1Start)
                     {
-                        txtLog.Text = txtLog.Text + String.Format("Engine 1 On: {0} \r\n", playerEngine1start.Value.ToString("F0"));
+                        sb.AppendFormat("Engine 1 On: {0} \r\n", playerEngine1start.Value.ToString("F0"));
                     }
                     else
                     {
-                        txtLog.Text = txtLog.Text + String.Format("Engine 1 Off: {0} \r\n", playerEngine1start.Value.ToString("F0"));
+                        sb.AppendFormat("Engine 1 Off: {0} \r\n", playerEngine1start.Value.ToString("F0"));
                     }
                     if (Engine2Start)
                     {
-                        txtLog.Text = txtLog.Text + String.Format("Engine 2 On: {0} \r\n", playerEngine2start.Value.ToString("F0"));
+                        sb.AppendFormat("Engine 2 On: {0} \r\n", playerEngine2start.Value.ToString("F0"));
                     }
                     else
                     {
-                        txtLog.Text = txtLog.Text + String.Format("Engine 2 Off: {0} \r\n", playerEngine2start.Value.ToString("F0"));
+                        sb.AppendFormat("Engine 2 Off: {0} \r\n", playerEngine2start.Value.ToString("F0"));
                     }
                     if (Engine3Start)
                     {
-                        txtLog.Text = txtLog.Text + String.Format("Engine 3 On: {0} \r\n\r\n", playerEngine3start.Value.ToString("F0"));
+                        sb.AppendFormat("Engine 3 On: {0} \r\n\r\n", playerEngine3start.Value.ToString("F0"));
                     }
                     else
                     {
-                        txtLog.Text = txtLog.Text + String.Format("Engine 3 Off: {0} \r\n\r\n", playerEngine3start.Value.ToString("F0"));
+                        sb.AppendFormat("Engine 3 Off: {0} \r\n\r\n", playerEngine3start.Value.ToString("F0"));
                     }
                 }
 
@@ -679,64 +682,64 @@ namespace Acars
                 {
                     if (Engine1Start)
                     {
-                        txtLog.Text = txtLog.Text + String.Format("Engine 1 On: {0} \r\n", playerEngine1start.Value.ToString("F0"));
+                        sb.AppendFormat("Engine 1 On: {0} \r\n", playerEngine1start.Value.ToString("F0"));
                     }
                     else
                     {
-                        txtLog.Text = txtLog.Text + String.Format("Engine 1 Off: {0} \r\n", playerEngine1start.Value.ToString("F0"));
+                        sb.AppendFormat("Engine 1 Off: {0} \r\n", playerEngine1start.Value.ToString("F0"));
                     }
                     if (Engine2Start)
                     {
-                        txtLog.Text = txtLog.Text + String.Format("Engine 2 On: {0} \r\n", playerEngine2start.Value.ToString("F0"));
+                        sb.AppendFormat("Engine 2 On: {0} \r\n", playerEngine2start.Value.ToString("F0"));
                     }
                     else
                     {
-                        txtLog.Text = txtLog.Text + String.Format("Engine 2 Off: {0} \r\n", playerEngine2start.Value.ToString("F0"));
+                        sb.AppendFormat("Engine 2 Off: {0} \r\n", playerEngine2start.Value.ToString("F0"));
                     }
                     if (Engine3Start)
                     {
-                        txtLog.Text = txtLog.Text + String.Format("Engine 3 On: {0} \r\n", playerEngine3start.Value.ToString("F0"));
+                        sb.AppendFormat("Engine 3 On: {0} \r\n", playerEngine3start.Value.ToString("F0"));
                     }
                     else
                     {
-                        txtLog.Text = txtLog.Text + String.Format("Engine 3 Off: {0} \r\n", playerEngine3start.Value.ToString("F0"));
+                        sb.AppendFormat("Engine 3 Off: {0} \r\n", playerEngine3start.Value.ToString("F0"));
                     }
                     if (Engine4Start)
                     {
-                        txtLog.Text = txtLog.Text + String.Format("Engine 4 On: {0} \r\n\r\n", playerEngine4start.Value.ToString("F0"));
+                        sb.AppendFormat("Engine 4 On: {0} \r\n\r\n", playerEngine4start.Value.ToString("F0"));
                     }
                     else
                     {
-                        txtLog.Text = txtLog.Text + String.Format("Engine 4 Off: {0} \r\n\r\n", playerEngine4start.Value.ToString("F0"));
+                        sb.AppendFormat("Engine 4 Off: {0} \r\n\r\n", playerEngine4start.Value.ToString("F0"));
                     }
                 }
 
-                txtLog.Text = txtLog.Text + String.Format("IAS: {0} \r\n", (playerIndicatedAirspeed.Value / 128).ToString("F0"));
-                txtLog.Text = txtLog.Text + String.Format("QNH: {0} mbar \r\n\r\n", ((playerQNH.Value) / 16).ToString("F0"));
+                sb.AppendFormat("IAS: {0} \r\n", (playerIndicatedAirspeed.Value / 128).ToString("F0"));
+                sb.AppendFormat("QNH: {0} mbar \r\n\r\n", ((playerQNH.Value) / 16).ToString("F0"));
 
                 if (playerBattery.Value == 257)
                 {
-                    txtLog.Text = txtLog.Text + String.Format("Battery On: {0} \r\n", (playerBattery.Value).ToString("F0"));
+                    sb.AppendFormat("Battery On: {0} \r\n", (playerBattery.Value).ToString("F0"));
                 }
                 else
                 {
-                    txtLog.Text = txtLog.Text + String.Format("Battery Off: {0} \r\n", (playerBattery.Value).ToString("F0"));
+                    sb.AppendFormat("Battery Off: {0} \r\n", (playerBattery.Value).ToString("F0"));
                 }                
                 if (ParkingBrake)
                 {
-                    txtLog.Text = txtLog.Text + String.Format("Parking Brakes On \r\n");
+                    sb.AppendFormat("Parking Brakes On \r\n");
                 }
                 else
                 {
-                    txtLog.Text = txtLog.Text + String.Format("Parking Brakes Off \r\n");
+                    sb.AppendFormat("Parking Brakes Off \r\n");
                 }
                 if (Gear)
                 {
-                    txtLog.Text = txtLog.Text + String.Format("Gear Down at: {0} ft\r\n\r\n", (playerAltitude.Value * 3.2808399).ToString("F0"));
+                    sb.AppendFormat("Gear Down at: {0} ft\r\n\r\n", (playerAltitude.Value * 3.2808399).ToString("F0"));
                 }
                 else
                 {
-                    txtLog.Text = txtLog.Text + String.Format("Gear Up at: {0} ft \r\n\r\n", (playerAltitude.Value * 3.2808399).ToString("F0"));
+                    sb.AppendFormat("Gear Up at: {0} ft \r\n\r\n", (playerAltitude.Value * 3.2808399).ToString("F0"));
                 }
                 //Touch Down
                 if (txtStatus.Text == "Approaching" && onGround && landingRate == double.MinValue)
@@ -744,9 +747,10 @@ namespace Acars
 
                     landingRate = (playerVerticalSpeed.Value * 3.28084) / -1;
                     txtLandingRate.Text = String.Format("{0} ft/min", landingRate.ToString("F0"));
-                    txtLog.Text = txtLog.Text + String.Format("TouchDown: {0} ft/min\r\n", landingRate.ToString("F0"));
+                    sb.AppendFormat("TouchDown: {0} ft/min\r\n", landingRate.ToString("F0"));
                 }
                 #endregion logging info for debugging
+                txtLog.Text = sb.ToString();
 
                 #region penalties
                 String tempLogData = debugLogText;
@@ -873,7 +877,6 @@ namespace Acars
                 if (flightPhase == FlightPhases.TAXIIN && ParkingBrake)
                 {
                     // enable end flight
-                    flight.HandleFlightPhases();
                     button1.Text = "End flight";
                     button1.Enabled = true;
 
@@ -883,12 +886,11 @@ namespace Acars
 
                 // Write the string to a file.
                 string logFilePath = String.Format("{0}log-flight-{1}.txt",
-                                                         Application.ExecutablePath.Replace("Acars.exe", ""),
-                                                         flightId);
+                                                    Application.ExecutablePath.Replace("Acars.exe", ""),
+                                                    flightId);
                 //Write to file only if there is new data
                 if (!tempLogData.Equals(debugLogText))
                 {
-
                     using (System.IO.StreamWriter file =
                     new System.IO.StreamWriter(logFilePath, true))
                     {

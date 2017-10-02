@@ -25,5 +25,7 @@ namespace Acars.FlightData
         static public Offset<short> stall = new Offset<short>(0x036C, false);
         static public Offset<short> battery = new Offset<short>(0x3102, false);
         static public Offset<short> landingLights = new Offset<short>(0x028C, false);
+        static public Offset<double> grossWeight = new Offset<double>(0x30C0);
+        static public Offset<int> zeroFuelWeight = new Offset<int>(0x3BFC);
     }
 }

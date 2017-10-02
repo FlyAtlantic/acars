@@ -90,6 +90,10 @@ namespace Acars.FlightData
         /// Landing lights switch
         /// </summary>
         bool LandingLights;
+
+        public double GrossWeight;
+
+        public double ZeroFuelWeight;
         #endregion Properties
 
         public static Telemetry GetCurrent()
@@ -120,6 +124,8 @@ namespace Acars.FlightData
             result.Stall = (FSUIPCOffsets.stall.Value == 0) ? false : true;
             result.Battery = (FSUIPCOffsets.battery.Value == 0) ? false : true;
             result.LandingLights = (FSUIPCOffsets.landingLights.Value == 0) ? false : true;
+            result.GrossWeight = (FSUIPCOffsets.grossWeight.Value) * 0.45359237;
+            result.ZeroFuelWeight = (FSUIPCOffsets.zeroFuelWeight.Value / 256) * 0.45359237;
 
             return result;
         }
