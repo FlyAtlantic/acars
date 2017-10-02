@@ -17,9 +17,6 @@ namespace Acars
         public abstract int Duration
         { get; }
 
-        private int EventStart;
-        private int EventEnd;
-
         /// <summary>
         /// Analyses Telemetry t and a returns true if the event condition is active
         /// </summary>
