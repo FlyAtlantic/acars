@@ -72,10 +72,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App.cs" />
     <Compile Include="Events\MaxBankAngleExceeded.cs" />
     <Compile Include="Events\FlightEvent.cs" />
+    <Compile Include="FlightData\FlightDatabase.cs" />
     <Compile Include="FlightData\FlightPhases.cs" />
     <Compile Include="FlightData\Flight.cs" />
+    <Compile Include="FlightData\FlightPlan.cs" />
     <Compile Include="FlightData\FSUIPCOffsets.cs" />
     <Compile Include="FlightData\Telemetry.cs" />
     <Compile Include="FlyAtlanticHelpers.cs" />
