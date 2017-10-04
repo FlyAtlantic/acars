@@ -14,6 +14,8 @@ namespace Acars.FlightData
 
             ActualArrivalTime = null;
             ActualDepartureTime = null;
+
+            LoadedFlightPlan = new FlightPlan();
         }
 
         #region variables
@@ -57,6 +59,11 @@ namespace Acars.FlightData
         {
             get;
             private set;
+        }
+
+        public FlightPlan LoadedFlightPlan
+        {
+            get; private set;
         }
         #endregion Properties
 
