@@ -52,6 +52,9 @@
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>tszbanner.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="FSUIPCClient">
       <HintPath>.\FSUIPCClient.dll</HintPath>
@@ -132,6 +135,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\banner1.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="tszbanner.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
