@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Acars.FlightData;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -15,22 +16,27 @@ namespace Acars
         private NotifyIcon TrayIcon;
         private ContextMenuStrip TrayIconContextMenu;
         private ToolStripMenuItem CloseMenuItem;
+        private ToolStripMenuItem OpenOldFormMenuItem;
+
+        private Form1 oldForm;
+
+        private Timer timer;
+
+        private Flight flight;
 
         public App()
         {
             Application.ApplicationExit += new EventHandler(this.OnApplicationExit);
             InitializeComponent();
             TrayIcon.Visible = true;
+
+            timer.Start();
         }
 
         private void InitializeComponent()
         {
             TrayIcon = new NotifyIcon();
 
-            TrayIcon.BalloonTipIcon = ToolTipIcon.Info;
-            TrayIcon.BalloonTipText =
-              "I noticed that you double-clicked me! What can I do for you?";
-            TrayIcon.BalloonTipTitle = "You called Master?";
             TrayIcon.Text = "Fly Atlantic ACARS";
 
 
@@ -44,13 +50,23 @@ namespace Acars
             //Optional - Add a context menu to the TrayIcon:
             TrayIconContextMenu = new ContextMenuStrip();
             CloseMenuItem = new ToolStripMenuItem();
+            OpenOldFormMenuItem = new ToolStripMenuItem();
             TrayIconContextMenu.SuspendLayout();
 
+
+            //
+            // Timer
+            //
+            timer = new Timer();
+            timer.Interval = 10000;
+            timer.Tick += new EventHandler(GetFlightTimer_Tick);
             // 
             // TrayIconContextMenu
             // 
             this.TrayIconContextMenu.Items.AddRange(new ToolStripItem[] {
-            this.CloseMenuItem});
+                this.OpenOldFormMenuItem,
+                this.CloseMenuItem
+            });
             this.TrayIconContextMenu.Name = "TrayIconContextMenu";
             this.TrayIconContextMenu.Size = new Size(153, 70);
             // 
@@ -60,6 +76,13 @@ namespace Acars
             this.CloseMenuItem.Size = new Size(152, 22);
             this.CloseMenuItem.Text = "Exit";
             this.CloseMenuItem.Click += new EventHandler(this.CloseMenuItem_Click);
+            // 
+            // OpenOldFormMenuItem
+            // 
+            this.OpenOldFormMenuItem.Name = "OpenOldFormMenuItem";
+            this.OpenOldFormMenuItem.Size = new Size(152, 22);
+            this.OpenOldFormMenuItem.Text = "Open Old Form";
+            this.OpenOldFormMenuItem.Click += new EventHandler(this.OpenOldFormMenuItem_Click);
 
             TrayIconContextMenu.ResumeLayout(false);
             TrayIcon.ContextMenuStrip = TrayIconContextMenu;
@@ -84,6 +107,39 @@ namespace Acars
                     MessageBoxDefaultButton.Button2) == DialogResult.Yes)
             {
                 Application.Exit();
+            }
+        }
+
+        private void OpenOldFormMenuItem_Click(object sender, EventArgs e)
+        {
+            if (oldForm == null)
+                oldForm = new Form1();
+
+            oldForm.Show();
+        }
+
+        private void GetFlightTimer_Tick(object sender, EventArgs e)
+        {
+            try
+            {
+                flight = FlightDatabase.GetFlight(@"prodrigues1990@gmail.com");
+                if (flight != null)
+                {
+                    timer.Stop();
+
+                    // notify user
+                    TrayIcon.BalloonTipIcon = ToolTipIcon.Info;
+                    TrayIcon.BalloonTipText = String.Format("{0} from {1} to {2}",
+                                                            flight.LoadedFlightPlan.AtcCallsign,
+                                                            flight.LoadedFlightPlan.DepartureICAO,
+                                                            flight.LoadedFlightPlan.ArrivalICAO);
+                    TrayIcon.BalloonTipTitle = "New flight assigned";
+                    TrayIcon.ShowBalloonTip(10000);
+                }
+            }
+            catch (Exception crap)
+            {
+
             }
         }
     }
