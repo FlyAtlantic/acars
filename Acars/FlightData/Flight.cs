@@ -80,14 +80,14 @@ namespace Acars.FlightData
                         phase = FlightPhases.TAXIOUT;
                     break;
                 case FlightPhases.TAXIOUT:
-                    if (currentTelemetry.Engine1 && !currentTelemetry.ParkingBrake && currentTelemetry.IndicatedAirSpeed >= 27 && currentTelemetry.Throttle >= 10000)
+                    if (currentTelemetry.Engine1 && currentTelemetry.IndicatedAirSpeed >= 30)
                     {
                         ActualDepartureTime = currentTelemetry;
                         phase = FlightPhases.TAKEOFF;
                     }
                     break;
                 case FlightPhases.TAKEOFF:
-                    if (currentTelemetry.VerticalSpeed >= 100 && !currentTelemetry.OnGround)
+                    if (!currentTelemetry.OnGround)
                         phase = FlightPhases.CLIMBING;
                     break;
                 case FlightPhases.CLIMBING:
