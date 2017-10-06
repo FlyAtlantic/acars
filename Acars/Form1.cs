@@ -361,7 +361,7 @@ namespace Acars
             }
             else if (flight.ActualArrivalTime != null)
             {
-                if (FlyAtlanticHelpers.EndFlight(conn, userId, flight.ActualTimeEnRoute.TotalMinutes, flightId, landingRate))
+                if (FlyAtlanticHelpers.EndFlight(conn, userId, flight.ActualTimeEnRoute.TotalMinutes, flightId, flight.ActualArrivalTime.VerticalSpeed))
                 {
                     MessageBox.Show(String.Format("Flight approved, rating 100% {0} EP(s)", Math.Round(Math.Round(flight.ActualTimeEnRoute.TotalMinutes) / 10)),
                                     "Flight Approved",
