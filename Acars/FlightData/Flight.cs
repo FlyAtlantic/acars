@@ -1,4 +1,5 @@
-﻿using FSUIPC;
+﻿using Acars.Events;
+using FSUIPC;
 using System;
 using System.Collections.Generic;
 
@@ -33,11 +34,15 @@ namespace Acars.FlightData
         #endregion variables
 
         #region Properties
+        /// <summary>
+        /// Flight Identifier on the database side
+        /// </summary>
         public int FlightID
         {
             get;
             internal set;
         }
+
         public Telemetry ActualDepartureTime
         {
             get;
@@ -69,6 +74,12 @@ namespace Acars.FlightData
         public FlightPlan LoadedFlightPlan
         {
             get; private set;
+        }
+
+        public FlightEvent[] Events
+        {
+            get;
+            private set;
         }
         #endregion Properties
 

@@ -1,7 +1,7 @@
 ﻿using Acars.FlightData;
 using System.Collections.Generic;
 
-namespace Acars
+namespace Acars.Events
 {
     public abstract class FlightEvent
     {
