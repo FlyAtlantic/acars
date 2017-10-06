@@ -72,10 +72,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Events\Gear Down Above 250kt.cs" />
+    <Compile Include="Events\LandingLights On Above 250kt.cs" />
     <Compile Include="Events\LandingLights Off Below 3000ft.cs" />
     <Compile Include="Events\LandingLights On Above 10000ft.cs" />
     <Compile Include="Events\MaxBankAngleExceeded.cs" />
     <Compile Include="Events\FlightEvent.cs" />
+    <Compile Include="Events\Pitch High.cs" />
     <Compile Include="Events\Speed above 250kt below 10.000ft.cs" />
     <Compile Include="Events\Speed above 25kt on Taxi.cs" />
     <Compile Include="FlightData\FlightPhases.cs" />
