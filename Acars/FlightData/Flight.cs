@@ -1,4 +1,5 @@
-﻿using FSUIPC;
+﻿using Acars.Events;
+using FSUIPC;
 using System;
 using System.Collections.Generic;
 
@@ -8,17 +9,33 @@ namespace Acars.FlightData
     {
         public Flight(FlightPhases initialPhase = FlightPhases.PREFLIGHT)
         {
+            #region Register Events
+            activeEvents = new FlightEvent[] {
+                new FlightEvent("4D", 5, (t) => { return (t.Gear && t.IndicatedAirSpeed > 255); }),
+                new FlightEvent("3B", 5, (t) => { return (t.LandingLights && t.Altitude < 2750); }),
+                new FlightEvent("3A", 5, (t) => { return (t.LandingLights && t.Altitude > 10500); }),
+                new FlightEvent("4A", 5, (t) => { return (t.LandingLights && t.IndicatedAirSpeed > 255); }),
+                new FlightEvent("7B", 5, (t) => { return (t.Pitch > 30); }),
+                new FlightEvent("3C", 5, (t) => { return (t.IndicatedAirSpeed > 255 && t.Altitude < 9500); }),
+                new FlightEvent("3D", 5, (t) => { return (t.GroundSpeed > 30 && t.OnGround); })
+            };
+            #endregion Register Events
+
             phase = initialPhase;
 
             TelemetryLog = new List<Telemetry>();
 
             ActualArrivalTime = null;
             ActualDepartureTime = null;
+
+            LoadedFlightPlan = new FlightPlan();
         }
 
         #region variables
         // instance
         private FlightPhases phase;
+
+        private FlightEvent[] activeEvents;
 
         // statics
         static private Offset<short> engine1 = new Offset<short>(0x0894);
@@ -31,6 +48,15 @@ namespace Acars.FlightData
         #endregion variables
 
         #region Properties
+        /// <summary>
+        /// Flight Identifier on the database side
+        /// </summary>
+        public int FlightID
+        {
+            get;
+            internal set;
+        }
+
         public Telemetry ActualDepartureTime
         {
             get;
@@ -54,6 +80,17 @@ namespace Acars.FlightData
         }
 
         public List<Telemetry> TelemetryLog
+        {
+            get;
+            private set;
+        }
+
+        public FlightPlan LoadedFlightPlan
+        {
+            get; private set;
+        }
+
+        public FlightEvent[] Events
         {
             get;
             private set;

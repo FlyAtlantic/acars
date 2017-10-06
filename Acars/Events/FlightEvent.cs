@@ -1,28 +1,34 @@
 ﻿using Acars.FlightData;
+using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 
-namespace Acars
+namespace Acars.Events
 {
-    public abstract class FlightEvent
+    public class FlightEvent
     {
         /// <summary>
         /// 
         /// </summary>
-        public abstract string Code
-        { get; }
+        public string Code
+        { get; private set; }
 
         /// <summary>
         /// The duration in seconds the event must last to be triggered
         /// </summary>
-        public abstract int Duration
-        { get; }
+        public int Duration
+        { get; private set; }
 
-        /// <summary>
-        /// Analyses Telemetry t and a returns true if the event condition is active
-        /// </summary>
-        /// <param name="t"></param>
-        /// <returns></returns>
-        public abstract bool ConditionActive(Telemetry t);
+        private FlightEventConditionActiveDelegate ConditionActive;
+
+        public delegate bool FlightEventConditionActiveDelegate(Telemetry t);
+
+        public FlightEvent(string Code, int Duration, FlightEventConditionActiveDelegate ConditionActive)
+        {
+            this.Code = Code;
+            this.Duration = Duration;
+            this.ConditionActive = ConditionActive;
+        }
 
         /// <summary>
         /// Gets all indeces of start 

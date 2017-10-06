@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.16
+VisualStudioVersion = 15.0.26730.15
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Acars", "Acars\Acars.csproj", "{FED35AB1-B790-4E1F-8B37-AE0EC6919464}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AcarsTests", "AcarsTests\AcarsTests.csproj", "{7A51B8CB-9528-4A2E-A79D-D87A7C5D3A41}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,8 +17,15 @@ Global
 		{FED35AB1-B790-4E1F-8B37-AE0EC6919464}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FED35AB1-B790-4E1F-8B37-AE0EC6919464}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FED35AB1-B790-4E1F-8B37-AE0EC6919464}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A51B8CB-9528-4A2E-A79D-D87A7C5D3A41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A51B8CB-9528-4A2E-A79D-D87A7C5D3A41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A51B8CB-9528-4A2E-A79D-D87A7C5D3A41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A51B8CB-9528-4A2E-A79D-D87A7C5D3A41}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {04D55D23-1A6A-45EF-8077-C5E584B91AA3}
 	EndGlobalSection
 EndGlobal
