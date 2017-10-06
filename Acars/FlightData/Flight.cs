@@ -9,6 +9,13 @@ namespace Acars.FlightData
     {
         public Flight(FlightPhases initialPhase = FlightPhases.PREFLIGHT)
         {
+            #region Register Events
+            activeEvents = new FlightEvent[] {
+                new FlightEvent("1A", 1, (t) => { return (t.Gear); }),
+                new FlightEvent("1A", 1, (t) => { return (t.Gear); })
+            };
+            #endregion Register Events
+
             phase = initialPhase;
 
             TelemetryLog = new List<Telemetry>();
@@ -22,6 +29,8 @@ namespace Acars.FlightData
         #region variables
         // instance
         private FlightPhases phase;
+
+        private FlightEvent[] activeEvents;
 
         // statics
         static private Offset<short> engine1 = new Offset<short>(0x0894);
