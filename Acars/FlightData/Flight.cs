@@ -11,8 +11,7 @@ namespace Acars.FlightData
         {
             #region Register Events
             activeEvents = new FlightEvent[] {
-                new FlightEvent("1A", 1, (t) => { return (t.Gear); }),
-                new FlightEvent("1A", 1, (t) => { return (t.Gear); })
+                new FlightEvent("10A", 5, (t) => { return (t.Bank > 5); })
             };
             #endregion Register Events
 
