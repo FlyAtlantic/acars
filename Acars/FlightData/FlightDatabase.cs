@@ -68,7 +68,7 @@ namespace Acars.FlightData
             {
                 result = null;
                 // pass the exception to the caller with an usefull message
-                throw new Exception(String.Format("Failed to load flight plan for user {0}.\r\nSQL Statement: {1}", pilotId, sqlStr), crap);
+                throw new Exception(String.Format("Failed to load flight plan for user {0}.\r\nSQL Statements: {1} | {2}", pilotId, sqlStrGetFlight, sqlStrUpdateAssignment), crap);
             }
             finally
             {
@@ -124,7 +124,7 @@ namespace Acars.FlightData
             catch (Exception crap)
             {
                 // pass the exception to the caller with an usefull message
-                throw new Exception(String.Format("Failed to end the flight plan for user {0}.\r\nSQL Statement: {1}", pilotId, sqlStr), crap);
+                throw new Exception(String.Format("Failed to end the flight plan for user {0}.\r\nSQL Statements: {1} | {2} | {3}", pilotId, sqlStrInsertPirep, sqlStrUpdateUser, sqlStrDeleteAssignment), crap);
             }
             finally
             {

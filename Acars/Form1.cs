@@ -434,6 +434,11 @@ namespace Acars
                                                            Math.Truncate(flight.ActualTimeEnRoute.TotalHours),
                                                            flight.ActualTimeEnRoute.Minutes);
                 
+                // Check Vspeeds are inserted
+                if(txtV1.Text == null || txtVR.Text == null || txtV2.Text == null)
+                    playerParkingBrake.Value = 1;
+                    FSUIPCConnection.Process();
+
                 // process FSUIPC data
                 onGround = (playerAircraftOnGround.Value == 0) ? false : true;
                 Gear = (playerGear.Value == 0) ? false : true;
@@ -452,7 +457,7 @@ namespace Acars
                 //Acars informations
                 txtAltitude.Text = String.Format("{0} ft", lastTelemetry.Altitude.ToString("F0"));
                 txtHeading.Text = String.Format("{0} º", (compass.Value).ToString("F0"));
-                txtGroundSpeed.Text = String.Format("{0} kt", lastTelemetry.IndicatedAirSpeed);
+                txtGroundSpeed.Text = String.Format("{0} kt", lastTelemetry.GroundSpeed);
                 txtVerticalSpeed.Text = String.Format("{0} ft/m", lastTelemetry.VerticalSpeed.ToString("F0"));
 
                 #region disabled pilot actions
