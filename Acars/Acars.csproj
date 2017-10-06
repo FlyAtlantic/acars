@@ -72,7 +72,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App.cs" />
     <Compile Include="Events\MaxBankAngleExceeded.cs" />
     <Compile Include="Events\FlightEvent.cs" />
     <Compile Include="FlightData\FlightDatabase.cs" />

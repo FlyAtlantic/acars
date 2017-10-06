@@ -33,6 +33,11 @@ namespace Acars.FlightData
         #endregion variables
 
         #region Properties
+        public int FlightID
+        {
+            get;
+            internal set;
+        }
         public Telemetry ActualDepartureTime
         {
             get;

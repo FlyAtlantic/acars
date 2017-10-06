@@ -349,7 +349,7 @@ namespace Acars
                 if(DoLogin(txtEmail.Text, txtPassword.Text))               
                 {
                     // prepare current flight
-                    flight = new Flight();
+                    flight = FlightDatabase.GetFlight(txtEmail.Text);
                     FlightStart();
                     // save validated credentials
                     Properties.Settings.Default.Email = txtEmail.Text;
@@ -361,14 +361,12 @@ namespace Acars
             }
             else if (flight.ActualArrivalTime != null)
             {
-                if (FlyAtlanticHelpers.EndFlight(conn, userId, flight.ActualTimeEnRoute.TotalMinutes, flightId, flight.ActualArrivalTime.VerticalSpeed))
-                {
-                    MessageBox.Show(String.Format("Flight approved, rating 100% {0} EP(s)", Math.Round(Math.Round(flight.ActualTimeEnRoute.TotalMinutes) / 10)),
-                                    "Flight Approved",
-                                    MessageBoxButtons.OK,
-                                    MessageBoxIcon.Information);
-                    Application.Exit();
-                }
+                FlightDatabase.EndFlight(txtEmail.Text, flight);
+                MessageBox.Show(String.Format("Flight approved, rating 100% {0} EP(s)", Math.Round(Math.Round(flight.ActualTimeEnRoute.TotalMinutes) / 10)),
+                                "Flight Approved",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Information);
+                Application.Exit();
             }
             else
             {
