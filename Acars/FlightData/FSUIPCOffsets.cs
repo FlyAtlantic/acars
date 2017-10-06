@@ -13,7 +13,7 @@ namespace Acars.FlightData
         static public Offset<short> engine3 = new Offset<short>(0x09C4);
         static public Offset<short> engine4 = new Offset<short>(0x0A5C);
         static public Offset<short> parkingBrake = new Offset<short>(0x0BC8, false);
-        static public Offset<int> airspeed = new Offset<int>(0x02BC);
+        static public Offset<int> groundspeed = new Offset<int>(0x02B4);
         static public Offset<short> onGround = new Offset<short>(0x0366, false);
         static public Offset<short> verticalSpeed = new Offset<short>(0x0842);
         static public Offset<short> throttle = new Offset<short>(0x088C);

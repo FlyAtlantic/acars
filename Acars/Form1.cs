@@ -454,7 +454,7 @@ namespace Acars
                 //Acars informations
                 txtAltitude.Text = String.Format("{0} ft", lastTelemetry.Altitude.ToString("F0"));
                 txtHeading.Text = String.Format("{0} º", (compass.Value).ToString("F0"));
-                txtGroundSpeed.Text = String.Format("{0} kt", lastTelemetry.IndicatedAirSpeed);
+                txtGroundSpeed.Text = String.Format("{0} kt", lastTelemetry.GroundSpeed);
                 txtVerticalSpeed.Text = String.Format("{0} ft/m", lastTelemetry.VerticalSpeed.ToString("F0"));
 
                 #region disabled pilot actions
