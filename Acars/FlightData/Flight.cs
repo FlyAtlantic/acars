@@ -11,7 +11,6 @@ namespace Acars.FlightData
         {
             #region Register Events
             activeEvents = new FlightEvent[] {
-                new FlightEvent("10A", 5, (t) => { return (t.Bank > 5); }),
                 new FlightEvent("4D", 5, (t) => { return (t.Gear && t.IndicatedAirSpeed > 255); }),
                 new FlightEvent("3B", 5, (t) => { return (t.LandingLights && t.Altitude < 2750); }),
                 new FlightEvent("3A", 5, (t) => { return (t.LandingLights && t.Altitude > 10500); }),
