@@ -87,6 +87,12 @@
             this.txtZFW = new System.Windows.Forms.TextBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.OnFlight = new System.Windows.Forms.Timer(this.components);
+            this.txtV1 = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.txtVR = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.txtV2 = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -140,7 +146,7 @@
             // lblFlightInformation
             // 
             this.lblFlightInformation.AutoSize = true;
-            this.lblFlightInformation.Location = new System.Drawing.Point(132, 442);
+            this.lblFlightInformation.Location = new System.Drawing.Point(131, 433);
             this.lblFlightInformation.Name = "lblFlightInformation";
             this.lblFlightInformation.Size = new System.Drawing.Size(87, 13);
             this.lblFlightInformation.TabIndex = 6;
@@ -149,7 +155,7 @@
             // txtFlightInformation
             // 
             this.txtFlightInformation.Enabled = false;
-            this.txtFlightInformation.Location = new System.Drawing.Point(4, 470);
+            this.txtFlightInformation.Location = new System.Drawing.Point(12, 449);
             this.txtFlightInformation.Name = "txtFlightInformation";
             this.txtFlightInformation.Size = new System.Drawing.Size(343, 20);
             this.txtFlightInformation.TabIndex = 7;
@@ -674,6 +680,54 @@
             this.OnFlight.Interval = 300000;
             this.OnFlight.Tick += new System.EventHandler(this.OnFlight_Tick);
             // 
+            // txtV1
+            // 
+            this.txtV1.Location = new System.Drawing.Point(75, 479);
+            this.txtV1.Name = "txtV1";
+            this.txtV1.Size = new System.Drawing.Size(43, 20);
+            this.txtV1.TabIndex = 44;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(54, 482);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(23, 13);
+            this.label4.TabIndex = 45;
+            this.label4.Text = "V1:";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(139, 482);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(20, 13);
+            this.label5.TabIndex = 47;
+            this.label5.Text = "Vr:";
+            // 
+            // txtVR
+            // 
+            this.txtVR.Location = new System.Drawing.Point(160, 479);
+            this.txtVR.Name = "txtVR";
+            this.txtVR.Size = new System.Drawing.Size(43, 20);
+            this.txtVR.TabIndex = 46;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(222, 482);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(23, 13);
+            this.label6.TabIndex = 49;
+            this.label6.Text = "V2:";
+            // 
+            // txtV2
+            // 
+            this.txtV2.Location = new System.Drawing.Point(243, 479);
+            this.txtV2.Name = "txtV2";
+            this.txtV2.Size = new System.Drawing.Size(43, 20);
+            this.txtV2.TabIndex = 48;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -681,6 +735,12 @@
             this.BackgroundImage = global::Acars.Properties.Resources.banner;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.ClientSize = new System.Drawing.Size(772, 638);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.txtV2);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.txtVR);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.txtV1);
             this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
@@ -774,6 +834,12 @@
         private System.Windows.Forms.TextBox txtLandingRate;
         private System.Windows.Forms.Timer OnFlight;
         private System.Windows.Forms.TextBox txtPenalizations;
+        private System.Windows.Forms.TextBox txtV1;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TextBox txtVR;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.TextBox txtV2;
     }
 }
 

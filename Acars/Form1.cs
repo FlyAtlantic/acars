@@ -349,8 +349,7 @@ namespace Acars
                 if(DoLogin(txtEmail.Text, txtPassword.Text))               
                 {
                     // prepare current flight
-                    flight = new Flight();
-                    FlightStart();
+                    flight = Flight.Get();
                     // save validated credentials
                     Properties.Settings.Default.Email = txtEmail.Text;
                     Properties.Settings.Default.Password = txtPassword.Text;
@@ -361,37 +360,37 @@ namespace Acars
             }
             else if (flight.ActualArrivalTime != null)
             {
-                if (FlyAtlanticHelpers.EndFlight(conn, userId, flight.ActualTimeEnRoute.TotalMinutes, flightId, landingRate))
-                {
-                    MessageBox.Show(String.Format("Flight approved, rating 100% {0} EP(s)", Math.Round(Math.Round(flight.ActualTimeEnRoute.TotalMinutes) / 10)),
-                                    "Flight Approved",
-                                    MessageBoxButtons.OK,
-                                    MessageBoxIcon.Information);
-                    Application.Exit();
-                }
+                flight.EndFlight();
+
+                MessageBox.Show(String.Format("Flight approved, rating {0}% {1} EP(s)",
+                                              flight.FinalScore,
+                                              flight.EfficiencyPoints),
+                                "Flight Approved",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Information);
+                Application.Exit();
             }
             else
             {
-                if (FlyAtlanticHelpers.StartFlight(conn, fs, userId))
-                {
-                    // update form
-                    string Message = "Welcome to FlyAtlantic Acars";
-                    messageWrite.Value = Message;
-                    messageDuration.Value = 10;
-                    playerEngine1start.Value = 0;
-                    playerEngine2start.Value = 0;
-                    playerEngine3start.Value = 0;
-                    playerEngine4start.Value = 0;
-                    playerParkingBrake.Value = 1;
+                flight.StartFlight(fs);
 
-                    button1.Enabled = false;
-                    button1.Text = "Flying...";
+                // update form
+                string Message = "Welcome to FlyAtlantic Acars";
+                messageWrite.Value = Message;
+                messageDuration.Value = 10;
+                playerEngine1start.Value = 0;
+                playerEngine2start.Value = 0;
+                playerEngine3start.Value = 0;
+                playerEngine4start.Value = 0;
+                playerParkingBrake.Value = 1;
 
-                    landingRate = double.MinValue;
+                button1.Enabled = false;
+                button1.Text = "Flying...";
 
-                    OnFlight.Start();
-                    flightacars.Start();
-                }
+                landingRate = double.MinValue;
+
+                OnFlight.Start();
+                flightacars.Start();
             }
         }
 
@@ -435,7 +434,17 @@ namespace Acars
                         txtFlightTime.Text = String.Format("{0:00}:{1:00}",
                                                            Math.Truncate(flight.ActualTimeEnRoute.TotalHours),
                                                            flight.ActualTimeEnRoute.Minutes);
-                
+
+                // Check Vspeeds are inserted
+                if (txtV1.Text == "" || txtVR.Text == "" || txtV2.Text == "")
+                {
+                    playerParkingBrake.Value = 1;
+                    string Message = "Insert your Vspeeds!";
+                    messageWrite.Value = Message;
+                    messageDuration.Value = 5;
+                    FSUIPCConnection.Process();
+                   
+                }
                 // process FSUIPC data
                 onGround = (playerAircraftOnGround.Value == 0) ? false : true;
                 Gear = (playerGear.Value == 0) ? false : true;
@@ -454,7 +463,7 @@ namespace Acars
                 //Acars informations
                 txtAltitude.Text = String.Format("{0} ft", lastTelemetry.Altitude.ToString("F0"));
                 txtHeading.Text = String.Format("{0} º", (compass.Value).ToString("F0"));
-                txtGroundSpeed.Text = String.Format("{0} kt", lastTelemetry.IndicatedAirSpeed);
+                txtGroundSpeed.Text = String.Format("{0} kt", lastTelemetry.GroundSpeed);
                 txtVerticalSpeed.Text = String.Format("{0} ft/m", lastTelemetry.VerticalSpeed.ToString("F0"));
 
                 #region disabled pilot actions

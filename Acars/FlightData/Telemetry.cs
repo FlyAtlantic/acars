@@ -122,6 +122,10 @@ namespace Acars.FlightData
         /// QNH
         /// </summary>
         public int QNH;
+        /// <summary>
+        /// GroundSpeed
+        /// </summary>
+        public int GroundSpeed;
 
         public double GrossWeight;
 
@@ -166,6 +170,7 @@ namespace Acars.FlightData
             result.Compass = FSUIPCOffsets.compass.Value;
             result.Latitude = FSUIPCOffsets.latitude.Value;
             result.Longitude = FSUIPCOffsets.longitude.Value;
+            result.GroundSpeed = FSUIPCOffsets.groundspeed.Value / 65536;
 
             return result;
         }

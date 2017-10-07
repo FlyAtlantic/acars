@@ -1,41 +1,69 @@
 ﻿using Acars.FlightData;
+using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 
-namespace Acars
+namespace Acars.Events
 {
-    public abstract class FlightEvent
+    public class FlightEvent
     {
         /// <summary>
         /// 
         /// </summary>
-        public abstract string Code
-        { get; }
+        public string Code
+        { get; private set; }
 
         /// <summary>
         /// The duration in seconds the event must last to be triggered
         /// </summary>
-        public abstract int Duration
-        { get; }
+        public int Duration
+        { get; private set; }
 
         /// <summary>
-        /// Analyses Telemetry t and a returns true if the event condition is active
+        /// Human readable description of the event trigger
         /// </summary>
-        /// <param name="t"></param>
-        /// <returns></returns>
-        public abstract bool ConditionActive(Telemetry t);
+        public string Description
+        { get; private set; }
+
+        /// <summary>
+        /// Percentage to discount from flight score
+        /// </summary>
+        public int Discount
+        { get; private set; }
+
+        /// <summary>
+        /// Max applicable discount to apply to flight score
+        /// </summary>
+        public int MaxDiscount
+        { get; private set; }
+
+        private FlightEventConditionActiveDelegate ConditionActive;
+
+        public delegate bool FlightEventConditionActiveDelegate(Telemetry t);
+
+        public FlightEvent(string Code, int Duration, string Message, int Discount, int MaxDiscount, FlightEventConditionActiveDelegate ConditionActive)
+        {
+            this.Code = Code;
+            this.Duration = Duration;
+            this.Description = Description;
+            this.Discount = Discount;
+            this.MaxDiscount = MaxDiscount;
+            this.ConditionActive = ConditionActive;
+        }
 
         /// <summary>
         /// Gets all indeces of start 
         /// </summary>
         /// <param name="T"></param>
         /// <returns></returns>
-        public int[][] GetOccurences(Telemetry[] T)
+        public EventOccurrence[] GetOccurrences(Telemetry[] T, out int AcculumatedDiscount)
         {
-            List<int[]> result = new List<int[]>();
+            List<EventOccurrence> result = new List<EventOccurrence>();
             int i = 0;
 
             int eventStart = -1;
             int eventEnd = -1;
+            AcculumatedDiscount = 0;
 
             foreach (Telemetry t in T)
             {
@@ -55,8 +83,13 @@ namespace Acars
                     // validate duration, and proceed
                     if ((T[eventEnd].Timestamp - T[eventStart].Timestamp).TotalSeconds > Duration)
                     {
-                        int[] I = { eventStart, eventEnd };
-                        result.Add(I);
+                        result.Add(new EventOccurrence(eventStart, eventEnd, this));
+
+                        // calculate score discount
+                        AcculumatedDiscount += Discount;
+                        if (AcculumatedDiscount > MaxDiscount)
+                            AcculumatedDiscount = MaxDiscount;
+
                         eventStart = -1;
                         eventEnd = -1;
                     }

@@ -122,7 +122,7 @@ namespace Acars
         {
             try
             {
-                flight = FlightDatabase.GetFlight(@"prodrigues1990@gmail.com");
+                flight = FlightDatabase.GetFlight();
                 if (flight != null)
                 {
                     timer.Stop();
