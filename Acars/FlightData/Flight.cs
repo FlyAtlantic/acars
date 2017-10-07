@@ -11,13 +11,13 @@ namespace Acars.FlightData
         {
             #region Register Events
             activeEvents = new FlightEvent[] {
-                new FlightEvent("4D", 5, (t) => { return (t.Gear && t.IndicatedAirSpeed > 255); }),
-                new FlightEvent("3B", 5, (t) => { return (t.LandingLights && t.Altitude < 2750); }),
-                new FlightEvent("3A", 5, (t) => { return (t.LandingLights && t.Altitude > 10500); }),
-                new FlightEvent("4A", 5, (t) => { return (t.LandingLights && t.IndicatedAirSpeed > 255); }),
-                new FlightEvent("7B", 5, (t) => { return (t.Pitch > 30); }),
-                new FlightEvent("3C", 5, (t) => { return (t.IndicatedAirSpeed > 255 && t.Altitude < 9500); }),
-                new FlightEvent("3D", 5, (t) => { return (t.GroundSpeed > 30 && t.OnGround); })
+                new FlightEvent("4D", 5, "Gear down bellow 250 IAS"             , 10, 30, (t) => { return (t.Gear && t.IndicatedAirSpeed > 255); }),
+                new FlightEvent("3B", 5, "Landing lights off durring approach"  , 5 , 5 , (t) => { return (t.LandingLights && t.Altitude < 2750); }),
+                new FlightEvent("3A", 5, "Landing lights on above 10000 ft"     , 5 , 5 , (t) => { return (t.LandingLights && t.Altitude > 10500); }),
+                new FlightEvent("4A", 5, "Landing light on above 250 IAS"       , 5 , 5 , (t) => { return (t.LandingLights && t.IndicatedAirSpeed > 255); }),
+                new FlightEvent("7B", 5, "Pitch too high"                       , 10, 30, (t) => { return (t.Pitch > 30); }),
+                new FlightEvent("3C", 5, "Speed above 250 IAS bellow 10000 ft"  , 10, 50, (t) => { return (t.IndicatedAirSpeed > 255 && t.Altitude < 9500); }),
+                new FlightEvent("3D", 5, "High speed taxi"                      , 5 , 10, (t) => { return (t.GroundSpeed > 30 && t.OnGround); })
             };
             #endregion Register Events
 
@@ -29,6 +29,8 @@ namespace Acars.FlightData
             ActualDepartureTime = null;
 
             LoadedFlightPlan = new FlightPlan();
+
+            FinalScore = 100;
         }
 
         #region variables
@@ -95,6 +97,12 @@ namespace Acars.FlightData
             get;
             private set;
         }
+
+        public int FinalScore
+        { get; private set; }
+
+        public int EfficiencyPoints
+        { get; private set; }
         #endregion Properties
 
         /// <summary>
@@ -163,6 +171,31 @@ namespace Acars.FlightData
             currentTelemetry.FlightPhase = phase;
             TelemetryLog.Add(currentTelemetry);
             return currentTelemetry;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public void AnalyseFlightLog()
+        {
+            foreach (FlightEvent e in activeEvents)
+            {
+                int discount;
+                EventOccurrence[] r = e.GetOccurrences(TelemetryLog.ToArray(), out discount);
+
+                FinalScore -= discount;
+            }
+        }
+
+        public void EndFlight()
+        {
+            AnalyseFlightLog();
+
+            // calculate flight efficiency
+            EfficiencyPoints = Convert.ToInt32(Math.Round(ActualTimeEnRoute.TotalMinutes / 10 * (FinalScore / 1)));
+
+            // do database stuff
         }
     }
 }

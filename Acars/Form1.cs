@@ -361,8 +361,11 @@ namespace Acars
             }
             else if (flight.ActualArrivalTime != null)
             {
+                flight.EndFlight();
+
                 FlightDatabase.EndFlight(txtEmail.Text, flight);
-                MessageBox.Show(String.Format("Flight approved, rating 100% {0} EP(s)", Math.Round(Math.Round(flight.ActualTimeEnRoute.TotalMinutes) / 10)),
+
+                MessageBox.Show(String.Format("Flight approved, rating {0}% {1} EP(s)", flight.FinalScore, flight.EfficiencyPoints),
                                 "Flight Approved",
                                 MessageBoxButtons.OK,
                                 MessageBoxIcon.Information);

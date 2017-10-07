@@ -19,14 +19,35 @@ namespace Acars.Events
         public int Duration
         { get; private set; }
 
+        /// <summary>
+        /// Human readable description of the event trigger
+        /// </summary>
+        public string Description
+        { get; private set; }
+
+        /// <summary>
+        /// Percentage to discount from flight score
+        /// </summary>
+        public int Discount
+        { get; private set; }
+
+        /// <summary>
+        /// Max applicable discount to apply to flight score
+        /// </summary>
+        public int MaxDiscount
+        { get; private set; }
+
         private FlightEventConditionActiveDelegate ConditionActive;
 
         public delegate bool FlightEventConditionActiveDelegate(Telemetry t);
 
-        public FlightEvent(string Code, int Duration, FlightEventConditionActiveDelegate ConditionActive)
+        public FlightEvent(string Code, int Duration, string Message, int Discount, int MaxDiscount, FlightEventConditionActiveDelegate ConditionActive)
         {
             this.Code = Code;
             this.Duration = Duration;
+            this.Description = Description;
+            this.Discount = Discount;
+            this.MaxDiscount = MaxDiscount;
             this.ConditionActive = ConditionActive;
         }
 
@@ -35,13 +56,14 @@ namespace Acars.Events
         /// </summary>
         /// <param name="T"></param>
         /// <returns></returns>
-        public int[][] GetOccurences(Telemetry[] T)
+        public EventOccurrence[] GetOccurrences(Telemetry[] T, out int AcculumatedDiscount)
         {
-            List<int[]> result = new List<int[]>();
+            List<EventOccurrence> result = new List<EventOccurrence>();
             int i = 0;
 
             int eventStart = -1;
             int eventEnd = -1;
+            AcculumatedDiscount = 0;
 
             foreach (Telemetry t in T)
             {
@@ -61,8 +83,13 @@ namespace Acars.Events
                     // validate duration, and proceed
                     if ((T[eventEnd].Timestamp - T[eventStart].Timestamp).TotalSeconds > Duration)
                     {
-                        int[] I = { eventStart, eventEnd };
-                        result.Add(I);
+                        result.Add(new EventOccurrence(eventStart, eventEnd, this));
+
+                        // calculate score discount
+                        AcculumatedDiscount += Discount;
+                        if (AcculumatedDiscount > MaxDiscount)
+                            AcculumatedDiscount = MaxDiscount;
+
                         eventStart = -1;
                         eventEnd = -1;
                     }

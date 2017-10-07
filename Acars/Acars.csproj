@@ -73,6 +73,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Events\FlightEvent.cs" />
+    <Compile Include="Events\EventOccurrence.cs" />
     <Compile Include="FlightData\FlightDatabase.cs" />
     <Compile Include="FlightData\FlightPhases.cs" />
     <Compile Include="FlightData\Flight.cs" />
