@@ -80,7 +80,6 @@
     <Compile Include="FlightData\FlightPlan.cs" />
     <Compile Include="FlightData\FSUIPCOffsets.cs" />
     <Compile Include="FlightData\Telemetry.cs" />
-    <Compile Include="FlyAtlanticHelpers.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
