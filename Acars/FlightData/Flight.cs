@@ -30,8 +30,8 @@ namespace Acars.FlightData
 
             TelemetryLog = new List<Telemetry>();
 
-            ActualArrivalTime = null;
-            ActualDepartureTime = null;
+            ActualArrivalTimeId = -1;
+            ActualDepartureTimeId = -1;
 
             LoadedFlightPlan = new FlightPlan();
 
@@ -43,6 +43,8 @@ namespace Acars.FlightData
         private FlightPhases phase;
 
         private FlightEvent[] activeEvents;
+        private int ActualDepartureTimeId;
+        private int ActualArrivalTimeId;
 
         // statics
         static private Offset<short> engine1 = new Offset<short>(0x0894);
@@ -66,14 +68,12 @@ namespace Acars.FlightData
 
         public Telemetry ActualDepartureTime
         {
-            get;
-            private set;
+            get { return (ActualDepartureTimeId > -1) ? TelemetryLog[ActualDepartureTimeId] : null; }
         }
 
         public Telemetry ActualArrivalTime
         {
-            get;
-            private set;
+            get { return (ActualArrivalTimeId > -1) ? TelemetryLog[ActualArrivalTimeId] : null; }
         }
 
         public TimeSpan ActualTimeEnRoute
@@ -132,7 +132,7 @@ namespace Acars.FlightData
                 case FlightPhases.TAXIOUT:
                     if (currentTelemetry.Engine1 && currentTelemetry.IndicatedAirSpeed >= 30)
                     {
-                        ActualDepartureTime = currentTelemetry;
+                        ActualDepartureTimeId = TelemetryLog.Count; // works because we will be inserting the current telemetry data to the TelemetryLog
                         phase = FlightPhases.TAKEOFF;
                     }
                     break;
@@ -161,7 +161,7 @@ namespace Acars.FlightData
                 case FlightPhases.APPROACH:
                     if (currentTelemetry.OnGround)
                     {
-                        ActualArrivalTime = currentTelemetry;
+                        ActualArrivalTimeId = TelemetryLog.Count; // again, works because we will be inserting the current telemetry data to the TelemetryLog
                         phase = FlightPhases.LANDING;
                     }
                     else if (currentTelemetry.VerticalSpeed >= 100)
