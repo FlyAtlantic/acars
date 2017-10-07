@@ -436,12 +436,17 @@ namespace Acars
                         txtFlightTime.Text = String.Format("{0:00}:{1:00}",
                                                            Math.Truncate(flight.ActualTimeEnRoute.TotalHours),
                                                            flight.ActualTimeEnRoute.Minutes);
-                
-                // Check Vspeeds are inserted
-                if(txtV1.Text == null || txtVR.Text == null || txtV2.Text == null)
-                    playerParkingBrake.Value = 1;
-                    FSUIPCConnection.Process();
 
+                // Check Vspeeds are inserted
+                if (txtV1.Text == "" || txtVR.Text == "" || txtV2.Text == "")
+                {
+                    playerParkingBrake.Value = 1;
+                    string Message = "Insert your Vspeeds!";
+                    messageWrite.Value = Message;
+                    messageDuration.Value = 5;
+                    FSUIPCConnection.Process();
+                   
+                }
                 // process FSUIPC data
                 onGround = (playerAircraftOnGround.Value == 0) ? false : true;
                 Gear = (playerGear.Value == 0) ? false : true;
