@@ -349,8 +349,7 @@ namespace Acars
                 if(DoLogin(txtEmail.Text, txtPassword.Text))               
                 {
                     // prepare current flight
-                    flight = FlightDatabase.GetFlight(txtEmail.Text);
-                    FlightStart();
+                    flight = Flight.Get();
                     // save validated credentials
                     Properties.Settings.Default.Email = txtEmail.Text;
                     Properties.Settings.Default.Password = txtPassword.Text;
@@ -363,9 +362,9 @@ namespace Acars
             {
                 flight.EndFlight();
 
-                FlightDatabase.EndFlight(txtEmail.Text, flight);
-
-                MessageBox.Show(String.Format("Flight approved, rating {0}% {1} EP(s)", flight.FinalScore, flight.EfficiencyPoints),
+                MessageBox.Show(String.Format("Flight approved, rating {0}% {1} EP(s)",
+                                              flight.FinalScore,
+                                              flight.EfficiencyPoints),
                                 "Flight Approved",
                                 MessageBoxButtons.OK,
                                 MessageBoxIcon.Information);
@@ -373,26 +372,25 @@ namespace Acars
             }
             else
             {
-                if (FlyAtlanticHelpers.StartFlight(conn, fs, userId))
-                {
-                    // update form
-                    string Message = "Welcome to FlyAtlantic Acars";
-                    messageWrite.Value = Message;
-                    messageDuration.Value = 10;
-                    playerEngine1start.Value = 0;
-                    playerEngine2start.Value = 0;
-                    playerEngine3start.Value = 0;
-                    playerEngine4start.Value = 0;
-                    playerParkingBrake.Value = 1;
+                flight.StartFlight(fs);
 
-                    button1.Enabled = false;
-                    button1.Text = "Flying...";
+                // update form
+                string Message = "Welcome to FlyAtlantic Acars";
+                messageWrite.Value = Message;
+                messageDuration.Value = 10;
+                playerEngine1start.Value = 0;
+                playerEngine2start.Value = 0;
+                playerEngine3start.Value = 0;
+                playerEngine4start.Value = 0;
+                playerParkingBrake.Value = 1;
 
-                    landingRate = double.MinValue;
+                button1.Enabled = false;
+                button1.Text = "Flying...";
 
-                    OnFlight.Start();
-                    flightacars.Start();
-                }
+                landingRate = double.MinValue;
+
+                OnFlight.Start();
+                flightacars.Start();
             }
         }
 

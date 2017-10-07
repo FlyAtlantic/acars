@@ -1,9 +1,5 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Acars.FlightData
 {
@@ -25,9 +21,8 @@ namespace Acars.FlightData
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="pilotId"></param>
         /// <returns></returns>
-        public static Flight GetFlight(string pilotId)
+        public static Flight GetFlight()
         {
             Flight result = new Flight();
             string sqlStrGetFlight = "SELECT `flightnumber`, `departure`, `destination`, `alternate`, `date_assigned`, `utilizadores`.`user_id`, `flights`.`idf`, `flights`.`flighttime` FROM `pilotassignments` left join flights on pilotassignments.flightid = flights.idf left join utilizadores on pilotassignments.pilot = utilizadores.user_id WHERE utilizadores.user_email=@email";
@@ -41,7 +36,7 @@ namespace Acars.FlightData
 
                 // GET FLIGHT DATA
                 MySqlCommand sqlCmd = new MySqlCommand(sqlStrGetFlight, conn);
-                sqlCmd.Parameters.AddWithValue("@email", pilotId);
+                sqlCmd.Parameters.AddWithValue("@email", Properties.Settings.Default.Email);
 
                 MySqlDataReader sqlCmdRes = sqlCmd.ExecuteReader();
                 if (sqlCmdRes.HasRows)
@@ -55,20 +50,12 @@ namespace Acars.FlightData
                     }
                 else
                     result = null;
-
-
-                // START FLIGHT
-                sqlCmd = new MySqlCommand(sqlStrUpdateAssignment, conn);
-                sqlCmd.Parameters.AddWithValue("@pilotid", pilotId);
-
-                // TODO: currently handled by the main form, to comissionate when introducting AppContext
-                //sqlCmd.ExecuteNonQuery();
             }
             catch (Exception crap)
             {
                 result = null;
                 // pass the exception to the caller with an usefull message
-                throw new Exception(String.Format("Failed to load flight plan for user {0}.\r\nSQL Statements: {1} | {2}", pilotId, sqlStrGetFlight, sqlStrUpdateAssignment), crap);
+                throw new Exception(String.Format("Failed to load flight plan for user {0}.\r\nSQL Statements: {1} | {2}", Properties.Settings.Default.Email, sqlStrGetFlight, sqlStrUpdateAssignment), crap);
             }
             finally
             {
@@ -81,9 +68,39 @@ namespace Acars.FlightData
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="pilotId"></param>
+        public static void StartFlight(Flight flight)
+        {
+            string sqlStrUpdatePilotAsignments = "UPDATE ``pilotassignments`` JOIN ``utilizadores`` ON ``utilizadores``.``user_id`` = ``pilotassignments``.``pilot`` SET ``onflight`` = NOW() WHERE ``utilizadores``.``email``=@email;";
+            MySqlConnection conn = new MySqlConnection(ConnectionString);
+
+            try
+            {
+                conn.Open();
+
+                MySqlCommand sqlCmd = new MySqlCommand(sqlStrUpdatePilotAsignments, conn);
+                sqlCmd.Parameters.AddWithValue("@email", Properties.Settings.Default.Email);
+
+                sqlCmd.ExecuteNonQuery();
+            }
+            catch (Exception crap)
+            {
+                // pass the exception to the caller with an usefull message
+                throw new Exception(String.Format("Failed to start the flight plan for user {0}.\r\nSQL Statements: {1}",
+                                                  Properties.Settings.Default.Email,
+                                                  sqlStrUpdatePilotAsignments),
+                                    crap);
+            }
+            finally
+            {
+                conn.Close();
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="flight"></param>
-        public static void EndFlight(string pilotId, Flight flight)
+        public static void EndFlight(Flight flight)
         {
             string sqlStrInsertPirep = "INSERT INTO `pireps` (`date`, `flighttime`, `flightid`, `pilotid`, `ft/pm`, `sum`, `accepted`, `eps_granted`) VALUES (@date, @flighttime, @flightid, @pilotid, @landingrate, @sum, @accepted, @flighteps);";
             string sqlStrUpdateUser = "UPDATE `utilizadores` SET `eps` = eps + @flighteps WHERE `user_id` = @pilotid;";
@@ -100,7 +117,7 @@ namespace Acars.FlightData
                 dateParam.Value = DateTime.UtcNow;
                 sqlCmd.Parameters.AddWithValue("@flighttime", Math.Round(flight.ActualTimeEnRoute.TotalMinutes));
                 sqlCmd.Parameters.AddWithValue("@flightid", flight.FlightID);
-                sqlCmd.Parameters.AddWithValue("@pilotid", pilotId);
+                sqlCmd.Parameters.AddWithValue("@pilotid", Properties.Settings.Default.Email);
                 sqlCmd.Parameters.AddWithValue("@landingrate", Math.Round(flight.ActualArrivalTime.VerticalSpeed));
                 sqlCmd.Parameters.AddWithValue("@sum", 100);
                 sqlCmd.Parameters.AddWithValue("@accepted", "1");
@@ -110,21 +127,26 @@ namespace Acars.FlightData
 
                 // UPDATE PILOT DATA
                 sqlCmd = new MySqlCommand(sqlStrUpdateUser, conn);
-                sqlCmd.Parameters.AddWithValue("@pilotid", pilotId);
+                sqlCmd.Parameters.AddWithValue("@pilotid", Properties.Settings.Default.Email);
                 sqlCmd.Parameters.AddWithValue("@flighteps", Math.Round(Math.Round(flight.ActualTimeEnRoute.TotalMinutes) / 10));
 
                 sqlCmd.ExecuteNonQuery();
 
                 // DELETE ASSIGNMENT
                 sqlCmd = new MySqlCommand(sqlStrDeleteAssignment, conn);
-                sqlCmd.Parameters.AddWithValue("@pilotid", pilotId);
+                sqlCmd.Parameters.AddWithValue("@pilotid", Properties.Settings.Default.Email);
 
                 sqlCmd.ExecuteNonQuery();
             }
             catch (Exception crap)
             {
                 // pass the exception to the caller with an usefull message
-                throw new Exception(String.Format("Failed to end the flight plan for user {0}.\r\nSQL Statements: {1} | {2} | {3}", pilotId, sqlStrInsertPirep, sqlStrUpdateUser, sqlStrDeleteAssignment), crap);
+                throw new Exception(String.Format("Failed to end the flight plan for user {0}.\r\nSQL Statements: {1} | {2} | {3}",
+                                                  Properties.Settings.Default.Email,
+                                                  sqlStrInsertPirep,
+                                                  sqlStrUpdateUser,
+                                                  sqlStrDeleteAssignment),
+                                    crap);
             }
             finally
             {

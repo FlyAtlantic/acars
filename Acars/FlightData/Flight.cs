@@ -7,6 +7,11 @@ namespace Acars.FlightData
 {
     public class Flight
     {
+        public static Flight Get()
+        {
+            return FlightDatabase.GetFlight();
+        }
+
         public Flight(FlightPhases initialPhase = FlightPhases.PREFLIGHT)
         {
             #region Register Events
@@ -176,26 +181,45 @@ namespace Acars.FlightData
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="fs"></param>
+        public void StartFlight(FsuipcWrapper fs)
+        {
+            FlightDatabase.StartFlight(this);
+
+            // instanciate FS wrapper
+            while (fs == null)
+                fs = FsuipcWrapper.TryInstantiate();
+
+            //insere e verifica hora zulu no Simulador
+            fs.EnvironmentDateTime = DateTime.UtcNow;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <returns></returns>
-        public void AnalyseFlightLog()
+        private void AnalyseFlightLog(bool updateScore = false)
         {
             foreach (FlightEvent e in activeEvents)
             {
-                int discount;
-                EventOccurrence[] r = e.GetOccurrences(TelemetryLog.ToArray(), out discount);
+                EventOccurrence[] r = e.GetOccurrences(TelemetryLog.ToArray(), out int discount);
 
                 FinalScore -= discount;
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public void EndFlight()
         {
-            AnalyseFlightLog();
+            AnalyseFlightLog(true);
 
             // calculate flight efficiency
             EfficiencyPoints = Convert.ToInt32(Math.Round(ActualTimeEnRoute.TotalMinutes / 10 * (FinalScore / 1)));
 
             // do database stuff
+            FlightDatabase.EndFlight(this);
         }
     }
 }
