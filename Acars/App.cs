@@ -1,4 +1,5 @@
 ﻿using Acars.FlightData;
+using Acars.UI;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -17,8 +18,10 @@ namespace Acars
         private ContextMenuStrip TrayIconContextMenu;
         private ToolStripMenuItem CloseMenuItem;
         private ToolStripMenuItem OpenOldFormMenuItem;
+        private ToolStripMenuItem SettingsMenuItem;
 
         private Form1 oldForm;
+        private SettingsFrm settingsFrm;
 
         private Timer timer;
 
@@ -30,6 +33,11 @@ namespace Acars
             InitializeComponent();
             TrayIcon.Visible = true;
 
+            if (!FlightDatabase.ValidateLogin(Properties.Settings.Default.Email, Properties.Settings.Default.Password))
+            {
+                settingsFrm.Show();
+            }
+
             timer.Start();
         }
 
@@ -39,6 +47,7 @@ namespace Acars
 
             TrayIcon.Text = "Fly Atlantic ACARS";
 
+            settingsFrm = new SettingsFrm();
 
             //The icon is added to the project resources.
             //Here I assume that the name of the file is 'TrayIcon.ico'
@@ -51,6 +60,7 @@ namespace Acars
             TrayIconContextMenu = new ContextMenuStrip();
             CloseMenuItem = new ToolStripMenuItem();
             OpenOldFormMenuItem = new ToolStripMenuItem();
+            SettingsMenuItem = new ToolStripMenuItem();
             TrayIconContextMenu.SuspendLayout();
 
 
@@ -58,13 +68,14 @@ namespace Acars
             // Timer
             //
             timer = new Timer();
-            timer.Interval = 10000;
+            timer.Interval = 60000;
             timer.Tick += new EventHandler(GetFlightTimer_Tick);
             // 
             // TrayIconContextMenu
             // 
             this.TrayIconContextMenu.Items.AddRange(new ToolStripItem[] {
                 this.OpenOldFormMenuItem,
+                this.SettingsMenuItem,
                 this.CloseMenuItem
             });
             this.TrayIconContextMenu.Name = "TrayIconContextMenu";
@@ -83,6 +94,16 @@ namespace Acars
             this.OpenOldFormMenuItem.Size = new Size(152, 22);
             this.OpenOldFormMenuItem.Text = "Open Old Form";
             this.OpenOldFormMenuItem.Click += new EventHandler(this.OpenOldFormMenuItem_Click);
+            // 
+            // SettingsMenuItem
+            // 
+            this.SettingsMenuItem.Name = "SettingsMenuItem";
+            this.SettingsMenuItem.Size = new Size(152, 22);
+            this.SettingsMenuItem.Text = "Settings";
+            this.SettingsMenuItem.Click += (s, e) =>
+            {
+                settingsFrm.Show();
+            };
 
             TrayIconContextMenu.ResumeLayout(false);
             TrayIcon.ContextMenuStrip = TrayIconContextMenu;
@@ -120,27 +141,40 @@ namespace Acars
 
         private void GetFlightTimer_Tick(object sender, EventArgs e)
         {
-            try
-            {
-                flight = FlightDatabase.GetFlight(@"prodrigues1990@gmail.com");
-                if (flight != null)
-                {
-                    timer.Stop();
+            if (!FlightDatabase.ValidateLogin(Properties.Settings.Default.Email, Properties.Settings.Default.Password))
+                return;
 
-                    // notify user
-                    TrayIcon.BalloonTipIcon = ToolTipIcon.Info;
-                    TrayIcon.BalloonTipText = String.Format("{0} from {1} to {2}",
-                                                            flight.LoadedFlightPlan.AtcCallsign,
-                                                            flight.LoadedFlightPlan.DepartureICAO,
-                                                            flight.LoadedFlightPlan.ArrivalICAO);
-                    TrayIcon.BalloonTipTitle = "New flight assigned";
-                    TrayIcon.ShowBalloonTip(10000);
-                }
-            }
-            catch (Exception crap)
+            // check for assigned flight
+            if ((flight = Flight.Get()) != null)
             {
+                timer.Tick -= new EventHandler(GetFlightTimer_Tick);
+                timer.Tick += new EventHandler(WaitForSimulatorConnectionTimer_Tick);
 
+                TrayIcon.BalloonTipIcon = ToolTipIcon.Info;
+                TrayIcon.BalloonTipText = String.Format("{0} from {1} to {2}",
+                                                        flight.LoadedFlightPlan.AtcCallsign,
+                                                        flight.LoadedFlightPlan.DepartureICAO,
+                                                        flight.LoadedFlightPlan.ArrivalICAO);
+                TrayIcon.BalloonTipTitle = "New flight assigned";
+                TrayIcon.ShowBalloonTip(10000);
             }
+
+            // check for assigned flight
+            // if not found, sleep for 30s and repeat
+
+                // check for simulator connection
+                // if not connected, wait for 10s and repeat
+
+                // prompt user to start flight
+                // enable start flight menu item
+        }
+
+        private void WaitForSimulatorConnectionTimer_Tick(object sender, EventArgs e)
+        {
+            if (!FlightDatabase.ValidateLogin(Properties.Settings.Default.Email, Properties.Settings.Default.Password))
+                return;
+
+            // wait for simulator to enable Start Flight Menu Item
         }
     }
 }
