@@ -70,7 +70,7 @@ namespace Acars.FlightData
         /// </summary>
         public static void StartFlight(Flight flight)
         {
-            string sqlStrUpdatePilotAsignments = "UPDATE ``pilotassignments`` JOIN ``utilizadores`` ON ``utilizadores``.``user_id`` = ``pilotassignments``.``pilot`` SET ``onflight`` = NOW() WHERE ``utilizadores``.``email``=@email;";
+            string sqlStrUpdatePilotAsignments = "UPDATE `pilotassignments` JOIN `utilizadores` ON `utilizadores`.`user_id` = `pilotassignments`.`pilot` SET `onflight` = NOW() WHERE `utilizadores`.`user_email`=@email";
             MySqlConnection conn = new MySqlConnection(ConnectionString);
 
             try
