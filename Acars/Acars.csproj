@@ -99,6 +99,12 @@
     <Compile Include="UI\FlightProfile.Designer.cs">
       <DependentUpon>FlightProfile.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\SettingsFrm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\SettingsFrm.Designer.cs">
+      <DependentUpon>SettingsFrm.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -109,6 +115,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\FlightProfile.resx">
       <DependentUpon>FlightProfile.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\SettingsFrm.resx">
+      <DependentUpon>SettingsFrm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.manifest">
       <SubType>Designer</SubType>
