@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Device.Location;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +16,8 @@ namespace Acars.FlightData
         public string ArrivalICAO
         { get; set; }
         public string AlternateICAO
+        { get; set; }
+        public GeoCoordinate DepartureCordinate
         { get; set; }
     }
 }
