@@ -35,5 +35,6 @@ namespace Acars.FlightData
         static public Offset<Double> compass = new Offset<double>(0x02CC);
         static public Offset<long> longitude = new Offset<long>(0x0568);
         static public Offset<long> latitude = new Offset<long>(0x0560);
+        static public Offset<string> aircraftType = new Offset<string>("AircraftInfo", 0x3160, 24);
     }
 }

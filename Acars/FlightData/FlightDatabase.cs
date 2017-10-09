@@ -102,9 +102,9 @@ namespace Acars.FlightData
         /// <param name="flight"></param>
         public static void EndFlight(Flight flight)
         {
-            string sqlStrInsertPirep = "INSERT INTO `pireps` (`date`, `flighttime`, `flightid`, `pilotid`, `ft/pm`, `sum`, `accepted`, `eps_granted`) VALUES (@date, @flighttime, @flightid, @pilotid, @landingrate, @sum, @accepted, @flighteps);";
-            string sqlStrUpdateUser = "UPDATE `utilizadores` SET `eps` = eps + @flighteps WHERE `user_id` = @pilotid;";
-            string sqlStrDeleteAssignment = "DELETE from `pilotassignments` where `pilot` = @pilotid;";
+            string sqlStrInsertPirep = "INSERT INTO `pireps` (`date`, `flighttime`, `flightid`, `pilotid`, `ft/pm`, `sum`, `accepted`, `eps_granted`) SELECT @date, @flighttime, @flightid, `user_id`, @landingrate, @sum, @accepted, @flighteps FROM `utilizadores` WHERE `user_email` = @email;";
+            string sqlStrUpdateUser = "UPDATE `utilizadores` SET `eps` = eps + @flighteps WHERE `user_email` = @pilotid;";
+            string sqlStrDeleteAssignment = "DELETE from `pilotassignments` left join utilizadores on pilotassignments.pilot = utilizadores.user_id where `user_email` = @pilotid;";
             MySqlConnection conn = new MySqlConnection(ConnectionString);
 
             try

@@ -642,6 +642,8 @@ namespace Acars
 
                 sb.AppendFormat("IAS: {0} \r\n", (playerIndicatedAirspeed.Value / 128).ToString("F0"));
                 sb.AppendFormat("QNH: {0} mbar \r\n\r\n", ((playerQNH.Value) / 16).ToString("F0"));
+                FSUIPCConnection.Process("AircraftInfo");
+                sb.AppendFormat("Aircraft Type: {0} \r\n", FSUIPCOffsets.aircraftType.Value);
 
                 if (playerBattery.Value == 257)
                 {
