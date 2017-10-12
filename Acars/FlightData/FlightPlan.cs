@@ -11,13 +11,11 @@ namespace Acars.FlightData
     {
         public string AtcCallsign
         { get; set; }
-        public string DepartureICAO
+        public Location DepartureAirfield
         { get; set; }
-        public string ArrivalICAO
+        public Location ArrivalAirfield
         { get; set; }
         public string AlternateICAO
-        { get; set; }
-        public GeoCoordinate DepartureCordinate
         { get; set; }
     }
 }

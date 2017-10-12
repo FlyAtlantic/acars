@@ -38,13 +38,6 @@ namespace Acars.FlightData
             FinalScore = 100;
         }
 
-        public bool verifyAirport()
-        {
-            //retorna distancia em metros
-            bool verifyAirportPlayer = LoadedFlightPlan.DepartureCordinate.GetDistanceTo(new System.Device.Location.GeoCoordinate(LastTelemetry.Latitude, LastTelemetry.Longitude)) > 2000;
-            return verifyAirportPlayer;
-        }
-
         #region variables
         // instance
         private FlightPhases phase;

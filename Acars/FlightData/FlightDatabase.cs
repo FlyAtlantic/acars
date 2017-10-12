@@ -1,5 +1,6 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
+using System.Device.Location;
 
 namespace Acars.FlightData
 {
@@ -25,8 +26,7 @@ namespace Acars.FlightData
         public static Flight GetFlight()
         {
             Flight result = new Flight();
-            string sqlStrGetFlight = "SELECT `flightnumber`, `departure`, `destination`, `alternate`, `date_assigned`, `utilizadores`.`user_id`, `flights`.`idf`, `flights`.`flighttime` FROM `pilotassignments` left join flights on pilotassignments.flightid = flights.idf left join utilizadores on pilotassignments.pilot = utilizadores.user_id WHERE utilizadores.user_email=@email";
-            string sqlStrUpdateAssignment = "UPDATE `pilotassignments` SET `onflight` = NOW() WHERE `pilot` = @pilotid;";
+            string sqlStrGetFlight = "SELECT `flights`.`flightnumber`, `origin`.`ICAO` as originICAO, `origin`.`LAT` as originLat, `origin`.`LON` originLON, `arrival`.`ICAO` as arrivalICAO, `arrival`.`LAT` as arrivalLat, `arrival`.`LON` as arrivalLON, `flights`.`alternate`, `pilotassignments`.`date_assigned`, `utilizadores`.`user_id`, `flights`.`idf`, `flights`.`flighttime` FROM `pilotassignments` LEFT JOIN `flights` ON `pilotassignments`.`flightid` = `flights`.`idf` LEFT JOIN `airports` origin ON `origin`.`ICAO` = `flights`.`departure` LEFT JOIN `airports` arrival ON `arrival`.`ICAO` = `flights`.`destination` LEFT JOIN `utilizadores` on `pilotassignments`.`pilot` = `utilizadores`.`user_id` WHERE `utilizadores`.`user_email` = @email;";
             MySqlConnection conn = new MySqlConnection(ConnectionString);
 
             try
@@ -43,10 +43,14 @@ namespace Acars.FlightData
                     while (sqlCmdRes.Read())
                     {
                         result.LoadedFlightPlan.AtcCallsign = (string)sqlCmdRes[0];
-                        result.LoadedFlightPlan.DepartureICAO = (string)sqlCmdRes[1];
-                        result.LoadedFlightPlan.ArrivalICAO = (string)sqlCmdRes[2];
-                        result.LoadedFlightPlan.AlternateICAO = (string)sqlCmdRes[3];
-                        result.FlightID = (int)sqlCmdRes[6];
+                        result.LoadedFlightPlan.DepartureAirfield = new Location((string)sqlCmdRes[1],                      // ICAO string
+                                                                                 new GeoCoordinate((double)sqlCmdRes[2],    // Latitude
+                                                                                                   (double)sqlCmdRes[3]));  // Longitude
+                        result.LoadedFlightPlan.ArrivalAirfield = new Location((string)sqlCmdRes[4],                        // ICAO string
+                                                                               new GeoCoordinate((double)sqlCmdRes[5],      // Latitude
+                                                                                                 (double)sqlCmdRes[6]));    // Longitude
+                        result.LoadedFlightPlan.AlternateICAO = (string)sqlCmdRes[7];
+                        result.FlightID = (int)sqlCmdRes[10];
                     }
                 else
                     result = null;
@@ -55,7 +59,7 @@ namespace Acars.FlightData
             {
                 result = null;
                 // pass the exception to the caller with an usefull message
-                throw new Exception(String.Format("Failed to load flight plan for user {0}.\r\nSQL Statements: {1} | {2}", Properties.Settings.Default.Email, sqlStrGetFlight, sqlStrUpdateAssignment), crap);
+                throw new Exception(String.Format("Failed to load flight plan for user {0}.\r\nSQL Statements: {1}", Properties.Settings.Default.Email, sqlStrGetFlight), crap);
             }
             finally
             {
