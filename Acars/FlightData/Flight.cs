@@ -41,7 +41,8 @@ namespace Acars.FlightData
         public bool verifyAirport()
         {
             //retorna distancia em metros
-            return LoadedFlightPlan.DepartureCordinate.GetDistanceTo(new System.Device.Location.GeoCoordinate(LastTelemetry.Latitude, LastTelemetry.Longitude)) > 2000;
+            bool verifyAirportPlayer = LoadedFlightPlan.DepartureCordinate.GetDistanceTo(new System.Device.Location.GeoCoordinate(LastTelemetry.Latitude, LastTelemetry.Longitude)) > 2000;
+            return verifyAirportPlayer;
         }
 
         #region variables

@@ -114,14 +114,15 @@ namespace Acars.FlightData
                 // INSERT PIREP
                 MySqlCommand sqlCmd = new MySqlCommand(sqlStrInsertPirep, conn);
                 var dateParam = sqlCmd.Parameters.Add("@date", MySqlDbType.Date);
+                double resultpercentage = (flight.EfficiencyPoints * 0.01);
                 dateParam.Value = DateTime.UtcNow;
                 sqlCmd.Parameters.AddWithValue("@flighttime", Math.Round(flight.ActualTimeEnRoute.TotalMinutes));
                 sqlCmd.Parameters.AddWithValue("@flightid", flight.FlightID);
                 sqlCmd.Parameters.AddWithValue("@pilotid", Properties.Settings.Default.Email);
                 sqlCmd.Parameters.AddWithValue("@landingrate", Math.Round(flight.ActualArrivalTime.VerticalSpeed));
-                sqlCmd.Parameters.AddWithValue("@sum", 100);
+                sqlCmd.Parameters.AddWithValue("@sum", flight.EfficiencyPoints);
                 sqlCmd.Parameters.AddWithValue("@accepted", "1");
-                sqlCmd.Parameters.AddWithValue("@flighteps", Math.Round(Math.Round(flight.ActualTimeEnRoute.TotalMinutes) / 10));
+                sqlCmd.Parameters.AddWithValue("@flighteps", Math.Round(Math.Round(flight.ActualTimeEnRoute.TotalMinutes * resultpercentage) / 10));
 
                 sqlCmd.ExecuteNonQuery();
 
