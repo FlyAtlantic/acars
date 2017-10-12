@@ -221,6 +221,15 @@ namespace Acars.FlightData
 
                 FinalScore -= discount;
             }
+
+            if (updateScore)
+                UpdateScore();
+        }
+
+        private void UpdateScore()
+        {
+            // calculate EPs
+            EfficiencyPoints = (int)Math.Round((ActualTimeEnRoute.TotalMinutes / 10.0) * (FinalScore / 1.0));
         }
 
         /// <summary>
