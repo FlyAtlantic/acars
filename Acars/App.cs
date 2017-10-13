@@ -39,6 +39,8 @@ namespace Acars
 
         private void InitializeComponent()
         {
+            flight = new Flight();
+
             TrayIcon = new AcarsNotifyIcon();
 
             settingsFrm = new SettingsFrm();
@@ -101,7 +103,7 @@ namespace Acars
                 return;
 
             // check for assigned flight
-            if ((flight = Flight.Get()) != null)
+            if (flight.GetFlightPlan() != null)
             {
                 timer.Tick -= new EventHandler(GetFlightTimer_Tick);
             }
@@ -154,7 +156,7 @@ namespace Acars
             flight.ProcessTelemetry(t);
 
             // UI stuff
-            if (flight != null && !flight.FlightRunning)
+            if (flight.LoadedFlightPlan != null && !flight.FlightRunning)
             {
                 flight.StartFlight();
 

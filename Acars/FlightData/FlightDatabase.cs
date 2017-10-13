@@ -82,9 +82,9 @@ namespace Acars.FlightData
         /// 
         /// </summary>
         /// <returns></returns>
-        public static Flight GetFlight()
+        public static FlightPlan GetFlightPlan()
         {
-            Flight result = new Flight();
+            FlightPlan result = new FlightPlan();
             string sqlStrGetFlight = "SELECT `flights`.`flightnumber`, `origin`.`ICAO` as originICAO, `origin`.`LAT` as originLat, `origin`.`LON` originLON, `arrival`.`ICAO` as arrivalICAO, `arrival`.`LAT` as arrivalLat, `arrival`.`LON` as arrivalLON, `flights`.`alternate`, `pilotassignments`.`date_assigned`, `utilizadores`.`user_id`, `flights`.`idf`, `flights`.`flighttime` FROM `pilotassignments` LEFT JOIN `flights` ON `pilotassignments`.`flightid` = `flights`.`idf` LEFT JOIN `airports` origin ON `origin`.`ICAO` = `flights`.`departure` LEFT JOIN `airports` arrival ON `arrival`.`ICAO` = `flights`.`destination` LEFT JOIN `utilizadores` on `pilotassignments`.`pilot` = `utilizadores`.`user_id` WHERE `utilizadores`.`user_email` = @email;";
             MySqlConnection conn = new MySqlConnection(ConnectionString);
 
@@ -101,15 +101,15 @@ namespace Acars.FlightData
                 if (sqlCmdRes.HasRows)
                     while (sqlCmdRes.Read())
                     {
-                        result.LoadedFlightPlan.AtcCallsign = (string)sqlCmdRes[0];
-                        result.LoadedFlightPlan.DepartureAirfield = new Location((string)sqlCmdRes[1],                      // ICAO string
+                        result.AtcCallsign = (string)sqlCmdRes[0];
+                        result.DepartureAirfield = new Location((string)sqlCmdRes[1],                      // ICAO string
                                                                                  new GeoCoordinate((double)sqlCmdRes[2],    // Latitude
                                                                                                    (double)sqlCmdRes[3]));  // Longitude
-                        result.LoadedFlightPlan.ArrivalAirfield = new Location((string)sqlCmdRes[4],                        // ICAO string
+                        result.ArrivalAirfield = new Location((string)sqlCmdRes[4],                        // ICAO string
                                                                                new GeoCoordinate((double)sqlCmdRes[5],      // Latitude
                                                                                                  (double)sqlCmdRes[6]));    // Longitude
-                        result.LoadedFlightPlan.AlternateICAO = (string)sqlCmdRes[7];
-                        result.FlightID = (int)sqlCmdRes[10];
+                        result.AlternateICAO = (string)sqlCmdRes[7];
+                        result.ID = (int)sqlCmdRes[10];
                     }
                 else
                     result = null;

@@ -9,6 +9,8 @@ namespace Acars.FlightData
 {
     public class FlightPlan
     {
+        public int ID
+        { get; set; }
         public string AtcCallsign
         { get; set; }
         public Location DepartureAirfield
@@ -17,5 +19,7 @@ namespace Acars.FlightData
         { get; set; }
         public string AlternateICAO
         { get; set; }
+
+        public FlightPlan() { }
     }
 }

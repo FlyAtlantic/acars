@@ -7,9 +7,11 @@ namespace Acars.FlightData
 {
     public class Flight
     {
-        public static Flight Get()
+        public FlightPlan GetFlightPlan()
         {
-            return FlightDatabase.GetFlight();
+            LoadedFlightPlan = FlightDatabase.GetFlightPlan();
+
+            return LoadedFlightPlan;
         }
 
         public Flight(FlightPhases initialPhase = FlightPhases.PREFLIGHT)
@@ -34,7 +36,7 @@ namespace Acars.FlightData
             ActualArrivalTimeId = -1;
             ActualDepartureTimeId = -1;
 
-            LoadedFlightPlan = new FlightPlan();
+            LoadedFlightPlan = null;
 
             FinalScore = 100;
         }
