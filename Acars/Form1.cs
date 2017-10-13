@@ -167,7 +167,7 @@ namespace Acars
         #endregion FSUIPC Offset declarations
 
         #region Property declaration
-        Flight flight;
+        public Flight flight;
         private FsuipcWrapper fs;
         private int flightId;
         private int userId;

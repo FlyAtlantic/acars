@@ -14,16 +14,13 @@ namespace Acars
     class App : ApplicationContext
     {
         //Component declarations
-        private NotifyIcon TrayIcon;
-        private ContextMenuStrip TrayIconContextMenu;
-        private ToolStripMenuItem CloseMenuItem;
-        private ToolStripMenuItem OpenOldFormMenuItem;
-        private ToolStripMenuItem SettingsMenuItem;
+        private AcarsNotifyIcon TrayIcon;
 
         private Form1 oldForm;
         private SettingsFrm settingsFrm;
 
         private Timer timer;
+        private Timer telemetryTimer;
 
         private Flight flight;
 
@@ -31,7 +28,6 @@ namespace Acars
         {
             Application.ApplicationExit += new EventHandler(this.OnApplicationExit);
             InitializeComponent();
-            TrayIcon.Visible = true;
 
             if (!FlightDatabase.ValidateLogin(Properties.Settings.Default.Email, Properties.Settings.Default.Password))
             {
@@ -43,25 +39,10 @@ namespace Acars
 
         private void InitializeComponent()
         {
-            TrayIcon = new NotifyIcon();
-
-            TrayIcon.Text = "Fly Atlantic ACARS";
+            TrayIcon = new AcarsNotifyIcon();
 
             settingsFrm = new SettingsFrm();
-
-            //The icon is added to the project resources.
-            //Here I assume that the name of the file is 'TrayIcon.ico'
-            TrayIcon.Icon = Icon.ExtractAssociatedIcon(Assembly.GetExecutingAssembly().Location);
-
-            //Optional - handle doubleclicks on the icon:
-            TrayIcon.DoubleClick += TrayIcon_DoubleClick;
-
-            //Optional - Add a context menu to the TrayIcon:
-            TrayIconContextMenu = new ContextMenuStrip();
-            CloseMenuItem = new ToolStripMenuItem();
-            OpenOldFormMenuItem = new ToolStripMenuItem();
-            SettingsMenuItem = new ToolStripMenuItem();
-            TrayIconContextMenu.SuspendLayout();
+            oldForm = new Form1();
 
             //
             // Timer
@@ -70,55 +51,25 @@ namespace Acars
             timer.Interval = 10000;
             timer.Tick += new EventHandler(GetFlightTimer_Tick);
             timer.Tick += new EventHandler(WaitForSimulatorConnectionTimer_Tick);
-            // 
-            // TrayIconContextMenu
-            // 
-            this.TrayIconContextMenu.Items.AddRange(new ToolStripItem[] {
-                this.OpenOldFormMenuItem,
-                this.SettingsMenuItem,
-                this.CloseMenuItem
-            });
-            this.TrayIconContextMenu.Name = "TrayIconContextMenu";
-            this.TrayIconContextMenu.Size = new Size(153, 70);
-            // 
-            // CloseMenuItem
-            // 
-            this.CloseMenuItem.Name = "CloseMenuItem";
-            this.CloseMenuItem.Size = new Size(152, 22);
-            this.CloseMenuItem.Text = "Exit";
-            this.CloseMenuItem.Click += new EventHandler(this.CloseMenuItem_Click);
-            // 
-            // OpenOldFormMenuItem
-            // 
-            this.OpenOldFormMenuItem.Name = "OpenOldFormMenuItem";
-            this.OpenOldFormMenuItem.Size = new Size(152, 22);
-            this.OpenOldFormMenuItem.Text = "Open Old Form";
-            this.OpenOldFormMenuItem.Click += new EventHandler(this.OpenOldFormMenuItem_Click);
-            // 
-            // SettingsMenuItem
-            // 
-            this.SettingsMenuItem.Name = "SettingsMenuItem";
-            this.SettingsMenuItem.Size = new Size(152, 22);
-            this.SettingsMenuItem.Text = "Settings";
-            this.SettingsMenuItem.Click += (s, e) =>
-            {
-                settingsFrm.Show();
-            };
 
-            TrayIconContextMenu.ResumeLayout(false);
-            TrayIcon.ContextMenuStrip = TrayIconContextMenu;
+            telemetryTimer = new Timer();
+            telemetryTimer.Interval = 1000;
+            telemetryTimer.Tick += new EventHandler(ProcessFlightTelemetry);
+
+            TrayIcon.Close_Click += CloseMenuItem_Click;
+            TrayIcon.OpenFlightStatus_Click += OpenOldFormMenuItem_Click;
+            TrayIcon.OpenSettings_Click += TrayIcon_OpenSettings_Click;
+        }
+
+        private void TrayIcon_OpenSettings_Click(object sender, EventArgs e)
+        {
+            settingsFrm.Show();
         }
 
         private void OnApplicationExit(object sender, EventArgs e)
         {
             //Cleanup so that the icon will be removed when the application is closed
-            TrayIcon.Visible = false;
-        }
-
-        private void TrayIcon_DoubleClick(object sender, EventArgs e)
-        {
-            //Here you can do stuff if the tray icon is doubleclicked
-            TrayIcon.ShowBalloonTip(10000);
+            TrayIcon.Dispose();
         }
 
         private void CloseMenuItem_Click(object sender, EventArgs e)
@@ -154,15 +105,6 @@ namespace Acars
             {
                 timer.Tick -= new EventHandler(GetFlightTimer_Tick);
             }
-
-            // check for assigned flight
-            // if not found, sleep for 30s and repeat
-
-                // check for simulator connection
-                // if not connected, wait for 10s and repeat
-
-                // prompt user to start flight
-                // enable start flight menu item
         }
 
         /// <summary>
@@ -177,16 +119,8 @@ namespace Acars
 
             if (Telemetry.Connect())
             {
-                // start flight on the database
-                if (flight != null)
-                    flight.StartFlight();
-                else
-                {
-                    TrayIcon.ShowBalloonTip(10000);
-                }
-
                 timer.Tick -= new EventHandler(WaitForSimulatorConnectionTimer_Tick);
-                timer.Tick += new EventHandler(ProcessFlightTelemetry);
+                telemetryTimer.Start();
             }
 
             // wait for simulator to enable Start Flight Menu Item
@@ -202,34 +136,34 @@ namespace Acars
             Telemetry t = Telemetry.GetCurrent();
             if (t == null)
             {
-                timer.Tick -= new EventHandler(ProcessFlightTelemetry);
-                timer.Tick += new EventHandler(WaitForSimulatorConnectionTimer_Tick);
+                telemetryTimer.Stop();
+                timer.Tick -= new EventHandler(WaitForSimulatorConnectionTimer_Tick);
 
-                TrayIcon.BalloonTipIcon = ToolTipIcon.Info;
-                TrayIcon.BalloonTipText = String.Format("Connection to simulator lost.");
-                TrayIcon.BalloonTipTitle = "Sim Connection Lost";
-                TrayIcon.ShowBalloonTip(10000);
+                TrayIcon.ShowBalloonTip(ToolTipIcon.Warning,
+                                        "Connection to simulator lost.",
+                                        "Sim Connection Lost");
 
                 if (flight != null && flight.FlightRunning)
                 {
                     // cancel flight? just wait?
                 }
 
-                flight.ProcessTelemetry(t);
-
                 return;
             }
 
+            flight.ProcessTelemetry(t);
+
+            // UI stuff
             if (flight != null && !flight.FlightRunning)
             {
                 flight.StartFlight();
 
-                TrayIcon.BalloonTipIcon = ToolTipIcon.Info;
-                TrayIcon.BalloonTipText = String.Format("{0} from {1} to {2}",
-                                                        flight.LoadedFlightPlan.AtcCallsign,
-                                                        flight.LoadedFlightPlan.DepartureAirfield.Identifier,
-                                                        flight.LoadedFlightPlan.ArrivalAirfield.Identifier);
-                TrayIcon.BalloonTipTitle = "Start flying!";
+                TrayIcon.ShowBalloonTip(ToolTipIcon.Info,
+                                        String.Format("{0} from {1} to {2}",
+                                                      flight.LoadedFlightPlan.AtcCallsign,
+                                                      flight.LoadedFlightPlan.DepartureAirfield.Identifier,
+                                                      flight.LoadedFlightPlan.ArrivalAirfield.Identifier),
+                                        "Start flying!");
             }
         }
     }

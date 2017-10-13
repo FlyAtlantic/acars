@@ -207,13 +207,22 @@ namespace Acars.FlightData
         /// 
         /// </summary>
         /// <param name="fs"></param>
-        public void StartFlight()
+        public bool StartFlight()
         {
-            FlightDatabase.StartFlight(this);
+            try
+            {
+                FlightDatabase.StartFlight(this);
+                FlightRunning = true;
+            }
+            catch (Exception crap)
+            {
 
-            FlightRunning = false;
+            }
 
             // TODO: do all stuff via telemetry to force desired values
+
+
+            return FlightRunning;
         }
 
         /// <summary>
