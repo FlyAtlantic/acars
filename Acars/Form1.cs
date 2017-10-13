@@ -372,7 +372,7 @@ namespace Acars
             }
             else
             {
-                flight.StartFlight(fs);
+                flight.StartFlight();
 
                 // update form
                 string Message = "Welcome to FlyAtlantic Acars";

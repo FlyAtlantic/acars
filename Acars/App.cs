@@ -63,13 +63,13 @@ namespace Acars
             SettingsMenuItem = new ToolStripMenuItem();
             TrayIconContextMenu.SuspendLayout();
 
-
             //
             // Timer
             //
             timer = new Timer();
-            timer.Interval = 60000;
+            timer.Interval = 10000;
             timer.Tick += new EventHandler(GetFlightTimer_Tick);
+            timer.Tick += new EventHandler(WaitForSimulatorConnectionTimer_Tick);
             // 
             // TrayIconContextMenu
             // 
@@ -139,6 +139,11 @@ namespace Acars
             oldForm.Show();
         }
 
+        /// <summary>
+        /// Waits for assigned flight
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void GetFlightTimer_Tick(object sender, EventArgs e)
         {
             if (!FlightDatabase.ValidateLogin(Properties.Settings.Default.Email, Properties.Settings.Default.Password))
@@ -148,15 +153,6 @@ namespace Acars
             if ((flight = Flight.Get()) != null)
             {
                 timer.Tick -= new EventHandler(GetFlightTimer_Tick);
-                timer.Tick += new EventHandler(WaitForSimulatorConnectionTimer_Tick);
-
-                TrayIcon.BalloonTipIcon = ToolTipIcon.Info;
-                TrayIcon.BalloonTipText = String.Format("{0} from {1} to {2}",
-                                                        flight.LoadedFlightPlan.AtcCallsign,
-                                                        flight.LoadedFlightPlan.DepartureAirfield.Identifier,
-                                                        flight.LoadedFlightPlan.ArrivalAirfield.Identifier);
-                TrayIcon.BalloonTipTitle = "New flight assigned";
-                TrayIcon.ShowBalloonTip(10000);
             }
 
             // check for assigned flight
@@ -169,12 +165,72 @@ namespace Acars
                 // enable start flight menu item
         }
 
+        /// <summary>
+        /// Waits for simulator connection
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void WaitForSimulatorConnectionTimer_Tick(object sender, EventArgs e)
         {
             if (!FlightDatabase.ValidateLogin(Properties.Settings.Default.Email, Properties.Settings.Default.Password))
                 return;
 
+            if (Telemetry.Connect())
+            {
+                // start flight on the database
+                if (flight != null)
+                    flight.StartFlight();
+                else
+                {
+                    TrayIcon.ShowBalloonTip(10000);
+                }
+
+                timer.Tick -= new EventHandler(WaitForSimulatorConnectionTimer_Tick);
+                timer.Tick += new EventHandler(ProcessFlightTelemetry);
+            }
+
             // wait for simulator to enable Start Flight Menu Item
+        }
+
+        /// <summary>
+        /// Processes flight telemetry data, constantly
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ProcessFlightTelemetry(object sender, EventArgs e)
+        {
+            Telemetry t = Telemetry.GetCurrent();
+            if (t == null)
+            {
+                timer.Tick -= new EventHandler(ProcessFlightTelemetry);
+                timer.Tick += new EventHandler(WaitForSimulatorConnectionTimer_Tick);
+
+                TrayIcon.BalloonTipIcon = ToolTipIcon.Info;
+                TrayIcon.BalloonTipText = String.Format("Connection to simulator lost.");
+                TrayIcon.BalloonTipTitle = "Sim Connection Lost";
+                TrayIcon.ShowBalloonTip(10000);
+
+                if (flight != null && flight.FlightRunning)
+                {
+                    // cancel flight? just wait?
+                }
+
+                flight.ProcessTelemetry(t);
+
+                return;
+            }
+
+            if (flight != null && !flight.FlightRunning)
+            {
+                flight.StartFlight();
+
+                TrayIcon.BalloonTipIcon = ToolTipIcon.Info;
+                TrayIcon.BalloonTipText = String.Format("{0} from {1} to {2}",
+                                                        flight.LoadedFlightPlan.AtcCallsign,
+                                                        flight.LoadedFlightPlan.DepartureAirfield.Identifier,
+                                                        flight.LoadedFlightPlan.ArrivalAirfield.Identifier);
+                TrayIcon.BalloonTipTitle = "Start flying!";
+            }
         }
     }
 }

@@ -132,12 +132,45 @@ namespace Acars.FlightData
         public double ZeroFuelWeight;
         #endregion Properties
 
+        /// <summary>
+        /// Returns true on successfull connection, false otherwise
+        /// </summary>
+        /// <returns></returns>
+        public static bool Connect()
+        {
+            try
+            {
+                FSUIPCConnection.Open();
+            }
+            catch (Exception crap)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Returns a snapshot of the current simulator telemetry, or, if unable returns null
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public static Telemetry GetCurrent()
         {
             Telemetry result = new Telemetry();
 
             // snapshot data
-            FSUIPCConnection.Process();
+            try
+            {
+                FSUIPCConnection.Process();
+            }
+            catch (Exception crap)
+            {
+                // failed to connect to the sim?
+                return null;
+            }
+
+
             result.Timestamp = DateTime.UtcNow;
 
             // capture values

@@ -27,6 +27,7 @@ namespace Acars.FlightData
             #endregion Register Events
 
             phase = initialPhase;
+            FlightRunning = false;
 
             TelemetryLog = new List<Telemetry>();
 
@@ -57,6 +58,12 @@ namespace Acars.FlightData
         #endregion variables
 
         #region Properties
+
+        /// <summary>
+        /// Returns true if flight is to running on the database
+        /// </summary>
+        public bool FlightRunning
+        { get; private set; }
         /// <summary>
         /// Flight Identifier on the database side
         /// </summary>
@@ -118,12 +125,24 @@ namespace Acars.FlightData
         }
         #endregion Properties
 
+
+        /// <summary>
+        /// Saves a snapshot of the current telemetry readings
+        /// </summary>
+        /// <returns></returns>
+        public Telemetry ProcessTelemetry(Telemetry t)
+        {
+            // collect all telemetry data we need
+            TelemetryLog.Add(t);
+
+            return t;
+        }
+
         /// <summary>
         /// Handle flight phases
         /// </summary>
         public Telemetry HandleFlightPhases()
         {
-            // calculate all telemetry data we need
             Telemetry currentTelemetry = Telemetry.GetCurrent();
 
             // handle switching phase
@@ -181,8 +200,6 @@ namespace Acars.FlightData
                     break;
             }
 
-            currentTelemetry.FlightPhase = phase;
-            TelemetryLog.Add(currentTelemetry);
             return currentTelemetry;
         }
 
@@ -190,16 +207,13 @@ namespace Acars.FlightData
         /// 
         /// </summary>
         /// <param name="fs"></param>
-        public void StartFlight(FsuipcWrapper fs)
+        public void StartFlight()
         {
             FlightDatabase.StartFlight(this);
 
-            // instanciate FS wrapper
-            while (fs == null)
-                fs = FsuipcWrapper.TryInstantiate();
+            FlightRunning = false;
 
-            //insere e verifica hora zulu no Simulador
-            fs.EnvironmentDateTime = DateTime.UtcNow;
+            // TODO: do all stuff via telemetry to force desired values
         }
 
         /// <summary>
