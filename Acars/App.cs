@@ -153,8 +153,8 @@ namespace Acars
                 TrayIcon.BalloonTipIcon = ToolTipIcon.Info;
                 TrayIcon.BalloonTipText = String.Format("{0} from {1} to {2}",
                                                         flight.LoadedFlightPlan.AtcCallsign,
-                                                        flight.LoadedFlightPlan.DepartureICAO,
-                                                        flight.LoadedFlightPlan.ArrivalICAO);
+                                                        flight.LoadedFlightPlan.DepartureAirfield.Identifier,
+                                                        flight.LoadedFlightPlan.ArrivalAirfield.Identifier);
                 TrayIcon.BalloonTipTitle = "New flight assigned";
                 TrayIcon.ShowBalloonTip(10000);
             }
