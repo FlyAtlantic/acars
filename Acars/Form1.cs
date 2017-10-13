@@ -349,7 +349,7 @@ namespace Acars
                 if(DoLogin(txtEmail.Text, txtPassword.Text))               
                 {
                     // prepare current flight
-                    flight = Flight.Get();
+                    //flight = Flight.Get();
                     // save validated credentials
                     Properties.Settings.Default.Email = txtEmail.Text;
                     Properties.Settings.Default.Password = txtPassword.Text;
