@@ -178,7 +178,9 @@
     <None Include="Resources\banner1.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="tszbanner.ico" />
+    <Content Include="tszbanner.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
