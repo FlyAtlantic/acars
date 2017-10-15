@@ -18,6 +18,7 @@ namespace Acars
 
         private Form1 oldForm;
         private SettingsFrm settingsFrm;
+        private PilotReportFrm pilotReportFrm;
 
         private Timer timer;
         private Timer telemetryTimer;
@@ -43,8 +44,9 @@ namespace Acars
 
             TrayIcon = new AcarsNotifyIcon();
 
-            settingsFrm = new SettingsFrm();
             oldForm = new Form1();
+            settingsFrm = new SettingsFrm();
+            pilotReportFrm = new PilotReportFrm();
 
             //
             // Timer
@@ -163,7 +165,10 @@ namespace Acars
             //Detetar fim do voo
             if (flight.ActualArrivalTime != null)
             {
-                
+                // validaded company settings
+
+                // enable end flight
+                pilotReportFrm.Show(flight);
             }
 
             // UI stuff
