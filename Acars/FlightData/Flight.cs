@@ -143,9 +143,10 @@ namespace Acars.FlightData
         /// <summary>
         /// Handle flight phases
         /// </summary>
-        public Telemetry HandleFlightPhases()
+        public Telemetry HandleFlightPhases(Telemetry currentTelemetry = null)
         {
-            Telemetry currentTelemetry = Telemetry.GetCurrent();
+            if(currentTelemetry == null)
+                currentTelemetry = Telemetry.GetCurrent();
 
             // handle switching phase
             switch (phase)

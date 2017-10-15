@@ -153,12 +153,18 @@ namespace Acars
                 return;
             }
 
+            t = flight.HandleFlightPhases(t);
             flight.ProcessTelemetry(t);
 
             //Update flight every 5 minutes
             if (t.Timestamp.Minute % 5 == 0)
                 FlightDatabase.UpdateFlight(flight);
 
+            //Detetar fim do voo
+            if (t.FlightPhase == FlightPhases.TAXIIN)
+            {
+                
+            }
             // UI stuff
             if (flight.LoadedFlightPlan != null && !flight.FlightRunning)
             {
