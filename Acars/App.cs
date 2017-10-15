@@ -155,6 +155,10 @@ namespace Acars
 
             flight.ProcessTelemetry(t);
 
+            //Update flight every 5 minutes
+            if (t.Timestamp.Minute % 5 == 0)
+                FlightDatabase.UpdateFlight(flight);
+
             // UI stuff
             if (flight.LoadedFlightPlan != null && !flight.FlightRunning)
             {

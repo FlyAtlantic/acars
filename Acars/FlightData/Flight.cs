@@ -213,7 +213,7 @@ namespace Acars.FlightData
         {
             try
             {
-                FlightDatabase.StartFlight(this);
+                FlightDatabase.UpdateFlight(this);
                 FlightRunning = true;
             }
             catch (Exception crap)
