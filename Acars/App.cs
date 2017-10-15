@@ -165,6 +165,7 @@ namespace Acars
             {
                 
             }
+
             // UI stuff
             if (flight.LoadedFlightPlan != null && !flight.FlightRunning)
             {
