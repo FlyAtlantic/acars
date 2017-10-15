@@ -161,7 +161,7 @@ namespace Acars
                 FlightDatabase.UpdateFlight(flight);
 
             //Detetar fim do voo
-            if (t.FlightPhase == FlightPhases.TAXIIN)
+            if (flight.ActualArrivalTime != null)
             {
                 
             }
