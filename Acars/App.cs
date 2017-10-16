@@ -108,6 +108,7 @@ namespace Acars
             if (flight.GetFlightPlan() != null)
             {
                 timer.Tick -= new EventHandler(GetFlightTimer_Tick);
+                TrayIcon.SetStatusText("Waiting for Simulator!");
             }
         }
 
@@ -154,7 +155,8 @@ namespace Acars
 
                 return;
             }
-
+            if (flight.LoadedFlightPlan != null)
+                TrayIcon.SetStatusText("Flight Running...");
             t = flight.HandleFlightPhases(t);
             flight.ProcessTelemetry(t);
 
