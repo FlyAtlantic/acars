@@ -17,7 +17,7 @@ namespace Acars.FlightData.Tests
         public void GetFlightTest()
         {
             // should return null if no flight found for user
-            Assert.IsNull(FlightDatabase.GetFlight());
+            Assert.IsNull(FlightDatabase.GetFlightPlan());
         }
 
         //[TestMethod()]

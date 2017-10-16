@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Acars.UI
@@ -24,16 +20,16 @@ namespace Acars.UI
         public event Close_ClickEventHandler Close_Click;
 
         private ContextMenuStrip TrayIconContextMenu;
-        private ToolStripMenuItem StatusTectMenuItem;
+        private ToolStripMenuItem StatusTextMenuItem;
         private ToolStripMenuItem CloseMenuItem;
         private ToolStripMenuItem OpenOldFormMenuItem;
         private ToolStripMenuItem SettingsMenuItem;
 
         public AcarsNotifyIcon()
         {
-            StatusIcon = new NotifyIcon();
-
             InitializeComponent();
+            
+            SetStatusText("Waiting for flight");
         }
 
         public void Dispose()
@@ -44,8 +40,8 @@ namespace Acars.UI
         public void InitializeComponent()
         {
             // NotifyIcon
+            StatusIcon = new NotifyIcon();
             StatusIcon.Visible = true;
-            SetStatusText("Waiting for flight");
             StatusIcon.Icon = Icon.ExtractAssociatedIcon(Assembly.GetExecutingAssembly().Location);
             StatusIcon.DoubleClick += StatusIcon_DoubleClick;
 
@@ -53,7 +49,7 @@ namespace Acars.UI
             TrayIconContextMenu = new ContextMenuStrip();
 
             // ConextMenus
-            StatusTectMenuItem = new ToolStripMenuItem();
+            StatusTextMenuItem = new ToolStripMenuItem();
             CloseMenuItem = new ToolStripMenuItem();
             OpenOldFormMenuItem = new ToolStripMenuItem();
             SettingsMenuItem = new ToolStripMenuItem();
@@ -63,7 +59,7 @@ namespace Acars.UI
             // TrayIconContextMenu
             // 
             this.TrayIconContextMenu.Items.AddRange(new ToolStripItem[] {
-                this.StatusTectMenuItem,
+                this.StatusTextMenuItem,
                 this.OpenOldFormMenuItem,
                 this.SettingsMenuItem,
                 this.CloseMenuItem
@@ -71,11 +67,11 @@ namespace Acars.UI
             this.TrayIconContextMenu.Name = "TrayIconContextMenu";
             this.TrayIconContextMenu.Size = new Size(153, 70);
             //
-            // StatusTectMenuItem
+            // StatusTextMenuItem
             //
-            this.StatusTectMenuItem.Name = "StatusTectMenuItem";
-            this.StatusTectMenuItem.Size = new Size(152, 22);
-            this.StatusTectMenuItem.Text = "FlyAtlantic ACARS";
+            this.StatusTextMenuItem.Name = "StatusTextMenuItem";
+            this.StatusTextMenuItem.Size = new Size(152, 22);
+            this.StatusTextMenuItem.Text = "FlyAtlantic ACARS";
             // 
             // CloseMenuItem
             // 
@@ -127,7 +123,7 @@ namespace Acars.UI
         public void SetStatusText(string Text)
         {
             StatusIcon.Text = "FlyAltantic ACARS - " + Text;
-            //StatusTectMenuItem.Text = StatusIcon.Text;
+            StatusTextMenuItem.Text = StatusIcon.Text;
         }
     }
 }
