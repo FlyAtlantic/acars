@@ -18,6 +18,8 @@ namespace Acars.UI
             txtPilotMessage.Text = "";
 
             this.f = f;
+
+            Show();
         }
 
         private void btnSubmitFlight_Click(object sender, EventArgs e)

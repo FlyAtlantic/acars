@@ -193,7 +193,7 @@ namespace Acars
                     FlightDatabase.UpdateFlight(flight);
 
                 //Detetar fim do voo
-                if (flight.ActualArrivalTime != null)
+                if (flight.ActualArrivalTime != null && !pilotReportFrm.Visible)
                 {
                     TrayIcon.SetStatusText("Waiting for pilot report");
                     // validaded company settings
