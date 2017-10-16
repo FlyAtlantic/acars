@@ -14,10 +14,10 @@ namespace Acars.FlightData
             {
                 return String.Format(
                     "server={0};uid={1};pwd={2};database={3};",
-                    Properties.Settings.Default.Properties["Server"],
-                    Properties.Settings.Default.Properties["Dbuser"],
-                    Properties.Settings.Default.Properties["Dbpass"],
-                    Properties.Settings.Default.Properties["Database"]);
+                    Properties.Settings.Default.Server,
+                    Properties.Settings.Default.Dbuser,
+                    Properties.Settings.Default.Dbpass,
+                    Properties.Settings.Default.Database);
             }
         }
 
@@ -95,7 +95,7 @@ namespace Acars.FlightData
 
                 // GET FLIGHT DATA
                 MySqlCommand sqlCmd = new MySqlCommand(sqlStrGetFlight, conn);
-                sqlCmd.Parameters.AddWithValue("@email", Properties.Settings.Default.Properties["email"]);
+                sqlCmd.Parameters.AddWithValue("@email", Properties.Settings.Default.Email);
 
                 MySqlDataReader sqlCmdRes = sqlCmd.ExecuteReader();
                 if (sqlCmdRes.HasRows)
@@ -118,7 +118,7 @@ namespace Acars.FlightData
             {
                 result = null;
                 // pass the exception to the caller with an usefull message
-                throw new Exception(String.Format("Failed to load flight plan for user {0}.\r\nSQL Statements: {1}", Properties.Settings.Default.Properties["email"], sqlStrGetFlight), crap);
+                throw new Exception(String.Format("Failed to load flight plan for user {0}.\r\nSQL Statements: {1}", Properties.Settings.Default.Email, sqlStrGetFlight), crap);
             }
             finally
             {
@@ -141,7 +141,7 @@ namespace Acars.FlightData
                 conn.Open();
 
                 MySqlCommand sqlCmd = new MySqlCommand(sqlStrUpdatePilotAsignments, conn);
-                sqlCmd.Parameters.AddWithValue("@email", Properties.Settings.Default.Properties["email"]);
+                sqlCmd.Parameters.AddWithValue("@email", Properties.Settings.Default.Email);
 
                 sqlCmd.ExecuteNonQuery();
             }
@@ -149,7 +149,7 @@ namespace Acars.FlightData
             {
                 // pass the exception to the caller with an usefull message
                 throw new Exception(String.Format("Failed to start the flight plan for user {0}.\r\nSQL Statements: {1}",
-                                                  Properties.Settings.Default.Properties["email"],
+                                                  Properties.Settings.Default.Email,
                                                   sqlStrUpdatePilotAsignments),
                                     crap);
             }
@@ -180,7 +180,7 @@ namespace Acars.FlightData
                 dateParam.Value = DateTime.UtcNow;
                 sqlCmd.Parameters.AddWithValue("@flighttime", Math.Round(flight.ActualTimeEnRoute.TotalMinutes));
                 sqlCmd.Parameters.AddWithValue("@flightid", flight.FlightID);
-                sqlCmd.Parameters.AddWithValue("@pilotid", Properties.Settings.Default.Properties["email"]);
+                sqlCmd.Parameters.AddWithValue("@pilotid", Properties.Settings.Default.Email);
                 sqlCmd.Parameters.AddWithValue("@landingrate", Math.Round(flight.ActualArrivalTime.VerticalSpeed));
                 sqlCmd.Parameters.AddWithValue("@sum", flight.FinalScore);
                 sqlCmd.Parameters.AddWithValue("@accepted", "1");
@@ -190,14 +190,14 @@ namespace Acars.FlightData
 
                 // UPDATE PILOT DATA
                 sqlCmd = new MySqlCommand(sqlStrUpdateUser, conn);
-                sqlCmd.Parameters.AddWithValue("@pilotid", Properties.Settings.Default.Properties["email"]);
+                sqlCmd.Parameters.AddWithValue("@pilotid", Properties.Settings.Default.Email);
                 sqlCmd.Parameters.AddWithValue("@flighteps", flight.EfficiencyPoints);
 
                 sqlCmd.ExecuteNonQuery();
 
                 // DELETE ASSIGNMENT
                 sqlCmd = new MySqlCommand(sqlStrDeleteAssignment, conn);
-                sqlCmd.Parameters.AddWithValue("@pilotid", Properties.Settings.Default.Properties["email"]);
+                sqlCmd.Parameters.AddWithValue("@pilotid", Properties.Settings.Default.Email);
 
                 sqlCmd.ExecuteNonQuery();
             }
@@ -205,7 +205,7 @@ namespace Acars.FlightData
             {
                 // pass the exception to the caller with an usefull message
                 throw new Exception(String.Format("Failed to end the flight plan for user {0}.\r\nSQL Statements: {1} | {2} | {3}",
-                                                  Properties.Settings.Default.Properties["email"],
+                                                  Properties.Settings.Default.Email,
                                                   sqlStrInsertPirep,
                                                   sqlStrUpdateUser,
                                                   sqlStrDeleteAssignment),

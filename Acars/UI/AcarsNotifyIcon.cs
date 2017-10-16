@@ -123,7 +123,7 @@ namespace Acars.UI
         public void SetStatusText(string Text)
         {
             StatusIcon.Text = "FlyAltantic ACARS - " + Text;
-            StatusTextMenuItem.Text = StatusIcon.Text;
+            StatusTectMenuItem.Text = StatusIcon.Text;
         }
     }
 }
