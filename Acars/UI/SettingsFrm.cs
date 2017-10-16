@@ -13,7 +13,7 @@ namespace Acars.UI
 
         private void btnClose_Click(object sender, EventArgs e)
         {
-            this.Close();
+            this.Hide();
         }
 
         private void SettingsFrm_Load(object sender, EventArgs e)
@@ -36,6 +36,13 @@ namespace Acars.UI
                 }
 
             Properties.Settings.Default.Save();
+        }
+
+        private void SettingsFrm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            e.Cancel = true;
+
+            this.Hide();
         }
     }
 }
