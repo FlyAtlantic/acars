@@ -126,6 +126,10 @@ namespace Acars.FlightData
         /// GroundSpeed
         /// </summary>
         public int GroundSpeed;
+        /// <summary>
+        /// RadioAltitude
+        /// </summary>
+        public Double RadioAltitude;
 
         public double GrossWeight;
 
@@ -204,6 +208,7 @@ namespace Acars.FlightData
             result.Latitude = FSUIPCOffsets.latitude.Value;
             result.Longitude = FSUIPCOffsets.longitude.Value;
             result.GroundSpeed = FSUIPCOffsets.groundspeed.Value / 65536;
+            result.RadioAltitude = FSUIPCOffsets.RadioAltitude.Value / 65536;
 
             return result;
         }
