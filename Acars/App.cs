@@ -165,6 +165,7 @@ namespace Acars
             //Detetar fim do voo
             if (flight.ActualArrivalTime != null)
             {
+                TrayIcon.SetStatusText("Waiting for pilot report.");
                 // validaded company settings
 
                 // enable end flight
