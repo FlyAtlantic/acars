@@ -13,6 +13,13 @@ namespace Acars
 {
     class App : ApplicationContext
     {
+        public static string GetFullMessage(Exception ex)
+        {
+            return ex.InnerException == null
+                 ? ex.Message
+                 : ex.Message + " --> " + App.GetFullMessage(ex.InnerException);
+        }
+
         //Component declarations
         private AcarsNotifyIcon TrayIcon;
 
@@ -30,9 +37,14 @@ namespace Acars
             Application.ApplicationExit += new EventHandler(this.OnApplicationExit);
             InitializeComponent();
 
-            if (!FlightDatabase.ValidateLogin(Properties.Settings.Default.Email, Properties.Settings.Default.Password))
+            try
             {
-                settingsFrm.Show();
+                if (!FlightDatabase.ValidateLogin(Properties.Settings.Default.Email, Properties.Settings.Default.Password))
+                    settingsFrm.Show();
+            }
+            catch (Exception crap)
+            {
+                Console.WriteLine(App.GetFullMessage(crap));
             }
 
             timer.Start();
@@ -101,14 +113,21 @@ namespace Acars
         /// <param name="e"></param>
         private void GetFlightTimer_Tick(object sender, EventArgs e)
         {
-            if (!FlightDatabase.ValidateLogin(Properties.Settings.Default.Email, Properties.Settings.Default.Password))
-                return;
-
-            // check for assigned flight
-            if (flight.GetFlightPlan() != null)
+            try
             {
-                timer.Tick -= new EventHandler(GetFlightTimer_Tick);
-                TrayIcon.SetStatusText("Waiting for Simulator!");
+                if (!FlightDatabase.ValidateLogin(Properties.Settings.Default.Email, Properties.Settings.Default.Password))
+                    return;
+
+                // check for assigned flight
+                if (flight.GetFlightPlan() != null)
+                {
+                    timer.Tick -= new EventHandler(GetFlightTimer_Tick);
+                    TrayIcon.SetStatusText("Waiting for Simulator!");
+                }
+            }
+            catch (Exception crap)
+            {
+                Console.WriteLine("GetFlightTimer_Tick \r\n {0}", App.GetFullMessage(crap));
             }
         }
 
@@ -119,16 +138,23 @@ namespace Acars
         /// <param name="e"></param>
         private void WaitForSimulatorConnectionTimer_Tick(object sender, EventArgs e)
         {
-            if (!FlightDatabase.ValidateLogin(Properties.Settings.Default.Email, Properties.Settings.Default.Password))
-                return;
-
-            if (Telemetry.Connect())
+            try
             {
-                timer.Tick -= new EventHandler(WaitForSimulatorConnectionTimer_Tick);
-                telemetryTimer.Start();
-            }
+                if (!FlightDatabase.ValidateLogin(Properties.Settings.Default.Email, Properties.Settings.Default.Password))
+                    return;
 
-            // wait for simulator to enable Start Flight Menu Item
+                if (Telemetry.Connect())
+                {
+                    timer.Tick -= new EventHandler(WaitForSimulatorConnectionTimer_Tick);
+                    telemetryTimer.Start();
+                }
+
+                // wait for simulator to enable Start Flight Menu Item
+            }
+            catch (Exception crap)
+            {
+                Console.WriteLine("GetFlightTimer_Tick \r\n {0}", App.GetFullMessage(crap));
+            }
         }
 
         /// <summary>
@@ -138,52 +164,59 @@ namespace Acars
         /// <param name="e"></param>
         private void ProcessFlightTelemetry(object sender, EventArgs e)
         {
-            Telemetry t = Telemetry.GetCurrent();
-            if (t == null)
+            try
             {
-                telemetryTimer.Stop();
-                timer.Tick -= new EventHandler(WaitForSimulatorConnectionTimer_Tick);
-
-                TrayIcon.ShowBalloonTip(ToolTipIcon.Warning,
-                                        "Connection to simulator lost.",
-                                        "Sim Connection Lost");
-
-                if (flight != null && flight.FlightRunning)
+                Telemetry t = Telemetry.GetCurrent();
+                if (t == null)
                 {
-                    // cancel flight? just wait?
+                    telemetryTimer.Stop();
+                    timer.Tick -= new EventHandler(WaitForSimulatorConnectionTimer_Tick);
+
+                    TrayIcon.ShowBalloonTip(ToolTipIcon.Warning,
+                                            "Connection to simulator lost.",
+                                            "Sim Connection Lost");
+
+                    if (flight != null && flight.FlightRunning)
+                    {
+                        // cancel flight? just wait?
+                    }
+
+                    return;
+                }
+                if (flight.LoadedFlightPlan != null)
+                    TrayIcon.SetStatusText("Flight Running...");
+                t = flight.HandleFlightPhases(t);
+                flight.ProcessTelemetry(t);
+
+                //Update flight every 5 minutes
+                if (t.Timestamp.Minute % 5 == 0)
+                    FlightDatabase.UpdateFlight(flight);
+
+                //Detetar fim do voo
+                if (flight.ActualArrivalTime != null)
+                {
+                    // validaded company settings
+
+                    // enable end flight
+                    pilotReportFrm.Show(flight);
                 }
 
-                return;
+                // UI stuff
+                if (flight.LoadedFlightPlan != null && !flight.FlightRunning)
+                {
+                    flight.StartFlight();
+
+                    TrayIcon.ShowBalloonTip(ToolTipIcon.Info,
+                                            String.Format("{0} from {1} to {2}",
+                                                          flight.LoadedFlightPlan.AtcCallsign,
+                                                          flight.LoadedFlightPlan.DepartureAirfield.Identifier,
+                                                          flight.LoadedFlightPlan.ArrivalAirfield.Identifier),
+                                            "Start flying!");
+                }
             }
-            if (flight.LoadedFlightPlan != null)
-                TrayIcon.SetStatusText("Flight Running...");
-            t = flight.HandleFlightPhases(t);
-            flight.ProcessTelemetry(t);
-
-            //Update flight every 5 minutes
-            if (t.Timestamp.Minute % 5 == 0)
-                FlightDatabase.UpdateFlight(flight);
-
-            //Detetar fim do voo
-            if (flight.ActualArrivalTime != null)
+            catch (Exception crap)
             {
-                // validaded company settings
-
-                // enable end flight
-                pilotReportFrm.Show(flight);
-            }
-
-            // UI stuff
-            if (flight.LoadedFlightPlan != null && !flight.FlightRunning)
-            {
-                flight.StartFlight();
-
-                TrayIcon.ShowBalloonTip(ToolTipIcon.Info,
-                                        String.Format("{0} from {1} to {2}",
-                                                      flight.LoadedFlightPlan.AtcCallsign,
-                                                      flight.LoadedFlightPlan.DepartureAirfield.Identifier,
-                                                      flight.LoadedFlightPlan.ArrivalAirfield.Identifier),
-                                        "Start flying!");
+                Console.WriteLine("GetFlightTimer_Tick \r\n {0}", App.GetFullMessage(crap));
             }
         }
     }

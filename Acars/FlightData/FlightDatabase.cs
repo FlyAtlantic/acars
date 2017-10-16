@@ -68,7 +68,7 @@ namespace Acars.FlightData
             catch (Exception crap)
             {
                 // log the failure or something, anyway this isn't a good login for sure
-                validLogin = false;
+                throw new Exception(String.Format("Failed to validate credentials.\r\nSQL Statements: {0}", sqlStrValidateLogin), crap);
             }
             finally
             {
