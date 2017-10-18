@@ -239,6 +239,11 @@ namespace Acars
             {
                 Console.WriteLine("GetFlightTimer_Tick \r\n {0}", App.GetFullMessage(crap));
             }
+            finally
+            {
+                if (flight != null)
+                    oldForm.Update(flight);
+            }
         }
     }
 }
