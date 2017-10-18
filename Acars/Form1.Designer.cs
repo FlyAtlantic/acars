@@ -30,11 +30,6 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            this.txtEmail = new System.Windows.Forms.TextBox();
-            this.txtPassword = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
             this.lblFlightInformation = new System.Windows.Forms.Label();
             this.txtFlightInformation = new System.Windows.Forms.TextBox();
             this.flightacars = new System.Windows.Forms.Timer(this.components);
@@ -77,7 +72,6 @@
             this.lblDeparture = new System.Windows.Forms.Label();
             this.progressBar = new System.Windows.Forms.ProgressBar();
             this.lblProgressBar = new System.Windows.Forms.Label();
-            this.chkAutoLogin = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.txtPenalizations = new System.Windows.Forms.TextBox();
             this.txtLog = new System.Windows.Forms.TextBox();
@@ -93,55 +87,13 @@
             this.txtVR = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.txtV2 = new System.Windows.Forms.TextBox();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // txtEmail
-            // 
-            this.txtEmail.Location = new System.Drawing.Point(104, 523);
-            this.txtEmail.Name = "txtEmail";
-            this.txtEmail.Size = new System.Drawing.Size(143, 20);
-            this.txtEmail.TabIndex = 0;
-            // 
-            // txtPassword
-            // 
-            this.txtPassword.Location = new System.Drawing.Point(104, 569);
-            this.txtPassword.Name = "txtPassword";
-            this.txtPassword.PasswordChar = '*';
-            this.txtPassword.Size = new System.Drawing.Size(143, 20);
-            this.txtPassword.TabIndex = 1;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(149, 553);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(53, 13);
-            this.label2.TabIndex = 3;
-            this.label2.Text = "Password";
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(118, 605);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(114, 23);
-            this.button1.TabIndex = 4;
-            this.button1.Text = "Login";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.btnLogin_Click);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(159, 507);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(32, 13);
-            this.label1.TabIndex = 5;
-            this.label1.Text = "Email";
             // 
             // lblFlightInformation
             // 
@@ -562,17 +514,6 @@
             this.lblProgressBar.TabIndex = 22;
             this.lblProgressBar.Text = "Progress";
             // 
-            // chkAutoLogin
-            // 
-            this.chkAutoLogin.AutoSize = true;
-            this.chkAutoLogin.Location = new System.Drawing.Point(253, 609);
-            this.chkAutoLogin.Name = "chkAutoLogin";
-            this.chkAutoLogin.Size = new System.Drawing.Size(77, 17);
-            this.chkAutoLogin.TabIndex = 23;
-            this.chkAutoLogin.Text = "Auto Login";
-            this.chkAutoLogin.UseVisualStyleBackColor = true;
-            this.chkAutoLogin.CheckedChanged += new System.EventHandler(this.chkAutoLogin_CheckedChanged);
-            // 
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.txtPenalizations);
@@ -728,6 +669,17 @@
             this.txtV2.Size = new System.Drawing.Size(43, 20);
             this.txtV2.TabIndex = 48;
             // 
+            // textBox1
+            // 
+            this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBox1.Enabled = false;
+            this.textBox1.Location = new System.Drawing.Point(122, 544);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(49, 13);
+            this.textBox1.TabIndex = 44;
+            this.textBox1.Text = "----";
+            this.textBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -735,6 +687,7 @@
             this.BackgroundImage = global::Acars.Properties.Resources.banner;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.ClientSize = new System.Drawing.Size(772, 638);
+            this.Controls.Add(this.textBox1);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.txtV2);
             this.Controls.Add(this.label5);
@@ -745,21 +698,14 @@
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
-            this.Controls.Add(this.chkAutoLogin);
             this.Controls.Add(this.lblProgressBar);
             this.Controls.Add(this.progressBar);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.txtFlightInformation);
             this.Controls.Add(this.lblFlightInformation);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.txtPassword);
-            this.Controls.Add(this.txtEmail);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
             this.Text = "FlyAtlantic Acars";
-            this.Load += new System.EventHandler(this.Form1_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
@@ -776,12 +722,6 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.TextBox txtEmail;
-        private System.Windows.Forms.TextBox txtPassword;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label lblFlightInformation;
         private System.Windows.Forms.TextBox txtFlightInformation;
         private System.Windows.Forms.Timer flightacars;
@@ -820,7 +760,6 @@
         private System.Windows.Forms.Label lblSimulatorHour;
         private System.Windows.Forms.TextBox txtSimHour;
         private System.Windows.Forms.Label lblProgressBar;
-        private System.Windows.Forms.CheckBox chkAutoLogin;
         private System.Windows.Forms.Label lblVerticalSpeed;
         private System.Windows.Forms.TextBox txtVerticalSpeed;
         private System.Windows.Forms.GroupBox groupBox2;
@@ -840,6 +779,7 @@
         private System.Windows.Forms.TextBox txtVR;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox txtV2;
+        private System.Windows.Forms.TextBox textBox1;
     }
 }
 

@@ -285,7 +285,6 @@ namespace Acars
                             txtFlightInformation.Text = String.Format("{0} {1} {2} {3:HH:mm}", (result1[0]), (result1[1]), (result1[2]), (result1[4]));
                             txtTimeEnroute.Text = String.Format("{0}", (result1[7])); 
 
-                            button1.Text = "Start Flight";
                             return true;
 
                         }
@@ -341,57 +340,45 @@ namespace Acars
             #endregion DEBUG
         }
 
-        private void btnLogin_Click(object sender, EventArgs e)
+        public void Update(Flight f)
         {
-            if (flight == null)
-            {
-                // Login
-                if(DoLogin(txtEmail.Text, txtPassword.Text))               
-                {
-                    // prepare current flight
-                    //flight = Flight.Get();
-                    // save validated credentials
-                    Properties.Settings.Default.Email = txtEmail.Text;
-                    Properties.Settings.Default.Password = txtPassword.Text;
-                    Properties.Settings.Default.Save();
-                    email = txtEmail.Text;
-                    password = txtPassword.Text;
-                }
+            if(f.LastTelemetry != null) {
+                txtStatus.Text = f.LastTelemetry.FlightPhase.ToString();
+                txtGrossWeight.Text = f.LastTelemetry.GrossWeight.ToString("F0");
+                txtZFW.Text = f.LastTelemetry.ZeroFuelWeight.ToString("F0");
+                txtFuel.Text = (f.LastTelemetry.GrossWeight - f.LastTelemetry.ZeroFuelWeight).ToString("F0");
+                txtSquawk.Text = f.LastTelemetry.Squawk.ToString();
+                txtSimHour.Text = f.LastTelemetry.SimTime.ToString("HH:mm");
+                txtAltitude.Text = f.LastTelemetry.Altitude.ToString("F0");
+                txtHeading.Text = f.LastTelemetry.Compass.ToString("F0");
+                txtGroundSpeed.Text = f.LastTelemetry.GroundSpeed.ToString("F0");
+                txtVerticalSpeed.Text = f.LastTelemetry.VerticalSpeed.ToString("F0");              
             }
-            else if (flight.ActualArrivalTime != null)
+            if (f.LoadedFlightPlan != null)
             {
-                flight.EndFlight();
+                txtCallsign.Text = f.LoadedFlightPlan.AtcCallsign;
+                txtDeparture.Text = f.LoadedFlightPlan.DepartureAirfield.Identifier;
+                txtAlternate.Text = f.LoadedFlightPlan.AlternateICAO;
+                txtArrival.Text = f.LoadedFlightPlan.ArrivalAirfield.Identifier;
+                txtFlightInformation.Text = String.Format("{0} {1} {2} {3:HH:mm}", (f.LoadedFlightPlan.DepartureAirfield.Identifier), (f.LoadedFlightPlan.ArrivalAirfield.Identifier), (f.LoadedFlightPlan.Aircraft), (f.LoadedFlightPlan.DateAssigned));
 
-                MessageBox.Show(String.Format("Flight approved, rating {0}% {1} EP(s)",
-                                              flight.FinalScore,
-                                              flight.EfficiencyPoints),
-                                "Flight Approved",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Information);
-                Application.Exit();
             }
-            else
+
+            // Actual times of Departure, Arrival, Flight Time
+            if (f.ActualDepartureTime != null)
+                txtDepTime.Text = f.ActualDepartureTime.Timestamp.ToString("HH:mm");
+            if (f.ActualArrivalTime != null)
             {
-                flight.StartFlight();
-
-                // update form
-                string Message = "Welcome to FlyAtlantic Acars";
-                messageWrite.Value = Message;
-                messageDuration.Value = 10;
-                playerEngine1start.Value = 0;
-                playerEngine2start.Value = 0;
-                playerEngine3start.Value = 0;
-                playerEngine4start.Value = 0;
-                playerParkingBrake.Value = 1;
-
-                button1.Enabled = false;
-                button1.Text = "Flying...";
-
-                landingRate = double.MinValue;
-
-                OnFlight.Start();
-                flightacars.Start();
+                txtArrTime.Text = f.ActualArrivalTime.Timestamp.ToString("HH:mm");
+                txtLandingRate.Text = f.ActualArrivalTime.VerticalSpeed.ToString("F0");
             }
+            if (f.ActualTimeEnRoute != TimeSpan.MinValue)
+                if (f.ActualTimeEnRoute <= TimeSpan.Zero)
+                    txtFlightTime.Text = String.Format("00:00");
+                else
+                    txtFlightTime.Text = String.Format("{0:00}:{1:00}",
+                                                       Math.Truncate(f.ActualTimeEnRoute.TotalHours),
+                                                       f.ActualTimeEnRoute.Minutes);
         }
 
         /// <summary>
@@ -672,14 +659,7 @@ namespace Acars
                
                 #endregion logging info for debugging
                 txtLog.Text = sb.ToString();
-               
-                if (lastTelemetry.FlightPhase == FlightPhases.TAXIIN && ParkingBrake)
-                {
-                    // enable end flight
-                    button1.Text = "End flight";
-                    button1.Enabled = true;
-
-                }                               
+                                                           
 
                 txtSquawk.Text = String.Format("{0}", (playersquawk.Value).ToString("X").PadLeft(4, '0'));
 
@@ -708,21 +688,8 @@ namespace Acars
             }
             Console.Write(result);
         }               
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            txtEmail.Text = Properties.Settings.Default.Email;
-            txtPassword.Text = Properties.Settings.Default.Password;
 
-            chkAutoLogin.Checked = Properties.Settings.Default.autologin;
-            // call function that handles login button clicks
-            btnLogin_Click(this, e);
-        }
-
-        private void chkAutoLogin_CheckedChanged(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.autologin = chkAutoLogin.Checked;
-            Properties.Settings.Default.Save();
-        }
+       
        
     }
 }
