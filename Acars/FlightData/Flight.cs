@@ -122,7 +122,10 @@ namespace Acars.FlightData
         {
             get
             {
-                return TelemetryLog[TelemetryLog.Count - 1];
+                if (TelemetryLog.Count == 0)
+                    return null;
+                else
+                    return TelemetryLog[TelemetryLog.Count - 1];
             }
         }
         #endregion Properties
