@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             this.label1 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.txtZFW = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.txtFuel = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
@@ -48,12 +48,12 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "ZFW";
             // 
-            // textBox1
+            // txtZFW
             // 
-            this.textBox1.Location = new System.Drawing.Point(63, 35);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 20);
-            this.textBox1.TabIndex = 1;
+            this.txtZFW.Location = new System.Drawing.Point(63, 35);
+            this.txtZFW.Name = "txtZFW";
+            this.txtZFW.Size = new System.Drawing.Size(100, 20);
+            this.txtZFW.TabIndex = 1;
             // 
             // label2
             // 
@@ -64,12 +64,12 @@
             this.label2.TabIndex = 2;
             this.label2.Text = "Fuel";
             // 
-            // textBox2
+            // txtFuel
             // 
-            this.textBox2.Location = new System.Drawing.Point(63, 73);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(100, 20);
-            this.textBox2.TabIndex = 3;
+            this.txtFuel.Location = new System.Drawing.Point(63, 73);
+            this.txtFuel.Name = "txtFuel";
+            this.txtFuel.Size = new System.Drawing.Size(100, 20);
+            this.txtFuel.TabIndex = 3;
             // 
             // label3
             // 
@@ -126,9 +126,9 @@
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.textBox2);
+            this.Controls.Add(this.txtFuel);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.txtZFW);
             this.Controls.Add(this.label1);
             this.Name = "PreFlightDataFrm";
             this.Text = "Form1";
@@ -140,9 +140,9 @@
         #endregion
 
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox txtZFW;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox txtFuel;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;

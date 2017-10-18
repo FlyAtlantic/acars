@@ -166,8 +166,8 @@ namespace Acars.FlightData
         public static void EndFlight(Flight flight)
         {
             string sqlStrInsertPirep = "INSERT INTO `pireps` (`date`, `flighttime`, `flightid`, `pilotid`, `ft/pm`, `sum`, `accepted`, `eps_granted`) SELECT @date, @flighttime, @flightid, `user_id`, @landingrate, @sum, @accepted, @flighteps FROM `utilizadores` WHERE `user_email` = @email;";
-            string sqlStrUpdateUser = "UPDATE `utilizadores` SET `eps` = eps + @flighteps WHERE `user_email` = @pilotid;";
-            string sqlStrDeleteAssignment = "DELETE from `pilotassignments` left join utilizadores on pilotassignments.pilot = utilizadores.user_id where `user_email` = @pilotid;";
+            string sqlStrUpdateUser = "UPDATE `utilizadores` SET `eps` = eps + @flighteps WHERE `user_email` = @email;";
+            string sqlStrDeleteAssignment = "DELETE `pilotassignments` from `pilotassignments` left join `utilizadores` on `pilotassignments`.`pilot` = `utilizadores`.`user_id` where `utilizadores`.`user_email` = @email;";
             MySqlConnection conn = new MySqlConnection(ConnectionString);
 
             try
@@ -179,8 +179,8 @@ namespace Acars.FlightData
                 var dateParam = sqlCmd.Parameters.Add("@date", MySqlDbType.Date);
                 dateParam.Value = DateTime.UtcNow;
                 sqlCmd.Parameters.AddWithValue("@flighttime", (int)Math.Round(flight.ActualTimeEnRoute.TotalMinutes));
-                sqlCmd.Parameters.AddWithValue("@flightid", flight.FlightID);
-                sqlCmd.Parameters.AddWithValue("@pilotid", Properties.Settings.Default.Email);
+                sqlCmd.Parameters.AddWithValue("@flightid", flight.LoadedFlightPlan.ID);
+                sqlCmd.Parameters.AddWithValue("@email", Properties.Settings.Default.Email);
                 sqlCmd.Parameters.AddWithValue("@landingrate", (int)Math.Round(flight.ActualArrivalTime.VerticalSpeed));
                 sqlCmd.Parameters.AddWithValue("@sum", flight.FinalScore);
                 sqlCmd.Parameters.AddWithValue("@accepted", "1");
@@ -190,14 +190,14 @@ namespace Acars.FlightData
 
                 // UPDATE PILOT DATA
                 sqlCmd = new MySqlCommand(sqlStrUpdateUser, conn);
-                sqlCmd.Parameters.AddWithValue("@pilotid", Properties.Settings.Default.Email);
+                sqlCmd.Parameters.AddWithValue("@email", Properties.Settings.Default.Email);
                 sqlCmd.Parameters.AddWithValue("@flighteps", flight.EfficiencyPoints);
 
                 sqlCmd.ExecuteNonQuery();
 
                 // DELETE ASSIGNMENT
                 sqlCmd = new MySqlCommand(sqlStrDeleteAssignment, conn);
-                sqlCmd.Parameters.AddWithValue("@pilotid", Properties.Settings.Default.Email);
+                sqlCmd.Parameters.AddWithValue("@email", Properties.Settings.Default.Email);
 
                 sqlCmd.ExecuteNonQuery();
             }

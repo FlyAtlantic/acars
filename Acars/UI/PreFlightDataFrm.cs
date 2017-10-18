@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Acars.FlightData;
+using Acars.UI;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,9 +14,18 @@ namespace Acars.UI
 {
     public partial class PreFlightDataFrm : Form
     {
+        private int ZFW;
+        private string ZFWtext;
+        private int Fuel;
+        private string Fueltext;
+
         public PreFlightDataFrm()
         {
+
             InitializeComponent();
+
+            ZFW = FSUIPCOffsets.zeroFuelWeight.Value;
+            ZFWtext = txtZFW.Text;
 
         }
     }

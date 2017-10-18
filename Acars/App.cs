@@ -26,6 +26,7 @@ namespace Acars
         private Form1 oldForm;
         private SettingsFrm settingsFrm;
         private PilotReportFrm pilotReportFrm;
+        private PreFlightDataFrm preFlightDataFrm;
 
         private Timer timer;
         private Timer telemetryTimer;
@@ -59,6 +60,7 @@ namespace Acars
             oldForm = new Form1();
             settingsFrm = new SettingsFrm();
             pilotReportFrm = new PilotReportFrm();
+            preFlightDataFrm = new PreFlightDataFrm();
 
             //
             // Timer
@@ -132,6 +134,26 @@ namespace Acars
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void WaitEndFlightTimer_Tick(object sender, EventArgs e)
+        {
+            //Detetar fim do voo
+            if (flight.ActualArrivalTime != null && !pilotReportFrm.Visible)
+            {
+                timer.Tick -= WaitEndFlightTimer_Tick;
+                TrayIcon.SetStatusText("Waiting for pilot report");
+                // validaded company settings
+
+                // enable end flight
+                pilotReportFrm.Show(flight);
+            }
+
+        }
+
+        /// <summary>
         /// Waits for simulator connection
         /// </summary>
         /// <param name="sender"></param>
@@ -183,24 +205,22 @@ namespace Acars
 
                     return;
                 }
+
                 if (flight.LoadedFlightPlan != null)
+                {
                     TrayIcon.SetStatusText("Flight Running...");
+
+                    preFlightDataFrm.Show();
+
+
+                    timer.Tick += WaitEndFlightTimer_Tick;
+                }
                 t = flight.HandleFlightPhases(t);
                 flight.ProcessTelemetry(t);
 
                 //Update flight every 5 minutes
                 if (t.Timestamp.Minute % 5 == 0)
                     FlightDatabase.UpdateFlight(flight);
-
-                //Detetar fim do voo
-                if (flight.ActualArrivalTime != null && !pilotReportFrm.Visible)
-                {
-                    TrayIcon.SetStatusText("Waiting for pilot report");
-                    // validaded company settings
-
-                    // enable end flight
-                    pilotReportFrm.Show(flight);
-                }
 
                 // UI stuff
                 if (flight.LoadedFlightPlan != null && !flight.FlightRunning)
