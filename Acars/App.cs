@@ -209,10 +209,6 @@ namespace Acars
                 if (flight.LoadedFlightPlan != null)
                 {
                     TrayIcon.SetStatusText("Flight Running...");
-
-                    preFlightDataFrm.Show();
-
-
                     timer.Tick += WaitEndFlightTimer_Tick;
                 }
                 t = flight.HandleFlightPhases(t);
