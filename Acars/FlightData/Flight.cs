@@ -217,6 +217,7 @@ namespace Acars.FlightData
         {
             try
             {
+                FlightDatabase.StartFlight(this);
                 FlightDatabase.UpdateFlight(this);
                 FlightRunning = true;
             }
