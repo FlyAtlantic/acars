@@ -13,7 +13,7 @@ namespace Acars.UI
 
         private void btnContinue_Click(object sender, EventArgs e)
         {
-            FSUIPCOffsets.zeroFuelWeight.Value = (int)Math.Round(nupZfw.Value * 2.20462262m);
+            FSUIPCOffsets.zeroFuelWeight.Value = (int)Math.Round(nupZfw.Value * 2.20462262m * 256m);
             nupZfw.Value = 0;
 
             Hide();
