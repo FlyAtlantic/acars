@@ -190,7 +190,7 @@ namespace Acars.FlightData
             result.VerticalSpeed = (FSUIPCOffsets.verticalSpeed.Value * 3.28084) / -1;
             result.Throttle = FSUIPCOffsets.throttle.Value;
             result.Altitude = (FSUIPCOffsets.altitude.Value * 3.2808399);
-            result.Gear = (FSUIPCOffsets.gear.Value == 0) ? false : true;
+            result.Gear = FSUIPCOffsets.GetBool(FSUIPCOffsets.gear);
             result.Slew = (FSUIPCOffsets.slew.Value == 0) ? false : true;
             result.Pause = (FSUIPCOffsets.pause.Value == 0) ? false : true;
             result.OverSpeed = (FSUIPCOffsets.overSpeed.Value == 0) ? false : true;
