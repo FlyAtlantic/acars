@@ -29,14 +29,15 @@
         private void InitializeComponent()
         {
             this.label1 = new System.Windows.Forms.Label();
-            this.txtZFW = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.txtFuel = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btnContinue = new System.Windows.Forms.Button();
+            this.nupZfw = new System.Windows.Forms.NumericUpDown();
+            ((System.ComponentModel.ISupportInitialize)(this.nupZfw)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -47,13 +48,6 @@
             this.label1.Size = new System.Drawing.Size(31, 13);
             this.label1.TabIndex = 0;
             this.label1.Text = "ZFW";
-            // 
-            // txtZFW
-            // 
-            this.txtZFW.Location = new System.Drawing.Point(63, 35);
-            this.txtZFW.Name = "txtZFW";
-            this.txtZFW.Size = new System.Drawing.Size(100, 20);
-            this.txtZFW.TabIndex = 1;
             // 
             // label2
             // 
@@ -107,31 +101,45 @@
             this.label6.TabIndex = 7;
             this.label6.Text = "----";
             // 
-            // button1
+            // btnContinue
             // 
-            this.button1.Location = new System.Drawing.Point(63, 165);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(69, 34);
-            this.button1.TabIndex = 8;
-            this.button1.Text = "Apply and Next";
-            this.button1.UseVisualStyleBackColor = true;
+            this.btnContinue.Location = new System.Drawing.Point(66, 165);
+            this.btnContinue.Name = "btnContinue";
+            this.btnContinue.Size = new System.Drawing.Size(69, 34);
+            this.btnContinue.TabIndex = 8;
+            this.btnContinue.Text = "Apply and Next";
+            this.btnContinue.UseVisualStyleBackColor = true;
+            this.btnContinue.Click += new System.EventHandler(this.btnContinue_Click);
+            // 
+            // nupZfw
+            // 
+            this.nupZfw.Location = new System.Drawing.Point(66, 36);
+            this.nupZfw.Maximum = new decimal(new int[] {
+            100000000,
+            0,
+            0,
+            0});
+            this.nupZfw.Name = "nupZfw";
+            this.nupZfw.Size = new System.Drawing.Size(97, 20);
+            this.nupZfw.TabIndex = 9;
             // 
             // PreFlightDataFrm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(207, 228);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.nupZfw);
+            this.Controls.Add(this.btnContinue);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.txtFuel);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.txtZFW);
             this.Controls.Add(this.label1);
             this.Name = "PreFlightDataFrm";
             this.Text = "Form1";
+            ((System.ComponentModel.ISupportInitialize)(this.nupZfw)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -140,13 +148,13 @@
         #endregion
 
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox txtZFW;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox txtFuel;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnContinue;
+        private System.Windows.Forms.NumericUpDown nupZfw;
     }
 }

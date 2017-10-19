@@ -130,10 +130,14 @@ namespace Acars.FlightData
         /// RadioAltitude
         /// </summary>
         public Double RadioAltitude;
-
+        /// <summary>
+        /// GW in pounds
+        /// </summary>
         public double GrossWeight;
-
-        public double ZeroFuelWeight;
+        /// <summary>
+        /// ZFW in pounds
+        /// </summary>
+        public int ZeroFuelWeight;
         #endregion Properties
 
         /// <summary>
@@ -174,7 +178,6 @@ namespace Acars.FlightData
                 return null;
             }
 
-
             result.Timestamp = DateTime.UtcNow;
 
             // capture values
@@ -197,8 +200,8 @@ namespace Acars.FlightData
             result.Stall = (FSUIPCOffsets.stall.Value == 0) ? false : true;
             result.Battery = (FSUIPCOffsets.battery.Value == 0) ? false : true;
             result.LandingLights = (FSUIPCOffsets.landingLights.Value == 0) ? false : true;
-            result.GrossWeight = (FSUIPCOffsets.grossWeight.Value) * 0.45359237;
-            result.ZeroFuelWeight = (FSUIPCOffsets.zeroFuelWeight.Value / 256) * 0.45359237;
+            result.GrossWeight = FSUIPCOffsets.grossWeight.Value;
+            result.ZeroFuelWeight = FSUIPCOffsets.zeroFuelWeight.Value / 256;
             result.Squawk = FSUIPCOffsets.squawk.Value;
             result.SimTime = (new DateTime(BitConverter.ToInt16(FSUIPCOffsets.simTime.Value, 8), 1, 1, FSUIPCOffsets.simTime.Value[0], FSUIPCOffsets.simTime.Value[1], FSUIPCOffsets.simTime.Value[2])).Add(new TimeSpan(BitConverter.ToInt16(FSUIPCOffsets.simTime.Value, 6) - 1, 0, 0, 0));
             result.SimRate = FSUIPCOffsets.simRate.Value;

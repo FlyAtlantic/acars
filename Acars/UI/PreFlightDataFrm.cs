@@ -1,32 +1,22 @@
 ﻿using Acars.FlightData;
-using Acars.UI;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Acars.UI
 {
     public partial class PreFlightDataFrm : Form
     {
-        private int ZFW;
-        private string ZFWtext;
-        private int Fuel;
-        private string Fueltext;
-
         public PreFlightDataFrm()
         {
-
             InitializeComponent();
+        }
 
-            ZFW = FSUIPCOffsets.zeroFuelWeight.Value;
-            ZFWtext = txtZFW.Text;
+        private void btnContinue_Click(object sender, EventArgs e)
+        {
+            FSUIPCOffsets.zeroFuelWeight.Value = (int)Math.Round(nupZfw.Value * 2.20462262m);
+            nupZfw.Value = 0;
 
+            Hide();
         }
     }
 }

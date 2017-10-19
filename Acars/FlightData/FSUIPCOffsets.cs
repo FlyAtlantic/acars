@@ -42,5 +42,10 @@ namespace Acars.FlightData
         {
             return (offset.Value != 0);
         }
+
+        public static int GetInt(Offset<int> offset)
+        {
+            return offset.Value;
+        }
     }
 }
