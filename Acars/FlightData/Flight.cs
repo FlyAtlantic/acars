@@ -75,6 +75,14 @@ namespace Acars.FlightData
             internal set;
         }
 
+        /// <summary>
+        /// pipers table ID for this flight
+        /// 
+        /// Retrieved on FlightStart()
+        /// </summary>
+        public long PirepID
+        { get; private set; }
+
         public Telemetry ActualDepartureTime
         {
             get { return (ActualDepartureTimeId > -1) ? TelemetryLog[ActualDepartureTimeId] : null; }
@@ -217,12 +225,13 @@ namespace Acars.FlightData
         {
             try
             {
+                PirepID = FlightDatabase.StartFlight(this);
                 FlightDatabase.UpdateFlight(this);
                 FlightRunning = true;
             }
             catch (Exception crap)
             {
-
+                throw new Exception("Failed to start flight.", crap);
             }
 
             // TODO: do all stuff via telemetry to force desired values

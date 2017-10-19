@@ -133,6 +133,51 @@ namespace Acars.FlightData
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="flight"></param>
+        /// <returns>(int) Inserted pirep ID</returns>
+        public static long StartFlight(Flight flight)
+        {
+            long insertedId = -1;
+
+            string sqlStrInsertPirep = "INSERT INTO `pireps` (`date`, `flighttime`, `flightid`, `pilotid`, `accepted`) SELECT @date, @flighttime, @flightid, `user_id`, @accepted FROM `utilizadores` WHERE `user_email` = @email;";
+
+            MySqlConnection conn = new MySqlConnection(ConnectionString);
+
+            try
+            {
+                conn.Open();
+
+                // INSERT PIREP
+                MySqlCommand sqlCmd = new MySqlCommand(sqlStrInsertPirep, conn);
+                var dateParam = sqlCmd.Parameters.Add("@date", MySqlDbType.Date);
+                dateParam.Value = DateTime.UtcNow;
+                sqlCmd.Parameters.AddWithValue("@flighttime", (int)Math.Round(flight.ActualTimeEnRoute.TotalMinutes));
+                sqlCmd.Parameters.AddWithValue("@flightid", flight.LoadedFlightPlan.ID);
+                sqlCmd.Parameters.AddWithValue("@accepted", "0");
+                sqlCmd.Parameters.AddWithValue("@email", Properties.Settings.Default.Email);
+
+                sqlCmd.ExecuteNonQuery();
+                insertedId = sqlCmd.LastInsertedId;
+            }
+            catch (Exception crap)
+            {
+                // pass the exception to the caller with an usefull message
+                throw new Exception(String.Format("Failed to end the flight plan for user {0}.\r\nSQL Statements: {1}",
+                                                  Properties.Settings.Default.Email,
+                                                  sqlStrInsertPirep,),
+                                    crap);
+            }
+            finally
+            {
+                conn.Close();
+            }
+
+            return insertedId;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public static void UpdateFlight(Flight flight)
         {
             string sqlStrUpdatePilotAsignments = "UPDATE `pilotassignments` JOIN `utilizadores` ON `utilizadores`.`user_id` = `pilotassignments`.`pilot` SET `onflight` = NOW() WHERE `utilizadores`.`user_email`=@email";
@@ -167,7 +212,7 @@ namespace Acars.FlightData
         /// <param name="flight"></param>
         public static void EndFlight(Flight flight)
         {
-            string sqlStrInsertPirep = "INSERT INTO `pireps` (`date`, `flighttime`, `flightid`, `pilotid`, `ft/pm`, `sum`, `accepted`, `eps_granted`) SELECT @date, @flighttime, @flightid, `user_id`, @landingrate, @sum, @accepted, @flighteps FROM `utilizadores` WHERE `user_email` = @email;";
+            string sqlStrInsertPirep = "UPDATE `pireps` set `date` = @date, `flighttime` = @flighttime, `ft/pm` = @landingrate, `sum` = @sum, `accepted` = @accepted, `eps_granted` = @flighteps) WHERE `id` = @pirepId;";
             string sqlStrUpdateUser = "UPDATE `utilizadores` SET `eps` = eps + @flighteps WHERE `user_email` = @email;";
             string sqlStrDeleteAssignment = "DELETE `pilotassignments` from `pilotassignments` left join `utilizadores` on `pilotassignments`.`pilot` = `utilizadores`.`user_id` where `utilizadores`.`user_email` = @email;";
             MySqlConnection conn = new MySqlConnection(ConnectionString);
@@ -181,12 +226,11 @@ namespace Acars.FlightData
                 var dateParam = sqlCmd.Parameters.Add("@date", MySqlDbType.Date);
                 dateParam.Value = DateTime.UtcNow;
                 sqlCmd.Parameters.AddWithValue("@flighttime", (int)Math.Round(flight.ActualTimeEnRoute.TotalMinutes));
-                sqlCmd.Parameters.AddWithValue("@flightid", flight.LoadedFlightPlan.ID);
-                sqlCmd.Parameters.AddWithValue("@email", Properties.Settings.Default.Email);
                 sqlCmd.Parameters.AddWithValue("@landingrate", (int)Math.Round(flight.ActualArrivalTime.VerticalSpeed));
                 sqlCmd.Parameters.AddWithValue("@sum", flight.FinalScore);
                 sqlCmd.Parameters.AddWithValue("@accepted", "1");
                 sqlCmd.Parameters.AddWithValue("@flighteps", flight.EfficiencyPoints);
+                sqlCmd.Parameters.AddWithValue("@pirepId", flight.PirepID);
 
                 sqlCmd.ExecuteNonQuery();
 
