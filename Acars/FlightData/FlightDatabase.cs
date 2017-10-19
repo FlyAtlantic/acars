@@ -180,7 +180,7 @@ namespace Acars.FlightData
         public static void UpdateFlight(Flight flight)
         {
             string sqlStrUpdatePilotAsignments = "UPDATE `pilotassignments` JOIN `utilizadores` ON `utilizadores`.`user_id` = `pilotassignments`.`pilot` SET `onflight` = NOW() WHERE `utilizadores`.`user_email`=@email";
-            string sqlStrUpdateFlightLog = "INSERT INTO flightLog (pirepid, LAT, LON, ALT, HDG, GS, phase) VALUES (@pipepid, @LAT, @LON, @ALT, @HDG, @GS, @phase)";
+            string sqlStrUpdateFlightLog = "INSERT INTO flightLog (pirepid, LAT, LON, ALT, HDG, GS, phase) VALUES (@pirepid, @LAT, @LON, @ALT, @HDG, @GS, @phase)";
             MySqlConnection conn = new MySqlConnection(ConnectionString);
 
             try
@@ -188,7 +188,15 @@ namespace Acars.FlightData
                 conn.Open();
 
                 MySqlCommand sqlCmd = new MySqlCommand(sqlStrUpdatePilotAsignments, conn);
+                sqlCmd = new MySqlCommand(sqlStrUpdateFlightLog, conn);
+                sqlCmd.Parameters.AddWithValue("@pirepid", flight.PirepID);
                 sqlCmd.Parameters.AddWithValue("@email", Properties.Settings.Default.Properties["email"]);
+                sqlCmd.Parameters.AddWithValue("@LAT", flight.LastTelemetry.Latitude);
+                sqlCmd.Parameters.AddWithValue("@LON", flight.LastTelemetry.Longitude);
+                sqlCmd.Parameters.AddWithValue("@ALT", flight.LastTelemetry.Altitude);
+                sqlCmd.Parameters.AddWithValue("@HDG", flight.LastTelemetry.Compass);
+                sqlCmd.Parameters.AddWithValue("@GS", flight.LastTelemetry.GroundSpeed);
+                sqlCmd.Parameters.AddWithValue("@phase", flight.LastTelemetry.FlightPhase);
 
                 sqlCmd.ExecuteNonQuery();
             }
@@ -197,7 +205,8 @@ namespace Acars.FlightData
                 // pass the exception to the caller with an usefull message
                 throw new Exception(String.Format("Failed to start the flight plan for user {0}.\r\nSQL Statements: {1}",
                                                   Properties.Settings.Default.Email,
-                                                  sqlStrUpdatePilotAsignments),
+                                                  sqlStrUpdatePilotAsignments,
+                                                  sqlStrUpdateFlightLog),
                                     crap);
             }
             finally
