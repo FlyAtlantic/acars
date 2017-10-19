@@ -13,7 +13,7 @@ namespace Acars.FlightData
             get
             {
                 return String.Format(
-                    "server={0};uid={1};pwd={2};database={3};",
+                    "server={0};uid={1};pwd={2};database={3};;Connection Timeout=60",
                     Properties.Settings.Default.Server,
                     Properties.Settings.Default.Dbuser,
                     Properties.Settings.Default.Dbpass,
@@ -163,7 +163,7 @@ namespace Acars.FlightData
                 // pass the exception to the caller with an usefull message
                 throw new Exception(String.Format("Failed to end the flight plan for user {0}.\r\nSQL Statements: {1}",
                                                   Properties.Settings.Default.Email,
-                                                  sqlStrInsertPirep,),
+                                                  sqlStrInsertPirep),
                                     crap);
             }
             finally
@@ -212,7 +212,7 @@ namespace Acars.FlightData
         /// <param name="flight"></param>
         public static void EndFlight(Flight flight)
         {
-            string sqlStrInsertPirep = "UPDATE `pireps` set `date` = @date, `flighttime` = @flighttime, `ft/pm` = @landingrate, `sum` = @sum, `accepted` = @accepted, `eps_granted` = @flighteps) WHERE `id` = @pirepId;";
+            string sqlStrInsertPirep = "UPDATE `pireps` set `date` = @date, `flighttime` = @flighttime, `ft/pm` = @landingrate, `sum` = @sum, `accepted` = @accepted, `eps_granted` = @flighteps WHERE `id` = @pirepid;";
             string sqlStrUpdateUser = "UPDATE `utilizadores` SET `eps` = eps + @flighteps WHERE `user_email` = @email;";
             string sqlStrDeleteAssignment = "DELETE `pilotassignments` from `pilotassignments` left join `utilizadores` on `pilotassignments`.`pilot` = `utilizadores`.`user_id` where `utilizadores`.`user_email` = @email;";
             MySqlConnection conn = new MySqlConnection(ConnectionString);
@@ -230,7 +230,7 @@ namespace Acars.FlightData
                 sqlCmd.Parameters.AddWithValue("@sum", flight.FinalScore);
                 sqlCmd.Parameters.AddWithValue("@accepted", "1");
                 sqlCmd.Parameters.AddWithValue("@flighteps", flight.EfficiencyPoints);
-                sqlCmd.Parameters.AddWithValue("@pirepId", flight.PirepID);
+                sqlCmd.Parameters.AddWithValue("@pirepid", flight.PirepID);
 
                 sqlCmd.ExecuteNonQuery();
 
