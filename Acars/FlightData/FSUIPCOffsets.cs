@@ -37,5 +37,10 @@ namespace Acars.FlightData
         static public Offset<long> latitude = new Offset<long>(0x0560);
         static public Offset<string> aircraftType = new Offset<string>("AircraftInfo", 0x3160, 24);
         static public Offset<Double> RadioAltitude = new Offset<Double>(0x31E4);
+
+        public static bool GetBool(Offset<short> offset)
+        {
+            return (offset.Value != 0);
+        }
     }
 }
