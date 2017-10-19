@@ -123,7 +123,7 @@ namespace Acars.FlightData
             get
             {
                 if (TelemetryLog.Count == 0)
-                    return null;
+                    return Telemetry.GetCurrent();
                 else
                     return TelemetryLog[TelemetryLog.Count - 1];
             }

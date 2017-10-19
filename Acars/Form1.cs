@@ -369,7 +369,7 @@ namespace Acars
                 sb.AppendFormat("Simulator Rate: {0} X \r\n\r\n", ((playerSimRate.Value) / 256).ToString("F0"));
                 sb.AppendFormat("Latitude: {0} \r\n", lat.DecimalDegrees.ToString().Replace(',', '.'));
                 sb.AppendFormat("Longitude: {0} \r\n\r\n", lon.DecimalDegrees.ToString().Replace(',', '.'));
-
+                sb.AppendFormat("Gear Pedro: {0} \r\n\r\n", f.LastTelemetry.Gear.ToString().Replace(',', '.'));
                 sb.AppendFormat("Number of Engines: {0} \r\n", (playerEnginesNumber.Value).ToString("F0"));
                 if (playerEnginesNumber.Value == 1)
                 {

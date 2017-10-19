@@ -2,19 +2,27 @@
 using System;
 using System.Windows.Forms;
 
+
 namespace Acars.UI
 {
     public partial class PreFlightDataFrm : Form
     {
         public PreFlightDataFrm()
         {
-            InitializeComponent();
+            InitializeComponent();         
         }
+
+        public event EventHandler<EventArgs> OnStartClicked;
 
         private void btnContinue_Click(object sender, EventArgs e)
         {
-            FSUIPCOffsets.grossWeight.Value = (int)Math.Round(nupZfw.Value * 2.20462262m);
-            nupZfw.Value = 0;
+            //Start Flight
+            OnStartClicked(this, new EventArgs());
+        }
+
+        private void label4_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

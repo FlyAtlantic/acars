@@ -61,6 +61,18 @@ namespace Acars
             settingsFrm = new SettingsFrm();
             pilotReportFrm = new PilotReportFrm();
             preFlightDataFrm = new PreFlightDataFrm();
+            preFlightDataFrm.OnStartClicked += (object sender, EventArgs e) => {
+
+                flight.StartFlight();
+
+                TrayIcon.ShowBalloonTip(ToolTipIcon.Info,
+                                        String.Format("{0} from {1} to {2}",
+                                                      flight.LoadedFlightPlan.AtcCallsign,
+                                                      flight.LoadedFlightPlan.DepartureAirfield.Identifier,
+                                                      flight.LoadedFlightPlan.ArrivalAirfield.Identifier),
+                                        "Start flying!");
+                preFlightDataFrm.Hide();
+            };
 
             //
             // Timer
@@ -149,6 +161,7 @@ namespace Acars
 
                 // enable end flight
                 pilotReportFrm.Show(flight);
+
             }
 
         }
@@ -208,10 +221,7 @@ namespace Acars
 
                 if (flight.LoadedFlightPlan != null)
                 {
-                    TrayIcon.SetStatusText("Flight Running...");
-
-                    preFlightDataFrm.Show();
-
+                    TrayIcon.SetStatusText("Flight Running...");                  
 
                     timer.Tick += WaitEndFlightTimer_Tick;
                 }
@@ -225,14 +235,16 @@ namespace Acars
                 // UI stuff
                 if (flight.LoadedFlightPlan != null && !flight.FlightRunning)
                 {
-                    flight.StartFlight();
-
-                    TrayIcon.ShowBalloonTip(ToolTipIcon.Info,
-                                            String.Format("{0} from {1} to {2}",
-                                                          flight.LoadedFlightPlan.AtcCallsign,
-                                                          flight.LoadedFlightPlan.DepartureAirfield.Identifier,
-                                                          flight.LoadedFlightPlan.ArrivalAirfield.Identifier),
-                                            "Start flying!");
+                    if (!preFlightDataFrm.Visible)
+                    {
+                        preFlightDataFrm.Show();
+                        TrayIcon.ShowBalloonTip(ToolTipIcon.Info,
+                                           String.Format("{0} from {1} to {2}",
+                                                         flight.LoadedFlightPlan.AtcCallsign,
+                                                         flight.LoadedFlightPlan.DepartureAirfield.Identifier,
+                                                         flight.LoadedFlightPlan.ArrivalAirfield.Identifier),
+                                           "New Flight!");
+                    }
                 }
             }
             catch (Exception crap)

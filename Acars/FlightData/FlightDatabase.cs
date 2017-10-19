@@ -136,6 +136,7 @@ namespace Acars.FlightData
         public static void UpdateFlight(Flight flight)
         {
             string sqlStrUpdatePilotAsignments = "UPDATE `pilotassignments` JOIN `utilizadores` ON `utilizadores`.`user_id` = `pilotassignments`.`pilot` SET `onflight` = NOW() WHERE `utilizadores`.`user_email`=@email";
+            string sqlStrUpdateFlightLog = "INSERT INTO flightLog (pirepid, LAT, LON, ALT, HDG, GS, phase) VALUES (@pipepid, @LAT, @LON, @ALT, @HDG, @GS, @phase)";
             MySqlConnection conn = new MySqlConnection(ConnectionString);
 
             try
