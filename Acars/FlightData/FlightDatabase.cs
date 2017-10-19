@@ -129,40 +129,7 @@ namespace Acars.FlightData
 
             return result;
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        public static void StartFlight(Flight flight) {
-            string sqlStrInsertPirep = "INSERT INTO `pireps` (`date`, `flightid`, `pilotid`) SELECT @date, @flightid, `user_id` FROM `utilizadores` WHERE `user_email` = @email;";            
-            MySqlConnection conn = new MySqlConnection(ConnectionString);
 
-            try
-            {
-                conn.Open();
-
-                // INSERT PIREP
-                MySqlCommand sqlCmd = new MySqlCommand(sqlStrInsertPirep, conn);
-                var dateParam = sqlCmd.Parameters.Add("@date", MySqlDbType.Date);
-                dateParam.Value = DateTime.UtcNow;
-                sqlCmd.Parameters.AddWithValue("@flightid", flight.LoadedFlightPlan.ID);
-                sqlCmd.Parameters.AddWithValue("@email", Properties.Settings.Default.Email);
-
-                sqlCmd.ExecuteNonQuery();
-               
-            }
-            catch (Exception crap)
-            {
-                // pass the exception to the caller with an usefull message
-                throw new Exception(String.Format("Failed to initiate flightLog for user {0}.\r\nSQL Statements: {1} | {2} | {3}",
-                                                  Properties.Settings.Default.Email,
-                                                  sqlStrInsertPirep),
-                                    crap);
-            }
-            finally
-            {
-                conn.Close();
-            }
-        }
         /// <summary>
         /// 
         /// </summary>
@@ -172,7 +139,7 @@ namespace Acars.FlightData
         {
             long insertedId = -1;
 
-            string sqlStrInsertPirep = "INSERT INTO `pireps` (`date`, `flighttime`, `flightid`, `pilotid`, `accepted`) SELECT @date, @flighttime, @flightid, `user_id`, @accepted FROM `utilizadores` WHERE `user_email` = @email;";
+            string sqlStrInsertPirep = "INSERT INTO `pireps` (`date`, `flightid`, `pilotid`, `accepted`) SELECT @date, @flightid, `user_id`, @accepted FROM `utilizadores` WHERE `user_email` = @email;";
 
             MySqlConnection conn = new MySqlConnection(ConnectionString);
 
@@ -184,7 +151,6 @@ namespace Acars.FlightData
                 MySqlCommand sqlCmd = new MySqlCommand(sqlStrInsertPirep, conn);
                 var dateParam = sqlCmd.Parameters.Add("@date", MySqlDbType.Date);
                 dateParam.Value = DateTime.UtcNow;
-                sqlCmd.Parameters.AddWithValue("@flighttime", (int)Math.Round(flight.ActualTimeEnRoute.TotalMinutes));
                 sqlCmd.Parameters.AddWithValue("@flightid", flight.LoadedFlightPlan.ID);
                 sqlCmd.Parameters.AddWithValue("@accepted", "0");
                 sqlCmd.Parameters.AddWithValue("@email", Properties.Settings.Default.Email);
