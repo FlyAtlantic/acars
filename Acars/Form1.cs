@@ -352,7 +352,154 @@ namespace Acars
                 txtAltitude.Text = f.LastTelemetry.Altitude.ToString("F0");
                 txtHeading.Text = f.LastTelemetry.Compass.ToString("F0");
                 txtGroundSpeed.Text = f.LastTelemetry.GroundSpeed.ToString("F0");
-                txtVerticalSpeed.Text = f.LastTelemetry.VerticalSpeed.ToString("F0");              
+                txtVerticalSpeed.Text = f.LastTelemetry.VerticalSpeed.ToString("F0");
+
+                //Log Text
+                StringBuilder sb = new StringBuilder();
+                FsLongitude lon = new FsLongitude(playerLongitude.Value);
+                FsLatitude lat = new FsLatitude(playerLatitude.Value);
+                int turnRate = (((playerTurnRate.Value) / 360) / 65536) * 2;
+                Double intAltitude = (playerAltitude.Value * 3.2808399);
+                int IAS = (playerIndicatedAirspeed.Value / 128);
+                int Pitch = (((((playerPitch.Value) / 360) / 65536) * 2) / -1);
+
+                sb.AppendFormat("{0:dd-MM-yyyy HH:mm:ss}\r\n\r\n", f.LastTelemetry.Timestamp);
+
+                sb.AppendFormat("Simulator: {0} \r\n", FSUIPCConnection.FlightSimVersionConnected);
+                sb.AppendFormat("Simulator Rate: {0} X \r\n\r\n", ((playerSimRate.Value) / 256).ToString("F0"));
+                sb.AppendFormat("Latitude: {0} \r\n", lat.DecimalDegrees.ToString().Replace(',', '.'));
+                sb.AppendFormat("Longitude: {0} \r\n\r\n", lon.DecimalDegrees.ToString().Replace(',', '.'));
+
+                sb.AppendFormat("Number of Engines: {0} \r\n", (playerEnginesNumber.Value).ToString("F0"));
+                if (playerEnginesNumber.Value == 1)
+                {
+                    if (Engine1Start)
+                    {
+                        sb.AppendFormat("Engine 1 On: {0} \r\n\r\n", playerEngine1start.Value.ToString("F0"));
+                    }
+                    else
+                    {
+                        sb.AppendFormat("Engine 1 Off: {0} \r\n\r\n", playerEngine1start.Value.ToString("F0"));
+                    }
+                }
+
+                if (playerEnginesNumber.Value == 2)
+                {
+                    if (Engine1Start)
+                    {
+                        sb.AppendFormat("Engine 1 On: {0} \r\n", playerEngine1start.Value.ToString("F0"));
+                    }
+                    else
+                    {
+                        sb.AppendFormat("Engine 1 Off: {0} \r\n", playerEngine1start.Value.ToString("F0"));
+                    }
+                    if (Engine2Start)
+                    {
+                        sb.AppendFormat("Engine 2 On: {0} \r\n\r\n", playerEngine2start.Value.ToString("F0"));
+                    }
+                    else
+                    {
+                        sb.AppendFormat("Engine 2 Off: {0} \r\n\r\n", playerEngine2start.Value.ToString("F0"));
+                    }
+                }
+
+                if (playerEnginesNumber.Value == 3)
+                {
+                    if (Engine1Start)
+                    {
+                        sb.AppendFormat("Engine 1 On: {0} \r\n", playerEngine1start.Value.ToString("F0"));
+                    }
+                    else
+                    {
+                        sb.AppendFormat("Engine 1 Off: {0} \r\n", playerEngine1start.Value.ToString("F0"));
+                    }
+                    if (Engine2Start)
+                    {
+                        sb.AppendFormat("Engine 2 On: {0} \r\n", playerEngine2start.Value.ToString("F0"));
+                    }
+                    else
+                    {
+                        sb.AppendFormat("Engine 2 Off: {0} \r\n", playerEngine2start.Value.ToString("F0"));
+                    }
+                    if (Engine3Start)
+                    {
+                        sb.AppendFormat("Engine 3 On: {0} \r\n\r\n", playerEngine3start.Value.ToString("F0"));
+                    }
+                    else
+                    {
+                        sb.AppendFormat("Engine 3 Off: {0} \r\n\r\n", playerEngine3start.Value.ToString("F0"));
+                    }
+                }
+
+                if (playerEnginesNumber.Value == 4)
+                {
+                    if (Engine1Start)
+                    {
+                        sb.AppendFormat("Engine 1 On: {0} \r\n", playerEngine1start.Value.ToString("F0"));
+                    }
+                    else
+                    {
+                        sb.AppendFormat("Engine 1 Off: {0} \r\n", playerEngine1start.Value.ToString("F0"));
+                    }
+                    if (Engine2Start)
+                    {
+                        sb.AppendFormat("Engine 2 On: {0} \r\n", playerEngine2start.Value.ToString("F0"));
+                    }
+                    else
+                    {
+                        sb.AppendFormat("Engine 2 Off: {0} \r\n", playerEngine2start.Value.ToString("F0"));
+                    }
+                    if (Engine3Start)
+                    {
+                        sb.AppendFormat("Engine 3 On: {0} \r\n", playerEngine3start.Value.ToString("F0"));
+                    }
+                    else
+                    {
+                        sb.AppendFormat("Engine 3 Off: {0} \r\n", playerEngine3start.Value.ToString("F0"));
+                    }
+                    if (Engine4Start)
+                    {
+                        sb.AppendFormat("Engine 4 On: {0} \r\n\r\n", playerEngine4start.Value.ToString("F0"));
+                    }
+                    else
+                    {
+                        sb.AppendFormat("Engine 4 Off: {0} \r\n\r\n", playerEngine4start.Value.ToString("F0"));
+                    }
+                }
+
+                sb.AppendFormat("IAS: {0} \r\n", (playerIndicatedAirspeed.Value / 128).ToString("F0"));
+                sb.AppendFormat("QNH: {0} mbar \r\n\r\n", ((playerQNH.Value) / 16).ToString("F0"));
+                FSUIPCConnection.Process("AircraftInfo");
+                sb.AppendFormat("Aircraft Type: {0} \r\n", FSUIPCOffsets.aircraftType.Value);
+
+                if (playerBattery.Value == 257)
+                {
+                    sb.AppendFormat("Battery On: {0} \r\n", (playerBattery.Value).ToString("F0"));
+                }
+                else
+                {
+                    sb.AppendFormat("Battery Off: {0} \r\n", (playerBattery.Value).ToString("F0"));
+                }
+                if (ParkingBrake)
+                {
+                    sb.AppendFormat("Parking Brakes On \r\n");
+                }
+                else
+                {
+                    sb.AppendFormat("Parking Brakes Off \r\n");
+                }
+                if (Gear)
+                {
+                    sb.AppendFormat("Gear Down at: {0} ft\r\n\r\n", (playerAltitude.Value * 3.2808399).ToString("F0"));
+                }
+                else
+                {
+                    sb.AppendFormat("Gear Up at: {0} ft \r\n\r\n", (playerAltitude.Value * 3.2808399).ToString("F0"));
+                }
+
+
+                txtLog.Text = sb.ToString();
+
             }
             if (f.LoadedFlightPlan != null)
             {
@@ -508,173 +655,26 @@ namespace Acars
                 #endregion disabled pilot actions
 
                 // Info and realtime debugging data
-                StringBuilder sb = new StringBuilder();
+               
                 #region logging info for debugging
                 // aircraft wieghts
                 txtGrossWeight.Text = String.Format("{0} kg", lastTelemetry.GrossWeight.ToString("F0"));
                 txtZFW.Text = String.Format("{0} kg", lastTelemetry.ZeroFuelWeight.ToString("F0"));                    
                 txtFuel.Text = String.Format("{0} kg", (lastTelemetry.GrossWeight - lastTelemetry.ZeroFuelWeight).ToString("F0"));              
-                
-                //Log Text
-                FsLongitude lon = new FsLongitude(playerLongitude.Value);
-                FsLatitude lat = new FsLatitude(playerLatitude.Value);
-                int turnRate = (((playerTurnRate.Value) / 360) / 65536) * 2;
-                Double intAltitude = (playerAltitude.Value * 3.2808399);
-                int IAS = (playerIndicatedAirspeed.Value / 128);
-                int Pitch = (((((playerPitch.Value) / 360) / 65536) * 2) / -1);
-                
-                sb.AppendFormat("{0:dd-MM-yyyy HH:mm:ss}\r\n\r\n", lastTelemetry.Timestamp);
-
-                sb.AppendFormat("Simulator: {0} \r\n", FSUIPCConnection.FlightSimVersionConnected);
-                sb.AppendFormat("Simulator Rate: {0} X \r\n\r\n", ((playerSimRate.Value) / 256).ToString("F0"));
-                sb.AppendFormat("Latitude: {0} \r\n", lat.DecimalDegrees.ToString().Replace(',', '.'));
-                sb.AppendFormat("Longitude: {0} \r\n\r\n", lon.DecimalDegrees.ToString().Replace(',', '.'));
-
-                sb.AppendFormat("Number of Engines: {0} \r\n", (playerEnginesNumber.Value).ToString("F0"));
-                if (playerEnginesNumber.Value == 1)
-                {
-                    if (Engine1Start)
-                    {
-                        sb.AppendFormat("Engine 1 On: {0} \r\n\r\n", playerEngine1start.Value.ToString("F0"));
-                    }
-                    else
-                    {
-                        sb.AppendFormat("Engine 1 Off: {0} \r\n\r\n", playerEngine1start.Value.ToString("F0"));
-                    }
-                }
-
-                if (playerEnginesNumber.Value == 2)
-                {
-                    if (Engine1Start)
-                    {
-                        sb.AppendFormat("Engine 1 On: {0} \r\n", playerEngine1start.Value.ToString("F0"));
-                    }
-                    else
-                    {
-                        sb.AppendFormat("Engine 1 Off: {0} \r\n", playerEngine1start.Value.ToString("F0"));
-                    }
-                    if (Engine2Start)
-                    {
-                        sb.AppendFormat("Engine 2 On: {0} \r\n\r\n", playerEngine2start.Value.ToString("F0"));
-                    }
-                    else
-                    {
-                        sb.AppendFormat("Engine 2 Off: {0} \r\n\r\n", playerEngine2start.Value.ToString("F0"));
-                    }
-                }
-
-                if (playerEnginesNumber.Value == 3)
-                {
-                    if (Engine1Start)
-                    {
-                        sb.AppendFormat("Engine 1 On: {0} \r\n", playerEngine1start.Value.ToString("F0"));
-                    }
-                    else
-                    {
-                        sb.AppendFormat("Engine 1 Off: {0} \r\n", playerEngine1start.Value.ToString("F0"));
-                    }
-                    if (Engine2Start)
-                    {
-                        sb.AppendFormat("Engine 2 On: {0} \r\n", playerEngine2start.Value.ToString("F0"));
-                    }
-                    else
-                    {
-                        sb.AppendFormat("Engine 2 Off: {0} \r\n", playerEngine2start.Value.ToString("F0"));
-                    }
-                    if (Engine3Start)
-                    {
-                        sb.AppendFormat("Engine 3 On: {0} \r\n\r\n", playerEngine3start.Value.ToString("F0"));
-                    }
-                    else
-                    {
-                        sb.AppendFormat("Engine 3 Off: {0} \r\n\r\n", playerEngine3start.Value.ToString("F0"));
-                    }
-                }
-
-                if (playerEnginesNumber.Value == 4)
-                {
-                    if (Engine1Start)
-                    {
-                        sb.AppendFormat("Engine 1 On: {0} \r\n", playerEngine1start.Value.ToString("F0"));
-                    }
-                    else
-                    {
-                        sb.AppendFormat("Engine 1 Off: {0} \r\n", playerEngine1start.Value.ToString("F0"));
-                    }
-                    if (Engine2Start)
-                    {
-                        sb.AppendFormat("Engine 2 On: {0} \r\n", playerEngine2start.Value.ToString("F0"));
-                    }
-                    else
-                    {
-                        sb.AppendFormat("Engine 2 Off: {0} \r\n", playerEngine2start.Value.ToString("F0"));
-                    }
-                    if (Engine3Start)
-                    {
-                        sb.AppendFormat("Engine 3 On: {0} \r\n", playerEngine3start.Value.ToString("F0"));
-                    }
-                    else
-                    {
-                        sb.AppendFormat("Engine 3 Off: {0} \r\n", playerEngine3start.Value.ToString("F0"));
-                    }
-                    if (Engine4Start)
-                    {
-                        sb.AppendFormat("Engine 4 On: {0} \r\n\r\n", playerEngine4start.Value.ToString("F0"));
-                    }
-                    else
-                    {
-                        sb.AppendFormat("Engine 4 Off: {0} \r\n\r\n", playerEngine4start.Value.ToString("F0"));
-                    }
-                }
-
-                sb.AppendFormat("IAS: {0} \r\n", (playerIndicatedAirspeed.Value / 128).ToString("F0"));
-                sb.AppendFormat("QNH: {0} mbar \r\n\r\n", ((playerQNH.Value) / 16).ToString("F0"));
-                FSUIPCConnection.Process("AircraftInfo");
-                sb.AppendFormat("Aircraft Type: {0} \r\n", FSUIPCOffsets.aircraftType.Value);
-
-                if (playerBattery.Value == 257)
-                {
-                    sb.AppendFormat("Battery On: {0} \r\n", (playerBattery.Value).ToString("F0"));
-                }
-                else
-                {
-                    sb.AppendFormat("Battery Off: {0} \r\n", (playerBattery.Value).ToString("F0"));
-                }                
-                if (ParkingBrake)
-                {
-                    sb.AppendFormat("Parking Brakes On \r\n");
-                }
-                else
-                {
-                    sb.AppendFormat("Parking Brakes Off \r\n");
-                }
-                if (Gear)
-                {
-                    sb.AppendFormat("Gear Down at: {0} ft\r\n\r\n", (playerAltitude.Value * 3.2808399).ToString("F0"));
-                }
-                else
-                {
-                    sb.AppendFormat("Gear Up at: {0} ft \r\n\r\n", (playerAltitude.Value * 3.2808399).ToString("F0"));
-                }
-               
-                #endregion logging info for debugging
-                txtLog.Text = sb.ToString();
-                                                           
-
                 txtSquawk.Text = String.Format("{0}", (playersquawk.Value).ToString("X").PadLeft(4, '0'));
 
                 // get sim time from FSUIPC, no date
                 DateTime fsTime = new DateTime(DateTime.UtcNow.Year, 1, 1, playerSimTime.Value[0], playerSimTime.Value[1], playerSimTime.Value[2]);
                 txtSimHour.Text = fsTime.ToShortTimeString();
                 result = "[{";
-
+                
                 // Latitude and Longitude 
                 // Shows using the FsLongitude and FsLatitude classes to easily work with Lat/Lon
                 // Create new instances of FsLongitude and FsLatitude using the raw 8-Byte data from the FSUIPC Offsets
 
                 // Use the ToString() method to output in human readable form:
                 // (note that many other properties are avilable to get the Lat/Lon in different numerical formats)
-                result += String.Format("\"latitude\":\"{0}\",\"longitude\":\"{1}\"", lat.DecimalDegrees.ToString().Replace(',', '.'), lon.DecimalDegrees.ToString().Replace(',', '.'));
+                result += String.Format("\"latitude\":\"{0}\",\"longitude\":\"{1}\"", lastTelemetry.Latitude.ToString().Replace(',', '.'), lastTelemetry.Longitude.ToString().Replace(',', '.'));
                 result += String.Format(",\"altitude\":\"{0}\"", (playerAltitude.Value * 3.2808399).ToString("F2"));
                 result += String.Format(",\"heading\":\"{0}\"", compass.Value.ToString("F2"));
 
@@ -687,9 +687,9 @@ namespace Acars
                 Console.WriteLine(crap.Message);
             }
             Console.Write(result);
-        }               
+        }
+                #endregion logging info for debugging
 
-       
-       
+
     }
 }
