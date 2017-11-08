@@ -51,7 +51,7 @@
         <RegistryValue Id="FlyAtlanticAcars.Autostart" Root="HKMU" Action="write"
                        Key="Software\Microsoft\Windows\CurrentVersion\Run"
                        Name="FlyAtlantic ACARS"
-                       Value="[INSTALLFOLDER]acars.exe"
+                       Value="[INSTALLFOLDER]Fly Atlantic Acars"
                        Type="string" />
         <Condition>ASSISTANCE_START_VIA_REGISTRY</Condition>
       </Component>
@@ -67,7 +67,7 @@
         <RegistryKey Root="HKCU"
                      Key="Software\Microsoft\Windows\CurrentVersion\Run"
               Action="createAndRemoveOnUninstall">
-          <RegistryValue Type="string" Name="FlyAtlantic ACARS" Value="[#acars.exe]" KeyPath="yes"/>
+          <RegistryValue Type="string" Name="FlyAtlantic ACARS" Value="[#Fly Altantic Acars.exe]" KeyPath="yes"/>
         </RegistryKey>
       </Component>
     </DirectoryRef>
