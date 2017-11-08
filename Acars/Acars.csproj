@@ -7,7 +7,7 @@
     <ProjectGuid>{FED35AB1-B790-4E1F-8B37-AE0EC6919464}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>Acars</RootNamespace>
-    <AssemblyName>Acars</AssemblyName>
+    <AssemblyName>Fly Atlantic Acars</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>

@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
+<?define ProductName="$(fileVersion.ProductName($(var.Acars.TargetPath)))" ?>
+<?define CompanyName="$(fileVersion.CompanyName($(var.Acars.TargetPath)))" ?>
+<?define ProductVersion="$(fileVersion.ProductVersion($(var.Acars.TargetPath)))" ?>
+
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-	<Product Id="*" Name="FlyAtlantic ACARS" Language="1033" Version="1.0.0.0" Manufacturer="FlyAtlantic" UpgradeCode="290768e7-73e1-4432-a118-bde25c5a3cc9">
+  <Product Id="*"
+           Name="$(var.ProductName)"
+           Language="1033"
+           Version="$(var.ProductVersion)"
+           Manufacturer="$(var.CompanyName)"
+           UpgradeCode="fed35ab1-b790-4e1f-8b37-ae0ec6919464">
 		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
     <Icon Id="icon.ico" SourceFile="$(var.Acars.TargetDir)\tszbanner.ico"/>
