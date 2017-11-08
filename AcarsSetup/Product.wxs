@@ -7,7 +7,7 @@
     <Property Id="ARPPRODUCTICON" Value="tszbanner.ico" />
 
     <MajorUpgrade DowngradeErrorMessage="A newer version of FlyAtlantic ACARS is already installed." />
-		<MediaTemplate />
+		<MediaTemplate EmbedCab="yes" />
 
 		<Feature Id="ProductFeature" Title="FlyAtlantic Acars" Level="1">
 			<ComponentGroupRef Id="ProductComponents" />
