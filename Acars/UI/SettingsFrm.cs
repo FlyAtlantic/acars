@@ -37,5 +37,12 @@ namespace Acars.UI
 
             Properties.Settings.Default.Save();
         }
+
+        private void SettingsFrm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            e.Cancel = true;
+
+            this.Hide();
+        }
     }
 }
