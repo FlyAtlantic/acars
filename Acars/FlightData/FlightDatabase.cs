@@ -225,6 +225,7 @@ namespace Acars.FlightData
             string sqlStrInsertPirep = "UPDATE `pireps` set `date` = @date, `flighttime` = @flighttime, `ft/pm` = @landingrate, `sum` = @sum, `accepted` = @accepted, `eps_granted` = @flighteps WHERE `id` = @pirepid;";
             string sqlStrUpdateUser = "UPDATE `utilizadores` SET `eps` = eps + @flighteps WHERE `user_email` = @email;";
             string sqlStrDeleteAssignment = "DELETE `pilotassignments` from `pilotassignments` left join `utilizadores` on `pilotassignments`.`pilot` = `utilizadores`.`user_id` where `utilizadores`.`user_email` = @email;";
+            string sqlInsertPenalizations = "INSERT INTO penalizations(datepenalization, pirepid, code) VALUES (@DatePenalization, @PirepId, @Code)";
             MySqlConnection conn = new MySqlConnection(ConnectionString);
 
             try
@@ -260,7 +261,12 @@ namespace Acars.FlightData
                 // SEND PENALIZATION INFORMATION
                 foreach (EventOccurrence e in flight.Events)
                 {
+                    sqlCmd = new MySqlCommand(sqlStrDeleteAssignment, conn);
+                    sqlCmd.Parameters.AddWithValue("@DatePenalization", flight.TelemetryLog[e.StartId].Timestamp );
+                    sqlCmd.Parameters.AddWithValue("@PirepId", flight.PirepID);
+                    sqlCmd.Parameters.AddWithValue("@Code", e.Event.Code);
 
+                    sqlCmd.ExecuteNonQuery();
                 }
             }
             catch (Exception crap)
