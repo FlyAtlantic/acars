@@ -3,6 +3,7 @@ using System;
 using System.Security.Cryptography;
 using System.Text;
 using System.Device.Location;
+using Acars.Events;
 
 namespace Acars.FlightData
 {
@@ -255,6 +256,12 @@ namespace Acars.FlightData
                 sqlCmd.Parameters.AddWithValue("@email", Properties.Settings.Default.Email);
 
                 sqlCmd.ExecuteNonQuery();
+
+                // SEND PENALIZATION INFORMATION
+                foreach (EventOccurrence e in flight.Events)
+                {
+
+                }
             }
             catch (Exception crap)
             {
