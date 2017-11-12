@@ -259,15 +259,16 @@ namespace Acars.FlightData
                 sqlCmd.ExecuteNonQuery();
 
                 // SEND PENALIZATION INFORMATION
-                foreach (EventOccurrence e in flight.Events)
-                {
-                    sqlCmd = new MySqlCommand(sqlStrDeleteAssignment, conn);
-                    sqlCmd.Parameters.AddWithValue("@DatePenalization", flight.TelemetryLog[e.StartId].Timestamp );
-                    sqlCmd.Parameters.AddWithValue("@PirepId", flight.PirepID);
-                    sqlCmd.Parameters.AddWithValue("@Code", e.Event.Code);
+                if (flight.Events != null && flight.Events.Length > 0)
+                    foreach (EventOccurrence e in flight.Events)
+                    {
+                        sqlCmd = new MySqlCommand(sqlStrDeleteAssignment, conn);
+                        sqlCmd.Parameters.AddWithValue("@DatePenalization", flight.TelemetryLog[e.StartId].Timestamp );
+                        sqlCmd.Parameters.AddWithValue("@PirepId", flight.PirepID);
+                        sqlCmd.Parameters.AddWithValue("@Code", e.Event.Code);
 
-                    sqlCmd.ExecuteNonQuery();
-                }
+                        sqlCmd.ExecuteNonQuery();
+                    }
             }
             catch (Exception crap)
             {
