@@ -114,7 +114,7 @@ namespace Acars.FlightData
             get; private set;
         }
 
-        public FlightEvent[] Events
+        public EventOccurrence[] Events
         {
             get;
             private set;
@@ -248,7 +248,7 @@ namespace Acars.FlightData
         {
             foreach (FlightEvent e in activeEvents)
             {
-                EventOccurrence[] r = e.GetOccurrences(TelemetryLog.ToArray(), out int discount);
+                Events = e.GetOccurrences(TelemetryLog.ToArray(), out int discount);
 
                 FinalScore -= discount;
             }
