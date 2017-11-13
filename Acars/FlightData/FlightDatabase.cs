@@ -261,7 +261,7 @@ namespace Acars.FlightData
                 // SEND PENALIZATION INFORMATION
                 foreach (EventOccurrence e in flight.Events)
                 {
-                    sqlCmd = new MySqlCommand(sqlStrDeleteAssignment, conn);
+                    sqlCmd = new MySqlCommand(sqlInsertPenalizations, conn);
                     sqlCmd.Parameters.AddWithValue("@DatePenalization", flight.TelemetryLog[e.StartId].Timestamp );
                     sqlCmd.Parameters.AddWithValue("@PirepId", flight.PirepID);
                     sqlCmd.Parameters.AddWithValue("@Code", e.Event.Code);
@@ -276,7 +276,8 @@ namespace Acars.FlightData
                                                   Properties.Settings.Default.Email,
                                                   sqlStrInsertPirep,
                                                   sqlStrUpdateUser,
-                                                  sqlStrDeleteAssignment),
+                                                  sqlStrDeleteAssignment,
+                                                  sqlInsertPenalizations),
                                     crap);
             }
             finally
