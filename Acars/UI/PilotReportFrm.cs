@@ -24,7 +24,7 @@ namespace Acars.UI
 
         private void btnSubmitFlight_Click(object sender, EventArgs e)
         {
-            FlightDatabase.EndFlight(f);
+            f.EndFlight();
 
             Hide();
         }
