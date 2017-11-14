@@ -262,7 +262,7 @@ namespace Acars.FlightData
                 if (flight.Events != null && flight.Events.Length > 0)
                     foreach (EventOccurrence e in flight.Events)
                     {
-                        sqlCmd = new MySqlCommand(sqlStrDeleteAssignment, conn);
+                        sqlCmd = new MySqlCommand(sqlInsertPenalizations, conn);
                         sqlCmd.Parameters.AddWithValue("@DatePenalization", flight.TelemetryLog[e.StartId].Timestamp );
                         sqlCmd.Parameters.AddWithValue("@PirepId", flight.PirepID);
                         sqlCmd.Parameters.AddWithValue("@Code", e.Event.Code);
@@ -278,7 +278,8 @@ namespace Acars.FlightData
                                                   Properties.Settings.Default.Email,
                                                   sqlStrInsertPirep,
                                                   sqlStrUpdateUser,
-                                                  sqlStrDeleteAssignment),
+                                                  sqlStrDeleteAssignment,
+                                                  sqlInsertPenalizations),
                                     crap);
             }
             finally
