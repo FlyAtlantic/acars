@@ -266,6 +266,7 @@ namespace Acars.FlightData
                         sqlCmd.Parameters.AddWithValue("@DatePenalization", flight.TelemetryLog[e.StartId].Timestamp );
                         sqlCmd.Parameters.AddWithValue("@PirepId", flight.PirepID);
                         sqlCmd.Parameters.AddWithValue("@Code", e.Event.Code);
+                        sqlCmd.Parameters.AddWithValue("@email", Properties.Settings.Default.Email);
 
                         sqlCmd.ExecuteNonQuery();
                     }

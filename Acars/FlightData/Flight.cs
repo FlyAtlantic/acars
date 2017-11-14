@@ -39,6 +39,8 @@ namespace Acars.FlightData
             LoadedFlightPlan = null;
 
             FinalScore = 100;
+
+            Events = new List<EventOccurrence>();
         }
 
         #region variables
@@ -114,7 +116,7 @@ namespace Acars.FlightData
             get; private set;
         }
 
-        public EventOccurrence[] Events
+        public List<EventOccurrence> Events
         {
             get;
             private set;
@@ -248,7 +250,7 @@ namespace Acars.FlightData
         {
             foreach (FlightEvent e in activeEvents)
             {
-                Events = e.GetOccurrences(TelemetryLog.ToArray(), out int discount);
+                Events.AddRange(e.GetOccurrences(TelemetryLog.ToArray(), out int discount));
 
                 FinalScore -= discount;
             }
