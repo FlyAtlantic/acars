@@ -259,7 +259,7 @@ namespace Acars.FlightData
                 sqlCmd.ExecuteNonQuery();
 
                 // SEND PENALIZATION INFORMATION
-                if (flight.Events != null && flight.Events.Length > 0)
+                if (flight.Events != null && flight.Events.Count > 0)
                     foreach (EventOccurrence e in flight.Events)
                     {
                         sqlCmd = new MySqlCommand(sqlInsertPenalizations, conn);
