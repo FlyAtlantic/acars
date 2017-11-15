@@ -83,21 +83,23 @@ namespace Acars.Events
                     // validate duration, and proceed
                     if ((T[eventEnd].Timestamp - T[eventStart].Timestamp).TotalSeconds > Duration)
                     {
-                        result.Add(new EventOccurrence(eventStart, eventEnd, this));
+                        result.Add(new EventOccurrence(eventStart, eventEnd, this));                       
 
                         // calculate score discount
                         AcculumatedDiscount += Discount;
                         if (AcculumatedDiscount > MaxDiscount)
                             AcculumatedDiscount = MaxDiscount;
 
+                        Console.WriteLine(String.Format("Penalization : {0} {1} {2}", Code, Description, Discount.ToString()));
+
                         eventStart = -1;
                         eventEnd = -1;
                     }
+                    
                 }
 
                 i++;
-            }
-
+            }           
             return result.ToArray();
         }
     }

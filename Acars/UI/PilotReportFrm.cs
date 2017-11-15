@@ -27,6 +27,8 @@ namespace Acars.UI
             f.EndFlight();
 
             Hide();
+
+            Application.Exit();
         }
     }
 }
