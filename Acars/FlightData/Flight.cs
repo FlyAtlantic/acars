@@ -26,7 +26,6 @@ namespace Acars.FlightData
                 new FlightEvent("4A", 5, "Landing light on above 250 IAS"       , 5 , 5 , (t) => { return (t.LandingLights && t.IndicatedAirSpeed > 255); }),
                 new FlightEvent("4C", 5, "Pitch High Below 1500ft on Departure(Radio)"             , 10, 10, (t) => { return (t.RadioAltitude < 1500 && t.Pitch > 20); }),
                 new FlightEvent("4D", 5, "Gear down above 250 IAS"             , 10, 30, (t) => { return (t.Gear && t.IndicatedAirSpeed > 255); }),
-                new FlightEvent("5C", 1, "Hard Landing"             , 30, 30, (t) => { return (ActualArrivalTime.VerticalSpeed <= -500D); }),
                 new FlightEvent("7B", 5, "Pitch too high"                       , 30, 30, (t) => { return (t.Pitch > 30); })
             };
             #endregion Register Events
@@ -251,11 +250,21 @@ namespace Acars.FlightData
         /// <returns></returns>
         private void AnalyseFlightLog(bool updateScore = false)
         {
+
+            //                new FlightEvent("5C", 1, "Hard Landing"             , 30, 30, (t) => { return (ActualArrivalTime.VerticalSpeed <= -500D); }),
             foreach (FlightEvent e in activeEvents)
-            {
+            {               
                 Events.AddRange(e.GetOccurrences(TelemetryLog.ToArray(), out int discount));
 
                 FinalScore -= discount;
+            }
+
+            if(ActualArrivalTime.VerticalSpeed <= -500.0)
+            {
+                Events.Add(new EventOccurrence(ActualArrivalTimeId, ActualArrivalTimeId, new FlightEvent("5C", 1, "Hard Landing", 30, 30, (t) => { return true; })));
+
+                if (updateScore)
+                    FinalScore -= 30;
             }
 
             if (updateScore)
