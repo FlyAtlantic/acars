@@ -229,8 +229,10 @@ namespace Acars
                 flight.ProcessTelemetry(t);
 
                 //Update flight every 5 minutes
-                if (t.Timestamp.Minute % 5 == 0)
+                if (t.Timestamp.Minute % 1 == 0)
+                    Console.WriteLine(String.Format("entrou no IF"));
                     FlightDatabase.UpdateFlight(flight);
+                    Console.WriteLine(String.Format("Saiu no IF"));
 
                 // UI stuff
                 if (flight.LoadedFlightPlan != null && !flight.FlightRunning)

@@ -189,9 +189,12 @@ namespace Acars.FlightData
                 conn.Open();
 
                 MySqlCommand sqlCmd = new MySqlCommand(sqlStrUpdatePilotAsignments, conn);
+                sqlCmd.Parameters.AddWithValue("@email", Properties.Settings.Default.Email);
+
+                sqlCmd.ExecuteNonQuery();
+
                 sqlCmd = new MySqlCommand(sqlStrUpdateFlightLog, conn);
                 sqlCmd.Parameters.AddWithValue("@pirepid", flight.PirepID);
-                sqlCmd.Parameters.AddWithValue("@email", Properties.Settings.Default.Properties["email"]);
                 sqlCmd.Parameters.AddWithValue("@LAT", flight.LastTelemetry.Latitude);
                 sqlCmd.Parameters.AddWithValue("@LON", flight.LastTelemetry.Longitude);
                 sqlCmd.Parameters.AddWithValue("@ALT", flight.LastTelemetry.Altitude);
