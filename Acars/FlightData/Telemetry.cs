@@ -215,5 +215,22 @@ namespace Acars.FlightData
 
             return result;
         }
+
+        public static void SetValue(Offset<byte> offset, bool value)
+        {
+            offset.Value = (value) ? (byte)1 : (byte)0;
+
+            FSUIPCConnection.Process();
+
+        }
+
+        public static void SetValue(Offset<byte[]> offset, int value)
+        {
+            offset.Value = BitConverter.GetBytes(value);
+
+            FSUIPCConnection.Process();
+
+        }
+
     }
 }

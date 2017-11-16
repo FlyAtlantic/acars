@@ -8,10 +8,10 @@ namespace Acars.FlightData
         static public Offset<int> indicatedAirSpeed = new Offset<int>(0x02BC);
         static public Offset<int> pitch = new Offset<int>(0x0578);
         static public Offset<int> bank = new Offset<int>(0x057C);
-        static public Offset<short> engine1 = new Offset<short>(0x0894);
-        static public Offset<short> engine2 = new Offset<short>(0x092C);
-        static public Offset<short> engine3 = new Offset<short>(0x09C4);
-        static public Offset<short> engine4 = new Offset<short>(0x0A5C);
+        static public Offset<byte> engine1 = new Offset<byte>(0x0894);
+        static public Offset<byte> engine2 = new Offset<byte>(0x092C);
+        static public Offset<byte> engine3 = new Offset<byte>(0x09C4);
+        static public Offset<byte> engine4 = new Offset<byte>(0x0A5C);
         static public Offset<short> parkingBrake = new Offset<short>(0x0BC8, false);
         static public Offset<int> groundspeed = new Offset<int>(0x02B4);
         static public Offset<short> onGround = new Offset<short>(0x0366, false);
@@ -28,7 +28,7 @@ namespace Acars.FlightData
         static public Offset<double> grossWeight = new Offset<double>(0x30C0);
         static public Offset<int> zeroFuelWeight = new Offset<int>(0x3BFC);
         static public Offset<short> squawk = new Offset<short>(0x0354);
-        static public Offset<byte[]> simTime = new Offset<byte[]>(0x0238, 10);
+        static public Offset<byte[]> simTime = new Offset<byte[]>(0x023B, 10);
         static public Offset<int> simRate = new Offset<int>(0x0C1A);
         static public Offset<short> qnh = new Offset<short>(0x0330);
         static public Offset<int> engineCount = new Offset<int>(0x0AEC);
@@ -37,6 +37,12 @@ namespace Acars.FlightData
         static public Offset<long> latitude = new Offset<long>(0x0560);
         static public Offset<string> aircraftType = new Offset<string>("AircraftInfo", 0x3160, 24);
         static public Offset<Double> RadioAltitude = new Offset<Double>(0x31E4);
+
+        static public Offset<byte[]> environmentDateTime = new Offset<byte[]>(0x0238, 10);
+        static public Offset<byte[]> environmentDateTimeDayOfYear = new Offset<byte[]>(0x023E, 4);
+        static public Offset<byte[]> environmentDateTimeHour = new Offset<byte[]>(0x023B, 4);
+        static public Offset<byte[]> environmentDateTimeMinute = new Offset<byte[]>(0x023C, 4);
+        static public Offset<byte[]> environmentDateTimeYear = new Offset<byte[]>(0x0240, 4);
 
         public static bool GetBool(Offset<short> offset)
         {

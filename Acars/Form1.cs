@@ -516,7 +516,6 @@ namespace Acars
                 txtDepTime.Text = f.ActualDepartureTime.Timestamp.ToString("HH:mm");
             if (f.ActualArrivalTime != null)
             {
-                txtArrTime.Text = f.ActualArrivalTime.Timestamp.ToString("HH:mm");
                 txtLandingRate.Text = f.ActualArrivalTime.VerticalSpeed.ToString("F0");
             }
             if (f.ActualTimeEnRoute != TimeSpan.MinValue)

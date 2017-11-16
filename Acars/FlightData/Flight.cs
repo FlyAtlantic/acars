@@ -231,6 +231,17 @@ namespace Acars.FlightData
             {
                 PirepID = FlightDatabase.StartFlight(this);
                 FlightDatabase.UpdateFlight(this);
+                Telemetry.SetValue(FSUIPCOffsets.engine1, false);
+                Telemetry.SetValue(FSUIPCOffsets.engine2, false);
+                Telemetry.SetValue(FSUIPCOffsets.engine3, false);
+                Telemetry.SetValue(FSUIPCOffsets.engine4, false);
+
+                Telemetry.SetValue(FSUIPCOffsets.environmentDateTimeHour, DateTime.UtcNow.Hour);
+                Telemetry.SetValue(FSUIPCOffsets.environmentDateTimeMinute, DateTime.UtcNow.Minute);                
+                Telemetry.SetValue(FSUIPCOffsets.environmentDateTimeDayOfYear , DateTime.UtcNow.DayOfYear);
+                Telemetry.SetValue(FSUIPCOffsets.environmentDateTimeYear, DateTime.UtcNow.Year);
+
+
                 FlightRunning = true;
             }
             catch (Exception crap)
