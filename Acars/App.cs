@@ -81,6 +81,7 @@ namespace Acars
             timer.Interval = 10000;
             timer.Tick += new EventHandler(GetFlightTimer_Tick);
             timer.Tick += new EventHandler(WaitForSimulatorConnectionTimer_Tick);
+            timer.Tick += new EventHandler(WaitForDepartureAirfield);
 
             telemetryTimer = new Timer();
             telemetryTimer.Interval = 1000;
@@ -192,6 +193,37 @@ namespace Acars
             }
         }
 
+        private void WaitForDepartureAirfield(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!FlightDatabase.ValidateLogin(Properties.Settings.Default.Email, Properties.Settings.Default.Password))
+                    return;
+
+                if (flight.LastTelemetry == null)
+                    return;
+                if (flight.LoadedFlightPlan == null)
+                    return;
+                if (flight.LastTelemetry.Location.GetDistanceTo(flight.LoadedFlightPlan.DepartureAirfield.Position) < 5000)
+                {
+                    timer.Tick -= new EventHandler(WaitForDepartureAirfield);
+
+                    flight.StartFlight();
+
+                    TrayIcon.ShowBalloonTip(ToolTipIcon.Info,
+                                            String.Format("{0} from {1} to {2}",
+                                                          flight.LoadedFlightPlan.AtcCallsign,
+                                                          flight.LoadedFlightPlan.DepartureAirfield.Identifier,
+                                                          flight.LoadedFlightPlan.ArrivalAirfield.Identifier),
+                                            "Start flying!");
+                }
+                
+            }
+            catch (Exception crap)
+            {
+                Console.WriteLine("GetFlightTimer_Tick \r\n {0}", App.GetFullMessage(crap));
+            }
+        }
         /// <summary>
         /// Processes flight telemetry data, constantly
         /// </summary>
@@ -219,7 +251,7 @@ namespace Acars
                     return;
                 }
 
-                if (flight.LoadedFlightPlan != null)
+                if (flight.FlightRunning)
                 {
                     TrayIcon.SetStatusText("Flight Running...");                  
 
@@ -233,21 +265,7 @@ namespace Acars
 
                 if (flight.PirepID != 0 && flight.TelemetryLog.Count > reportDelay && t.Timestamp.Minute % reportDelay == 0 && flight.TelemetryLog[flight.TelemetryLog.Count-2].Timestamp.Minute != flight.LastTelemetry.Timestamp.Minute)
                     FlightDatabase.UpdateFlight(flight);
-
-                // UI stuff
-                if (flight.LoadedFlightPlan != null && !flight.FlightRunning)
-                {
-                    if (!preFlightDataFrm.Visible)
-                    {
-                        preFlightDataFrm.Show();
-                        TrayIcon.ShowBalloonTip(ToolTipIcon.Info,
-                                           String.Format("{0} from {1} to {2}",
-                                                         flight.LoadedFlightPlan.AtcCallsign,
-                                                         flight.LoadedFlightPlan.DepartureAirfield.Identifier,
-                                                         flight.LoadedFlightPlan.ArrivalAirfield.Identifier),
-                                           "New Flight!");
-                    }
-                }
+                
             }
             catch (Exception crap)
             {

@@ -1,5 +1,6 @@
 ﻿using FSUIPC;
 using System;
+using System.Device.Location;
 
 namespace Acars.FlightData
 {
@@ -13,11 +14,15 @@ namespace Acars.FlightData
         /// <summary>
         /// Offset for Lon features
         /// </summary>
-        public long Longitude;
+        public double Longitude;
         /// <summary>
         /// Offset for Lat features
         /// </summary>
-        public long Latitude;
+        public double Latitude;
+        /// <summary>
+        /// 
+        /// </summary>
+        public GeoCoordinate Location;
         /// <summary>
         /// UTC time of collection
         /// </summary>
@@ -208,8 +213,9 @@ namespace Acars.FlightData
             result.QNH = FSUIPCOffsets.qnh.Value / 16;
             result.EngineCount = FSUIPCOffsets.engineCount.Value;
             result.Compass = FSUIPCOffsets.compass.Value;
-            result.Latitude = FSUIPCOffsets.latitude.Value;
-            result.Longitude = FSUIPCOffsets.longitude.Value;
+            result.Latitude = FSUIPCOffsets.latitude.Value * (90.0 / (10001750.0 * 65536.0 * 65536.0));
+            result.Longitude = FSUIPCOffsets.longitude.Value * (360.0 / (65536.0 * 65536.0 * 65536.0 * 65536.0));
+            result.Location = new GeoCoordinate(result.Latitude, result.Longitude);
             result.GroundSpeed = FSUIPCOffsets.groundspeed.Value / 65536;
             result.RadioAltitude = FSUIPCOffsets.RadioAltitude.Value / 65536;
 
