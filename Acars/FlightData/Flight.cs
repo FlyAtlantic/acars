@@ -217,7 +217,7 @@ namespace Acars.FlightData
                         phase = FlightPhases.TAXIIN;
                     break;
             }
-
+            currentTelemetry.FlightPhase = phase;
             return currentTelemetry;
         }
 
@@ -247,7 +247,7 @@ namespace Acars.FlightData
                 FSUIPCOffsets.messageDuration.Value = 10;
                 FSUIPCConnection.Process();
 
-
+                phase = FlightPhases.PREFLIGHT;
                 FlightRunning = true;
             }
             catch (Exception crap)
