@@ -12,7 +12,7 @@ namespace Acars.FlightData
         static public Offset<byte> engine2 = new Offset<byte>(0x092C);
         static public Offset<byte> engine3 = new Offset<byte>(0x09C4);
         static public Offset<byte> engine4 = new Offset<byte>(0x0A5C);
-        static public Offset<short> parkingBrake = new Offset<short>(0x0BC8, false);
+        static public Offset<byte> parkingBrake = new Offset<byte>(0x0BC8);
         static public Offset<int> groundspeed = new Offset<int>(0x02B4);
         static public Offset<short> onGround = new Offset<short>(0x0366, false);
         static public Offset<short> verticalSpeed = new Offset<short>(0x0842);
@@ -37,6 +37,8 @@ namespace Acars.FlightData
         static public Offset<long> latitude = new Offset<long>(0x0560);
         static public Offset<string> aircraftType = new Offset<string>("AircraftInfo", 0x3160, 24);
         static public Offset<Double> RadioAltitude = new Offset<Double>(0x31E4);
+        static public Offset<string> messageWrite = new Offset<string>(0x3380, 128);
+        static public Offset<short> messageDuration = new Offset<short>(0x32FA);
 
         static public Offset<byte[]> environmentDateTime = new Offset<byte[]>(0x0238, 10);
         static public Offset<byte[]> environmentDateTimeDayOfYear = new Offset<byte[]>(0x023E, 4);
