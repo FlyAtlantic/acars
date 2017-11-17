@@ -198,7 +198,7 @@ namespace Acars.FlightData
                         phase = FlightPhases.CLIMBING;
                     break;
                 case FlightPhases.DESCENDING:
-                    if (!currentTelemetry.OnGround && currentTelemetry.IndicatedAirSpeed <= 200 && currentTelemetry.Altitude <= 6000)
+                    if (!currentTelemetry.OnGround && currentTelemetry.IndicatedAirSpeed <= 200 && currentTelemetry.Altitude <= 6000 && currentTelemetry.Location.GetDistanceTo(LoadedFlightPlan.ArrivalAirfield.Position) < 5000)
                         phase = FlightPhases.APPROACH;
                     else if (currentTelemetry.VerticalSpeed >= 100 && !currentTelemetry.OnGround)
                         phase = FlightPhases.CLIMBING;

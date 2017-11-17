@@ -154,7 +154,7 @@ namespace Acars
         private void WaitEndFlightTimer_Tick(object sender, EventArgs e)
         {
             //Detetar fim do voo
-            if (flight.ActualArrivalTime != null && !pilotReportFrm.Visible)
+            if (flight.ActualArrivalTime != null && !pilotReportFrm.Visible && flight.LastTelemetry.FlightPhase == FlightPhases.TAXIIN)
             {
                 timer.Tick -= WaitEndFlightTimer_Tick;
                 TrayIcon.SetStatusText("Waiting for pilot report");
@@ -261,7 +261,15 @@ namespace Acars
                 flight.ProcessTelemetry(t);
 
                 //Update flight every 5 minutes
-                int reportDelay = 5;
+                int reportDelay = 0;
+
+                if (flight.LastTelemetry.Altitude > 6000) {
+                    reportDelay = 5;
+                    }
+                if (flight.LastTelemetry.Altitude < 6000)
+                {
+                    reportDelay = 1;
+                }
 
                 if (flight.PirepID != 0 && flight.TelemetryLog.Count > reportDelay && t.Timestamp.Minute % reportDelay == 0 && flight.TelemetryLog[flight.TelemetryLog.Count-2].Timestamp.Minute != flight.LastTelemetry.Timestamp.Minute)
                     FlightDatabase.UpdateFlight(flight);
