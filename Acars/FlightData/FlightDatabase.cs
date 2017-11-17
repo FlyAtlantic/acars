@@ -181,7 +181,7 @@ namespace Acars.FlightData
         public static void UpdateFlight(Flight flight)
         {
             string sqlStrUpdatePilotAsignments = "UPDATE `pilotassignments` JOIN `utilizadores` ON `utilizadores`.`user_id` = `pilotassignments`.`pilot` SET `onflight` = NOW() WHERE `utilizadores`.`user_email`=@email";
-            string sqlStrUpdateFlightLog = "INSERT INTO flightLog (pirepid, LAT, LON, ALT, HDG, GS, phase) VALUES (@pirepid, @LAT, @LON, @ALT, @HDG, @GS, @phase)";
+            string sqlStrUpdateFlightLog = "INSERT INTO flightLog (pirepid, time, LAT, LON, ALT, HDG, GS, phase) VALUES (@pirepid, @time, @LAT, @LON, @ALT, @HDG, @GS, @phase)";
             MySqlConnection conn = new MySqlConnection(ConnectionString);
 
             try
@@ -195,6 +195,7 @@ namespace Acars.FlightData
 
                 sqlCmd = new MySqlCommand(sqlStrUpdateFlightLog, conn);
                 sqlCmd.Parameters.AddWithValue("@pirepid", flight.PirepID);
+                sqlCmd.Parameters.AddWithValue("@time", DateTime.UtcNow);
                 sqlCmd.Parameters.AddWithValue("@LAT", flight.LastTelemetry.Latitude);
                 sqlCmd.Parameters.AddWithValue("@LON", flight.LastTelemetry.Longitude);
                 sqlCmd.Parameters.AddWithValue("@ALT", flight.LastTelemetry.Altitude);
