@@ -188,11 +188,11 @@ namespace Acars.FlightData
                 case FlightPhases.CLIMBING:
                     if (currentTelemetry.VerticalSpeed <= 100 && currentTelemetry.VerticalSpeed >= -100 && !currentTelemetry.OnGround)
                         phase = FlightPhases.CRUISE;
-                    else if (currentTelemetry.VerticalSpeed <= 100 && !currentTelemetry.OnGround)
+                    else if (currentTelemetry.VerticalSpeed <= -100 && !currentTelemetry.OnGround)
                         phase = FlightPhases.DESCENDING;
                     break;
                 case FlightPhases.CRUISE:
-                    if (currentTelemetry.VerticalSpeed <= 100 && !currentTelemetry.OnGround)
+                    if (currentTelemetry.VerticalSpeed <= -100 && !currentTelemetry.OnGround)
                         phase = FlightPhases.DESCENDING;
                     else if (currentTelemetry.VerticalSpeed >= 100 && !currentTelemetry.OnGround)
                         phase = FlightPhases.CLIMBING;
@@ -202,6 +202,8 @@ namespace Acars.FlightData
                         phase = FlightPhases.APPROACH;
                     else if (currentTelemetry.VerticalSpeed >= 100 && !currentTelemetry.OnGround)
                         phase = FlightPhases.CLIMBING;
+                    else if (currentTelemetry.VerticalSpeed <= 100 && currentTelemetry.VerticalSpeed >= -100 && !currentTelemetry.OnGround)
+                        phase = FlightPhases.CRUISE;
                     break;
                 case FlightPhases.APPROACH:
                     if (currentTelemetry.OnGround)
