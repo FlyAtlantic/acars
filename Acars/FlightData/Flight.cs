@@ -198,7 +198,7 @@ namespace Acars.FlightData
                         phase = FlightPhases.CLIMBING;
                     break;
                 case FlightPhases.DESCENDING:
-                    if (!currentTelemetry.OnGround && currentTelemetry.IndicatedAirSpeed <= 200 && currentTelemetry.Altitude <= 6000 && currentTelemetry.Location.GetDistanceTo(LoadedFlightPlan.ArrivalAirfield.Position) < 5000)
+                    if (!currentTelemetry.OnGround && currentTelemetry.IndicatedAirSpeed <= 200 && currentTelemetry.Altitude <= 6000 && LastTelemetry.Location.GetDistanceTo(LoadedFlightPlan.ArrivalAirfield.Position) < 5000)
                         phase = FlightPhases.APPROACH;
                     else if (currentTelemetry.VerticalSpeed >= 100 && !currentTelemetry.OnGround)
                         phase = FlightPhases.CLIMBING;
@@ -291,7 +291,7 @@ namespace Acars.FlightData
         private void UpdateScore()
         {
             // calculate EPs
-            EfficiencyPoints = (int)Math.Round((ActualTimeEnRoute.TotalMinutes / 10.0) * (FinalScore / 1.0));
+            EfficiencyPoints = (int)Math.Round((ActualTimeEnRoute.TotalMinutes / 10) * (FinalScore / 1.0));
         }
 
         /// <summary>
@@ -302,7 +302,7 @@ namespace Acars.FlightData
             AnalyseFlightLog(true);
 
             // calculate flight efficiency
-            EfficiencyPoints = Convert.ToInt32(Math.Round(ActualTimeEnRoute.TotalMinutes / 10 * (FinalScore / 1)));
+            EfficiencyPoints = Convert.ToInt32(Math.Round((ActualTimeEnRoute.TotalMinutes / 10) * (FinalScore / 1.0)));
 
             // do database stuff
             FlightDatabase.EndFlight(this);
