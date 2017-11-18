@@ -293,7 +293,7 @@ namespace Acars.FlightData
         private void UpdateScore()
         {
             // calculate EPs
-            EfficiencyPoints = (int)Math.Round((ActualTimeEnRoute.TotalMinutes / 10) * (FinalScore / 1.0));
+            EfficiencyPoints = (int)Math.Round((ActualTimeEnRoute.TotalMinutes / 10) * (FinalScore * 0.01));
         }
 
         /// <summary>
@@ -304,7 +304,7 @@ namespace Acars.FlightData
             AnalyseFlightLog(true);
 
             // calculate flight efficiency
-            EfficiencyPoints = Convert.ToInt32(Math.Round((ActualTimeEnRoute.TotalMinutes / 10) * (FinalScore / 1.0)));
+            EfficiencyPoints = Convert.ToInt32(Math.Round((ActualTimeEnRoute.TotalMinutes / 10) * (FinalScore * 0.01)));
 
             // do database stuff
             FlightDatabase.EndFlight(this);

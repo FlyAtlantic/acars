@@ -256,6 +256,7 @@ namespace Acars
                     TrayIcon.SetStatusText("Flight Running...");                  
 
                     timer.Tick += WaitEndFlightTimer_Tick;
+
                 }
                 t = flight.HandleFlightPhases(t);
                 flight.ProcessTelemetry(t);
