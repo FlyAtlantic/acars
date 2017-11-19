@@ -87,7 +87,7 @@
             this.txtVR = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.txtV2 = new System.Windows.Forms.TextBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.txtAcarsStatus = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -669,16 +669,16 @@
             this.txtV2.Size = new System.Drawing.Size(43, 20);
             this.txtV2.TabIndex = 48;
             // 
-            // textBox1
+            // txtAcarsStatus
             // 
-            this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBox1.Enabled = false;
-            this.textBox1.Location = new System.Drawing.Point(122, 544);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(49, 13);
-            this.textBox1.TabIndex = 44;
-            this.textBox1.Text = "----";
-            this.textBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.txtAcarsStatus.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtAcarsStatus.Enabled = false;
+            this.txtAcarsStatus.Location = new System.Drawing.Point(58, 518);
+            this.txtAcarsStatus.Name = "txtAcarsStatus";
+            this.txtAcarsStatus.Size = new System.Drawing.Size(233, 13);
+            this.txtAcarsStatus.TabIndex = 44;
+            this.txtAcarsStatus.Text = "Waiting for all conditions";
+            this.txtAcarsStatus.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // Form1
             // 
@@ -687,7 +687,7 @@
             this.BackgroundImage = global::Acars.Properties.Resources.banner;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.ClientSize = new System.Drawing.Size(772, 638);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.txtAcarsStatus);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.txtV2);
             this.Controls.Add(this.label5);
@@ -779,7 +779,7 @@
         private System.Windows.Forms.TextBox txtVR;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox txtV2;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox txtAcarsStatus;
     }
 }
 
