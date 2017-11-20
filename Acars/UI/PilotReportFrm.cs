@@ -24,11 +24,11 @@ namespace Acars.UI
 
         private void btnSubmitFlight_Click(object sender, EventArgs e)
         {
-            f.EndFlight();
-
-            Hide();
+            f.EndFlight();           
 
             Application.Exit();
+
+            Close();
         }
     }
 }
