@@ -274,6 +274,7 @@ namespace Acars
 
                 if (FlightDatabase.IsUpdateRequired(flight))
                     FlightDatabase.UpdateFlight(flight);
+
             }
             catch (Exception crap)
             {

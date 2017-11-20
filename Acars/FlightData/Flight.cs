@@ -20,9 +20,9 @@ namespace Acars.FlightData
             activeEvents = new FlightEvent[] {
                 new FlightEvent("2A", 5, "Bank Angle Exceeded"                       , 30, 30, (t) => { return (t.Bank > 30); }),
                 new FlightEvent("3A", 5, "Landing lights on above 10000 ft"     , 5 , 5 , (t) => { return (t.LandingLights && t.Altitude > 10500); }),
-                new FlightEvent("3B", 5, "Landing lights off durring approach"  , 5 , 5 , (t) => { return (t.LandingLights && t.Altitude < 2750); }),
+                new FlightEvent("3B", 5, "Landing lights off durring approach"  , 5 , 5 , (t) => { return (t.LandingLights && t.RadioAltitude < 2750 && phase == FlightPhases.APPROACH); }),
                 new FlightEvent("3C", 5, "Speed above 250 IAS bellow 10000 ft"  , 10, 10, (t) => { return (t.IndicatedAirSpeed > 255 && t.Altitude < 9500); }),
-                new FlightEvent("3D", 5, "High speed taxi"                      , 5 , 5, (t) => { return (t.GroundSpeed > 30 && t.OnGround); }),
+                new FlightEvent("3D", 5, "High speed taxi"                      , 5 , 5, (t) => { return (t.GroundSpeed > 30 && t.OnGround && phase == FlightPhases.TAXIOUT); }),
                 new FlightEvent("4A", 5, "Landing light on above 250 IAS"       , 5 , 5 , (t) => { return (t.LandingLights && t.IndicatedAirSpeed > 255); }),
                 new FlightEvent("4C", 5, "Pitch High Below 1500ft on Departure(Radio)"             , 10, 10, (t) => { return (t.RadioAltitude < 1500 && t.Pitch > 20); }),
                 new FlightEvent("4D", 5, "Gear down above 250 IAS"             , 10, 30, (t) => { return (t.Gear && t.IndicatedAirSpeed > 255); }),
@@ -196,6 +196,8 @@ namespace Acars.FlightData
                         phase = FlightPhases.DESCENDING;
                     else if (currentTelemetry.VerticalSpeed >= 100 && !currentTelemetry.OnGround)
                         phase = FlightPhases.CLIMBING;
+                    else if (!currentTelemetry.OnGround && currentTelemetry.IndicatedAirSpeed <= 200 && LastTelemetry.Location.GetDistanceTo(LoadedFlightPlan.ArrivalAirfield.Position) < 10000)
+                        phase = FlightPhases.APPROACH;
                     break;
                 case FlightPhases.DESCENDING:
                     if (!currentTelemetry.OnGround && currentTelemetry.IndicatedAirSpeed <= 200 && LastTelemetry.Location.GetDistanceTo(LoadedFlightPlan.ArrivalAirfield.Position) < 10000)

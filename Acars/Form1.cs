@@ -503,12 +503,14 @@ namespace Acars
             }
             if (f.LoadedFlightPlan != null)
             {
+                Telemetry t = new Telemetry();
                 txtCallsign.Text = f.LoadedFlightPlan.AtcCallsign;
                 txtDeparture.Text = f.LoadedFlightPlan.DepartureAirfield.Identifier;
                 txtAlternate.Text = f.LoadedFlightPlan.AlternateICAO;
                 txtArrival.Text = f.LoadedFlightPlan.ArrivalAirfield.Identifier;
                 txtFlightInformation.Text = String.Format("{0} {1} {2} {3:HH:mm}", (f.LoadedFlightPlan.DepartureAirfield.Identifier), (f.LoadedFlightPlan.ArrivalAirfield.Identifier), (f.LoadedFlightPlan.Aircraft), (f.LoadedFlightPlan.DateAssigned));
-
+                if (f.FlightRunning == true)
+                    txtAcarsStatus.Text = String.Format("Acars Running");
             }
 
             // Actual times of Departure, Arrival, Flight Time
