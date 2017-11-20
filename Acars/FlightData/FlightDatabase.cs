@@ -204,9 +204,6 @@ namespace Acars.FlightData
                 sqlCmd.Parameters.AddWithValue("@phase", flight.LastTelemetry.FlightPhase);
 
                 sqlCmd.ExecuteNonQuery();
-
-                flight.
-                LastUpdate = flight;
             }
             catch (Exception crap)
             {
