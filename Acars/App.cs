@@ -272,8 +272,7 @@ namespace Acars
                     reportDelay = 1;
                 }
 
-                if (FlightDatabase.IsUpdateRequired(flight))
-                    FlightDatabase.UpdateFlight(flight);
+                flight.UpdateFlight();
 
             }
             catch (Exception crap)
