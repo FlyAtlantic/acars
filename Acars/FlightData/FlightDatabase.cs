@@ -32,6 +32,10 @@ namespace Acars.FlightData
             if (timeDiff.TotalMinutes >= 10)
                 return true;
 
+            // check flight phase change (TODO: discontinue)
+            if (f.LastTelemetry.FlightPhase != LastUpdate.LastTelemetry.FlightPhase)
+                return true;
+
             // check if altitude changed more than 50ft
             double altDiff = f.LastTelemetry.Altitude - LastUpdate.LastTelemetry.Altitude;
             if (Math.Abs(altDiff) >= 50.0)
@@ -41,6 +45,17 @@ namespace Acars.FlightData
             int spdDiff = f.LastTelemetry.GroundSpeed - LastUpdate.LastTelemetry.GroundSpeed;
             if (Math.Abs(spdDiff) >= 5)
                 return true;
+
+            // Heading changed more than 5 degrees (TODO: probably using trigonometry would be a wise idea)
+            double hdgDiff = f.LastTelemetry.Compass - LastUpdate.LastTelemetry.Compass;
+            if (Math.Abs(hdgDiff) >= 5.0)
+                return true;
+
+            //
+            // TODOs
+            //
+
+            // Event triggered
 
             return false;
         }
