@@ -52,6 +52,7 @@ namespace Acars.FlightData
         private FlightEvent[] activeEvents;
         private int ActualDepartureTimeId;
         private int ActualArrivalTimeId;
+        private int lastUpdateId;
 
         // statics
         static private Offset<short> engine1 = new Offset<short>(0x0894);
@@ -104,6 +105,16 @@ namespace Acars.FlightData
                 if (ActualDepartureTime == null || ActualArrivalTime == null)
                     return TimeSpan.MinValue;
                 return ActualArrivalTime.Timestamp - ActualDepartureTime.Timestamp;
+            }
+        }
+
+        public Telemetry LastUpdate
+        {
+            get
+            {
+                if (lastUpdateId == default(int))
+                    return null;
+                return TelemetryLog[lastUpdateId];
             }
         }
 
@@ -296,6 +307,52 @@ namespace Acars.FlightData
         {
             // calculate EPs
             EfficiencyPoints = (int)Math.Round((ActualTimeEnRoute.TotalMinutes / 10) * (FinalScore * 0.01));
+        }
+
+
+        private bool IsUpdateRequired()
+        {
+            // check for minimum time requirement for update (15min, 10min for 'safety reasons')
+            TimeSpan timeDiff = LastTelemetry.Timestamp - LastUpdate.Timestamp;
+            if (timeDiff.TotalMinutes >= 10)
+                return true;
+
+            // check flight phase change (TODO: discontinue)
+            if (LastTelemetry.FlightPhase != LastUpdate.FlightPhase)
+                return true;
+
+            // check if altitude changed more than 50ft
+            double altDiff = LastTelemetry.Altitude - LastUpdate.Altitude;
+            if (Math.Abs(altDiff) >= 50.0)
+                return true;
+
+            // check speed changed more than 5 knots
+            int spdDiff = LastTelemetry.GroundSpeed - LastUpdate.GroundSpeed;
+            if (Math.Abs(spdDiff) >= 5)
+                return true;
+
+            // Heading changed more than 5 degrees (TODO: probably using trigonometry would be a wise idea)
+            double hdgDiff = LastTelemetry.Compass - LastUpdate.Compass;
+            if (Math.Abs(hdgDiff) >= 5.0)
+                return true;
+
+            //
+            // TODOs
+            //
+
+            // Event triggered
+
+            return false;
+        }
+
+        public void UpdateFlight()
+        {
+            if (IsUpdateRequired())
+            {
+                FlightDatabase.UpdateFlight(this);
+
+                lastUpdateId = TelemetryLog.Count - 1;
+            }
         }
 
         /// <summary>
