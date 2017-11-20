@@ -9,6 +9,9 @@ namespace Acars.FlightData
 {
     public class FlightDatabase
     {
+        public static Flight LastUpdate
+        { get; private set; }
+
         private static string ConnectionString
         {
             get
@@ -20,6 +23,26 @@ namespace Acars.FlightData
                     Properties.Settings.Default.Dbpass,
                     Properties.Settings.Default.Database);
             }
+        }
+
+        public static bool IsUpdateRequired(Flight f)
+        {
+            // check for minimum time requirement for update (15min, 10min for 'safety reasons')
+            TimeSpan timeDiff = f.LastTelemetry.Timestamp - LastUpdate.LastTelemetry.Timestamp;
+            if (timeDiff.TotalMinutes >= 10)
+                return true;
+
+            // check if altitude changed more than 50ft
+            double altDiff = f.LastTelemetry.Altitude - LastUpdate.LastTelemetry.Altitude;
+            if (Math.Abs(altDiff) >= 50.0)
+                return true;
+
+            // check speed changed more than 5 knots
+            int spdDiff = f.LastTelemetry.GroundSpeed - LastUpdate.LastTelemetry.GroundSpeed;
+            if (Math.Abs(spdDiff) >= 5)
+                return true;
+
+            return false;
         }
 
         /// <summary>
@@ -204,6 +227,8 @@ namespace Acars.FlightData
                 sqlCmd.Parameters.AddWithValue("@phase", flight.LastTelemetry.FlightPhase);
 
                 sqlCmd.ExecuteNonQuery();
+
+                LastUpdate = flight;
             }
             catch (Exception crap)
             {
