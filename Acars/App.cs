@@ -283,6 +283,7 @@ namespace Acars
 
                 if (flight.LastTelemetry.FlightPhase == FlightPhases.TAXIIN)
                     FlightDatabase.UpdateFlight(flight);
+
             }
             catch (Exception crap)
             {

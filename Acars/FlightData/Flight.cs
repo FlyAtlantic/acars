@@ -192,7 +192,7 @@ namespace Acars.FlightData
                         phase = FlightPhases.DESCENDING;
                     break;
                 case FlightPhases.CRUISE:
-                    if (currentTelemetry.VerticalSpeed <= -100 && !currentTelemetry.OnGround && LastTelemetry.Location.GetDistanceTo(LoadedFlightPlan.ArrivalAirfield.Position) > 10000)
+                    if (currentTelemetry.VerticalSpeed <= -100 && !currentTelemetry.OnGround)
                         phase = FlightPhases.DESCENDING;
                     else if (currentTelemetry.VerticalSpeed >= 100 && !currentTelemetry.OnGround)
                         phase = FlightPhases.CLIMBING;
