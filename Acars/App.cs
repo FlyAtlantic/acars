@@ -272,16 +272,7 @@ namespace Acars
                     reportDelay = 1;
                 }
 
-                if (flight.PirepID != 0 && flight.TelemetryLog.Count > reportDelay && t.Timestamp.Minute % reportDelay == 0 && flight.TelemetryLog[flight.TelemetryLog.Count-2].Timestamp.Minute != flight.LastTelemetry.Timestamp.Minute)
-                    FlightDatabase.UpdateFlight(flight);
-                
-                if(flight.LastTelemetry.FlightPhase == FlightPhases.LANDING)
-                    FlightDatabase.UpdateFlight(flight);
-
-                if (flight.LastTelemetry.FlightPhase == FlightPhases.TAKEOFF)
-                    FlightDatabase.UpdateFlight(flight);
-
-                if (flight.LastTelemetry.FlightPhase == FlightPhases.TAXIIN)
+                if (FlightDatabase.IsUpdateRequired(flight))
                     FlightDatabase.UpdateFlight(flight);
             }
             catch (Exception crap)
