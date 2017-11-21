@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using FSUIPC;
 
 namespace Acars
 {
@@ -30,6 +31,7 @@ namespace Acars
 
         private Timer timer;
         private Timer telemetryTimer;
+        private Timer SimulatorStatusTimer;
 
         private Flight flight;
 
@@ -86,6 +88,7 @@ namespace Acars
             telemetryTimer = new Timer();
             telemetryTimer.Interval = 1000;
             telemetryTimer.Tick += new EventHandler(ProcessFlightTelemetry);
+            telemetryTimer.Tick += new EventHandler(SimulatorStatus);
 
             TrayIcon.Close_Click += CloseMenuItem_Click;
             TrayIcon.OpenFlightStatus_Click += OpenOldFormMenuItem_Click;
@@ -283,6 +286,66 @@ namespace Acars
             {
                 if (flight != null)
                     oldForm.Update(flight);
+            }
+        }
+        /// <summary>
+        /// Processes flight telemetry data, constantly
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void SimulatorStatus(object sender, EventArgs e)
+        {
+            try
+            {
+                Telemetry t = Telemetry.GetCurrent();               
+
+                ///FSUIPC Permanent Actions
+                //Slew Mode Bloked
+                if (t.Slew == true)
+                {
+                   Telemetry.SetValue(FSUIPCOffsets.slew, false);
+                   string Message = "You can't use Slew Mode!";
+                   FSUIPCOffsets.messageWrite.Value = Message;
+                   FSUIPCOffsets.messageDuration.Value = 5;
+                   FSUIPCConnection.Process();
+                }
+                //Unpaused Action
+                if (t.Pause == true)
+                {
+                    Telemetry.SetValue(FSUIPCOffsets.pause, false);
+                    string Message = "Simulator can't be paused!";
+                    FSUIPCOffsets.messageWrite.Value = Message;
+                    FSUIPCOffsets.messageDuration.Value = 5;
+                    FSUIPCConnection.Process();
+                }
+                //Simulator Rate Block Action
+                //if (playerSimRate.Value != 256)
+                //{
+                   // playerSimRate.Value = 256;
+                   // string Message = "Simulator Rate can't be changed!";
+                   // FSUIPCOffsets.messageWrite.Value = Message;
+                    //FSUIPCOffsets.messageDuration.Value = 5;
+                    //FSUIPCConnection.Process();
+                //}
+                //Parking Brakes can not be set on the air
+                if (t.ParkingBrake && t.GroundSpeed >= 10)
+                {
+                    Telemetry.SetValue(FSUIPCOffsets.parkingBrake, false);
+                    string Message = "Parking Brakes can not be set with aircraft movement!";
+                    FSUIPCOffsets.messageWrite.Value = Message;
+                    FSUIPCOffsets.messageDuration.Value = 5;
+                    FSUIPCConnection.Process();
+                }
+                //verifica hora e corrige hora
+                
+            }
+            catch (Exception crap)
+            {
+                Console.WriteLine("GetFlightTimer_Tick \r\n {0}", App.GetFullMessage(crap));
+            }
+            finally
+            {
+
             }
         }
     }

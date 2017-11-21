@@ -19,8 +19,8 @@ namespace Acars.FlightData
         static public Offset<short> throttle = new Offset<short>(0x088C);
         static public Offset<Double> altitude = new Offset<Double>(0x6020);
         static public Offset<short> gear = new Offset<short>(0x0BE8, false);
-        static public Offset<short> slew = new Offset<short>(0x05DC, false);
-        static public Offset<short> pause = new Offset<short>(0x0264, false);
+        static public Offset<byte> slew = new Offset<byte>(0x05DC);
+        static public Offset<byte> pause = new Offset<byte>(0x0264);
         static public Offset<short> overSpeed = new Offset<short>(0x036D, false);
         static public Offset<short> stall = new Offset<short>(0x036C, false);
         static public Offset<short> battery = new Offset<short>(0x3102, false);
