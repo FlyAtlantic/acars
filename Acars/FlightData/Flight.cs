@@ -231,6 +231,10 @@ namespace Acars.FlightData
                     if (currentTelemetry.IndicatedAirSpeed <= 40 && currentTelemetry.OnGround)
                         phase = FlightPhases.TAXIIN;
                     break;
+                case FlightPhases.TAXIIN:
+                    if (!currentTelemetry.Engine1 && !currentTelemetry.Engine2 && !currentTelemetry.Engine3 && !currentTelemetry.Engine4 && currentTelemetry.ParkingBrake)
+                        phase = FlightPhases.PARKING;
+                    break;
             }
             currentTelemetry.FlightPhase = phase;
             return currentTelemetry;

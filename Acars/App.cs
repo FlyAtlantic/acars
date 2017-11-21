@@ -157,7 +157,7 @@ namespace Acars
         private void WaitEndFlightTimer_Tick(object sender, EventArgs e)
         {
             //Detetar fim do voo
-            if (flight.ActualArrivalTime != null && !pilotReportFrm.Visible && flight.LastTelemetry.FlightPhase == FlightPhases.TAXIIN)
+            if (flight.ActualArrivalTime != null && !pilotReportFrm.Visible && flight.LastTelemetry.FlightPhase == FlightPhases.PARKING)
             {
                 timer.Tick -= WaitEndFlightTimer_Tick;
                 TrayIcon.SetStatusText("Waiting for pilot report");

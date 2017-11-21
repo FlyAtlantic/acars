@@ -17,6 +17,7 @@ namespace Acars.FlightData
         DESCENDING = 6,
         APPROACH = 7,
         LANDING = 8,
-        TAXIIN = 9
+        TAXIIN = 9,
+        PARKING = 10
     }
 }
