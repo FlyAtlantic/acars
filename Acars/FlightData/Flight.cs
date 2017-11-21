@@ -245,7 +245,7 @@ namespace Acars.FlightData
             try
             {
                 PirepID = FlightDatabase.StartFlight(this);
-                FlightDatabase.UpdateFlight(this);
+                UpdateFlight(true);
                 Telemetry.SetValue(FSUIPCOffsets.engine1, false);
                 Telemetry.SetValue(FSUIPCOffsets.engine2, false);
                 Telemetry.SetValue(FSUIPCOffsets.engine3, false);
@@ -345,9 +345,9 @@ namespace Acars.FlightData
             return false;
         }
 
-        public void UpdateFlight()
-        {
-            if (IsUpdateRequired())
+        public void UpdateFlight(bool force = false)
+        {          
+            if (IsUpdateRequired() || force)
             {
                 FlightDatabase.UpdateFlight(this);
 
