@@ -25,6 +25,7 @@ namespace Acars.FlightData
                 new FlightEvent("3D", 5, "High Speed On Taxi Out"                      , 5 , 5, (t) => { return (t.GroundSpeed > 30 && t.OnGround && phase == FlightPhases.TAXIOUT); }),
                 new FlightEvent("3E", 5, "High Speed On Taxi In"                      , 5 , 5, (t) => { return (t.GroundSpeed > 30 && t.OnGround && phase == FlightPhases.TAXIIN); }),
                 new FlightEvent("4A", 5, "Landing light on above 250 IAS"       , 5 , 5 , (t) => { return (t.LandingLights && t.IndicatedAirSpeed > 255); }),
+                new FlightEvent("4B", 5, "Landing lights Off On TakeOff"  , 5 , 5 , (t) => { return (!t.LandingLights && phase == FlightPhases.TAKEOFF); }),
                 new FlightEvent("4C", 5, "Pitch High Below 1500ft on Departure(Radio)"             , 10, 10, (t) => { return (t.RadioAltitude < 1500 && t.Pitch > 20); }),
                 new FlightEvent("4D", 5, "Gear down above 250 IAS"             , 10, 30, (t) => { return (t.Gear && t.IndicatedAirSpeed > 255); }),
                 new FlightEvent("7B", 5, "Pitch too high"                       , 30, 30, (t) => { return (t.Pitch > 30); })
