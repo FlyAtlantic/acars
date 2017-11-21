@@ -245,7 +245,6 @@ namespace Acars.FlightData
             try
             {
                 PirepID = FlightDatabase.StartFlight(this);
-                UpdateFlight(true);
                 Telemetry.SetValue(FSUIPCOffsets.engine1, false);
                 Telemetry.SetValue(FSUIPCOffsets.engine2, false);
                 Telemetry.SetValue(FSUIPCOffsets.engine3, false);
@@ -312,6 +311,9 @@ namespace Acars.FlightData
 
         private bool IsUpdateRequired()
         {
+            if (LastUpdate == null)
+                return true;
+
             // check for minimum time requirement for update (15min, 10min for 'safety reasons')
             TimeSpan timeDiff = LastTelemetry.Timestamp - LastUpdate.Timestamp;
             if (timeDiff.TotalMinutes >= 10)
@@ -345,9 +347,9 @@ namespace Acars.FlightData
             return false;
         }
 
-        public void UpdateFlight(bool force = false)
+        public void UpdateFlight()
         {          
-            if (IsUpdateRequired() || force)
+            if (IsUpdateRequired())
             {
                 FlightDatabase.UpdateFlight(this);
 
