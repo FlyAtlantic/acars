@@ -200,19 +200,19 @@ namespace Acars.FlightData
                 case FlightPhases.CLIMBING:
                     if (currentTelemetry.VerticalSpeed <= 100 && currentTelemetry.VerticalSpeed >= -100 && !currentTelemetry.OnGround)
                         phase = FlightPhases.CRUISE;
-                    else if (currentTelemetry.VerticalSpeed <= -100 && !currentTelemetry.OnGround && LastTelemetry.Location.GetDistanceTo(LoadedFlightPlan.ArrivalAirfield.Position) > 10000)
+                    else if (currentTelemetry.VerticalSpeed <= -100 && !currentTelemetry.OnGround && LastTelemetry.Location.GetDistanceTo(LoadedFlightPlan.ArrivalAirfield.Position) > 18000)
                         phase = FlightPhases.DESCENDING;
                     break;
                 case FlightPhases.CRUISE:
-                    if (currentTelemetry.VerticalSpeed <= -100 && !currentTelemetry.OnGround && LastTelemetry.Location.GetDistanceTo(LoadedFlightPlan.ArrivalAirfield.Position) > 10000)
+                    if (currentTelemetry.VerticalSpeed <= -100 && !currentTelemetry.OnGround && LastTelemetry.Location.GetDistanceTo(LoadedFlightPlan.ArrivalAirfield.Position) > 18000)
                         phase = FlightPhases.DESCENDING;
                     else if (currentTelemetry.VerticalSpeed >= 100 && !currentTelemetry.OnGround)
                         phase = FlightPhases.CLIMBING;
-                    else if (!currentTelemetry.OnGround && currentTelemetry.IndicatedAirSpeed <= 200 && LastTelemetry.Location.GetDistanceTo(LoadedFlightPlan.ArrivalAirfield.Position) < 10000)
+                    else if (!currentTelemetry.OnGround && currentTelemetry.IndicatedAirSpeed <= 200 && LastTelemetry.Location.GetDistanceTo(LoadedFlightPlan.ArrivalAirfield.Position) < 18000)
                         phase = FlightPhases.APPROACH;
                     break;
                 case FlightPhases.DESCENDING:
-                    if (!currentTelemetry.OnGround && currentTelemetry.IndicatedAirSpeed <= 200 && LastTelemetry.Location.GetDistanceTo(LoadedFlightPlan.ArrivalAirfield.Position) < 10000)
+                    if (!currentTelemetry.OnGround && currentTelemetry.IndicatedAirSpeed <= 200 && LastTelemetry.Location.GetDistanceTo(LoadedFlightPlan.ArrivalAirfield.Position) < 18000)
                         phase = FlightPhases.APPROACH;
                     else if (currentTelemetry.VerticalSpeed >= 100 && !currentTelemetry.OnGround)
                         phase = FlightPhases.CLIMBING;
