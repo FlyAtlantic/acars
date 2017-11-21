@@ -209,14 +209,14 @@ namespace Acars.FlightData
             result.ZeroFuelWeight = FSUIPCOffsets.zeroFuelWeight.Value / 256;
             result.Squawk = FSUIPCOffsets.squawk.Value;
             result.SimTime = (new DateTime(BitConverter.ToInt16(FSUIPCOffsets.simTime.Value, 8), 1, 1, FSUIPCOffsets.simTime.Value[0], FSUIPCOffsets.simTime.Value[1], FSUIPCOffsets.simTime.Value[2])).Add(new TimeSpan(BitConverter.ToInt16(FSUIPCOffsets.simTime.Value, 6) - 1, 0, 0, 0));
-            result.SimRate = FSUIPCOffsets.simRate.Value;
+            result.SimRate = (FSUIPCOffsets.simRate.Value / 256);
             result.QNH = FSUIPCOffsets.qnh.Value / 16;
             result.EngineCount = FSUIPCOffsets.engineCount.Value;
             result.Compass = FSUIPCOffsets.compass.Value;
             result.Latitude = FSUIPCOffsets.latitude.Value * (90.0 / (10001750.0 * 65536.0 * 65536.0));
             result.Longitude = FSUIPCOffsets.longitude.Value * (360.0 / (65536.0 * 65536.0 * 65536.0 * 65536.0));
             result.Location = new GeoCoordinate(result.Latitude, result.Longitude);
-            result.GroundSpeed = (FSUIPCOffsets.groundspeed.Value / 65536)* (int)1.943844492;
+            result.GroundSpeed = (FSUIPCOffsets.groundspeed.Value / 65536) * ((int)1.9438444924574 * 2);
             result.RadioAltitude = FSUIPCOffsets.RadioAltitude.Value / 65536;
 
             return result;
