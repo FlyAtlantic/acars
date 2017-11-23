@@ -58,11 +58,43 @@ namespace Acars.FlightData
                 maximumCeiling = 27500;
             }
 
+            //CONFIRM
+            if (f.LoadedFlightPlan.Aircraft == "AT72")
+            {
+                maximumTakeoffWeight = 23000;
+                maximumLandingWeight = 22500;
+                maximumCeiling = 25500;
+            }
+
+            //CONFIRM
+            if (f.LoadedFlightPlan.Aircraft == "RJ1H")
+            {
+                maximumTakeoffWeight = 46500;
+                maximumLandingWeight = 40500;
+                maximumCeiling = 25500;
+            }
+
             if (f.LoadedFlightPlan.Aircraft == "A320")
             {
                 maximumTakeoffWeight = 77000;
                 maximumLandingWeight = 64500;
                 maximumCeiling = 40000;
+            }
+
+            //CONFIRM
+            if (f.LoadedFlightPlan.Aircraft == "A332")
+            {
+                maximumTakeoffWeight = 242000;
+                maximumLandingWeight = 182000;
+                maximumCeiling = 41500;
+            }
+
+            //CONFIRM
+            if (f.LoadedFlightPlan.Aircraft == "A343")
+            {
+                maximumTakeoffWeight = 276500;
+                maximumLandingWeight = 192000;
+                maximumCeiling = 41500;
             }
 
             if (f.LoadedFlightPlan.Aircraft == "B738")
@@ -71,6 +103,47 @@ namespace Acars.FlightData
                 maximumLandingWeight = 66361;
                 maximumCeiling = 41500;
             }
+
+            //CONFIRM
+            if (f.LoadedFlightPlan.Aircraft == "B744")
+            {
+                maximumTakeoffWeight = 412760;
+                maximumLandingWeight = 295743;
+                maximumCeiling = 45500;
+            }
+
+            //CONFIRM
+            if (f.LoadedFlightPlan.Aircraft == "B763")
+            {
+                maximumTakeoffWeight = 181437;
+                maximumLandingWeight = 145150;
+                maximumCeiling = 43500;
+            }
+
+            //CONFIRM
+            if (f.LoadedFlightPlan.Aircraft == "B77L")
+            {
+                maximumTakeoffWeight = 242672;
+                maximumLandingWeight = 201800;
+                maximumCeiling = 43500;
+            }
+
+            //CONFIRM
+            if (f.LoadedFlightPlan.Aircraft == "MD11")
+            {
+                maximumTakeoffWeight = 286000;
+                maximumLandingWeight = 200000;
+                maximumCeiling = 43500;
+            }
+
+            //CONFIRM
+            if (f.LoadedFlightPlan.Aircraft == "CONC")
+            {
+                maximumTakeoffWeight = 185000;
+                maximumLandingWeight = 111130;
+                maximumCeiling = 60500;
+            }
+
         }
        
     }
