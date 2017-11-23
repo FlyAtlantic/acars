@@ -140,6 +140,10 @@ namespace Acars.FlightData
         /// </summary>
         public double GroundSpeed;
         /// <summary>
+        /// MachSpeed
+        /// </summary>
+        public long MachSpeed;
+        /// <summary>
         /// RadioAltitude
         /// </summary>
         public Double RadioAltitude;
@@ -151,6 +155,10 @@ namespace Acars.FlightData
         /// ZFW in pounds
         /// </summary>
         public int ZeroFuelWeight;
+        /// <summary>
+        /// Flaps level
+        /// </summary>
+        public short Flaps;
         #endregion Properties
 
         /// <summary>
@@ -227,6 +235,8 @@ namespace Acars.FlightData
             result.Location = new GeoCoordinate(result.Latitude, result.Longitude);
             result.GroundSpeed = (FSUIPCOffsets.groundspeed.Value / 65536)* 1.94384449;
             result.RadioAltitude = FSUIPCOffsets.RadioAltitude.Value / 65536;
+            result.MachSpeed = FSUIPCOffsets.machSpeed.Value / 20480;
+            result.Flaps = FSUIPCOffsets.flapsControl.Value;
 
             return result;
         }

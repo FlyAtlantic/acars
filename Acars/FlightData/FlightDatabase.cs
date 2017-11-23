@@ -4,6 +4,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Device.Location;
 using Acars.Events;
+using System.Collections.Generic;
 
 namespace Acars.FlightData
 {
@@ -112,7 +113,25 @@ namespace Acars.FlightData
                         result.AlternateICAO = (string)sqlCmdRes[7];
                         result.ID = (int)sqlCmdRes[10];
                         result.DateAssigned = (DateTime)sqlCmdRes[8];
-                        result.Aircraft = (string)sqlCmdRes[12];
+
+                        // TODO: Assign performance files from database
+                        switch ((string)sqlCmdRes[12])
+                        {
+                            case "C172":
+                                result.Aircraft = new AircraftPerformance(
+                                    "C172",
+                                    1111,
+                                    1111,
+                                    14508,
+                                    new Dictionary<short, FlapSetting>() {
+                                        { 0, new FlapSetting( "0", 128 + 500) },
+                                        { 10, new FlapSetting("1", 85) }
+                                });
+                                break;
+                            default:
+                                result.Aircraft = null;
+                                break;
+                        }
                     }
                 else
                     result = null;

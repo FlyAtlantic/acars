@@ -88,6 +88,8 @@
             this.label6 = new System.Windows.Forms.Label();
             this.txtV2 = new System.Windows.Forms.TextBox();
             this.txtAcarsStatus = new System.Windows.Forms.TextBox();
+            this.txtFlapPosition = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -679,6 +681,22 @@
             this.txtAcarsStatus.Text = "Waiting for all conditions";
             this.txtAcarsStatus.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
+            // txtFlapPosition
+            // 
+            this.txtFlapPosition.Location = new System.Drawing.Point(609, 579);
+            this.txtFlapPosition.Name = "txtFlapPosition";
+            this.txtFlapPosition.Size = new System.Drawing.Size(43, 20);
+            this.txtFlapPosition.TabIndex = 50;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(533, 582);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(70, 13);
+            this.label1.TabIndex = 51;
+            this.label1.Text = "Flap Position:";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -686,6 +704,8 @@
             this.BackgroundImage = global::Acars.Properties.Resources.banner;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.ClientSize = new System.Drawing.Size(772, 638);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.txtFlapPosition);
             this.Controls.Add(this.txtAcarsStatus);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.txtV2);
@@ -779,6 +799,8 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox txtV2;
         private System.Windows.Forms.TextBox txtAcarsStatus;
+        private System.Windows.Forms.TextBox txtFlapPosition;
+        private System.Windows.Forms.Label label1;
     }
 }
 

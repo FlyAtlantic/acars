@@ -21,7 +21,7 @@ namespace Acars.FlightData
         { get; set; }
         public DateTime DateAssigned
         { get; set; }
-        public string Aircraft
+        public AircraftPerformance Aircraft
         { get; set; }
 
         public FlightPlan() { }

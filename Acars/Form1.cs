@@ -40,8 +40,8 @@ namespace Acars
         {
             SpeedV1 = txtV1.Text;
             SpeedV2 = txtV2.Text;
-            SpeedVr = txtVR.Text;
-            
+            SpeedVr = txtVR.Text;            
+
             Console.WriteLine(String.Format("{0}", valuedistance.ToString("0")));
 
             if (f.LastTelemetry != null) {
@@ -59,6 +59,9 @@ namespace Acars
                 txtZFW.Text = String.Format("{0} kg", f.LastTelemetry.ZeroFuelWeight.ToString("F0"));
                 txtFuel.Text = String.Format("{0} kg", (f.LastTelemetry.GrossWeight - f.LastTelemetry.ZeroFuelWeight).ToString("F0"));
                 txtSquawk.Text = String.Format("{0}", (f.LastTelemetry.Squawk).ToString("X").PadLeft(4, '0'));
+                txtFlapPosition.Text = f.LoadedFlightPlan.Aircraft.FlapSettings[f.LastTelemetry.Flaps].Name;
+
+                Console.WriteLine(String.Format("{0}", f.LastTelemetry.MachSpeed.ToString()));
                 //Log Text
                 StringBuilder sb = new StringBuilder();
 
@@ -71,6 +74,9 @@ namespace Acars
                 sb.AppendFormat("Gear: {0} \r\n\r\n", f.LastTelemetry.Gear.ToString().Replace(',', '.'));               
                 sb.AppendFormat("IAS: {0} \r\n", (f.LastTelemetry.IndicatedAirSpeed).ToString("F0"));
                 sb.AppendFormat("QNH: {0} mbar \r\n\r\n", (f.LastTelemetry.QNH).ToString("F0"));
+                //View this offsets
+                sb.AppendFormat("Mach: {0} \r\n\r\n", f.LastTelemetry.MachSpeed.ToString("F2"));
+                sb.AppendFormat("Flaps: {0} \r\n\r\n", f.LastTelemetry.Flaps.ToString("F0"));
                 FSUIPCConnection.Process("AircraftInfo");
                 sb.AppendFormat("Aircraft Type: {0} \r\n", FSUIPCOffsets.aircraftType.Value);
 
