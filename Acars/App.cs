@@ -297,8 +297,8 @@ namespace Acars
         {
             try
             {
-                Telemetry t = Telemetry.GetCurrent();               
-
+                Telemetry t = Telemetry.GetCurrent();
+                Form1 m = new Form1();
                 ///FSUIPC Permanent Actions
                 //Slew Mode Bloked
                 if (t.Slew == 1)
@@ -335,8 +335,7 @@ namespace Acars
                     FSUIPCOffsets.messageWrite.Value = Message;
                     FSUIPCOffsets.messageDuration.Value = 5;
                     FSUIPCConnection.Process();
-                }
-                Form1 m = new Form1();
+                }                
                 // Check Vspeeds are inserted
                 if (m.SpeedV1 == "" || m.SpeedV2 == "" || m.SpeedVr == "")
                 {

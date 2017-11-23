@@ -18,7 +18,10 @@ namespace Acars
         private int userId;
         public string SpeedV1;
         public string SpeedV2;
-        public string SpeedVr;       
+        public string SpeedVr;
+        public double totaldistance;
+        public double distanceremaining;
+        public double valuedistance;
 
         public Form1()
         {
@@ -38,6 +41,8 @@ namespace Acars
             SpeedV1 = txtV1.Text;
             SpeedV2 = txtV2.Text;
             SpeedVr = txtVR.Text;
+            
+            Console.WriteLine(String.Format("{0}", valuedistance.ToString("0")));
 
             if (f.LastTelemetry != null) {
                 txtStatus.Text = f.LastTelemetry.FlightPhase.ToString();
@@ -54,7 +59,6 @@ namespace Acars
                 txtZFW.Text = String.Format("{0} kg", f.LastTelemetry.ZeroFuelWeight.ToString("F0"));
                 txtFuel.Text = String.Format("{0} kg", (f.LastTelemetry.GrossWeight - f.LastTelemetry.ZeroFuelWeight).ToString("F0"));
                 txtSquawk.Text = String.Format("{0}", (f.LastTelemetry.Squawk).ToString("X").PadLeft(4, '0'));
-
                 //Log Text
                 StringBuilder sb = new StringBuilder();
 
@@ -149,6 +153,6 @@ namespace Acars
                 Console.WriteLine(crap.Message);
             }
             Console.Write(result);
-        }
+        }     
     }
 }
