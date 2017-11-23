@@ -64,6 +64,10 @@ namespace Acars.FlightData
         /// </summary>
         public bool ParkingBrake;
         /// <summary>
+        /// Parking Brake state
+        /// </summary>
+        public int ParkingBrakeWrite;
+        /// <summary>
         /// Returns true if aircraft is on ground, false otherwise
         /// </summary>
         public bool OnGround;
@@ -86,11 +90,15 @@ namespace Acars.FlightData
         /// <summary>
         /// Slew mode active
         /// </summary>
-        public bool Slew;
+        public int Slew;
         /// <summary>
         /// Pause state
         /// </summary>
         public bool Pause;
+        /// <summary>
+        /// Pause Write
+        /// </summary>
+        public int PauseWrite;
         /// <summary>
         /// Is aircraft in overspeed
         /// </summary>
@@ -194,12 +202,13 @@ namespace Acars.FlightData
             result.Engine3 = (FSUIPCOffsets.engine3.Value == 0) ? false : true;
             result.Engine4 = (FSUIPCOffsets.engine4.Value == 0) ? false : true;
             result.ParkingBrake = (FSUIPCOffsets.parkingBrake.Value == 0) ? false : true;
+            result.ParkingBrakeWrite = FSUIPCOffsets.parkingBrakeWrite.Value;
             result.OnGround = (FSUIPCOffsets.onGround.Value == 0) ? false : true;
             result.VerticalSpeed = (FSUIPCOffsets.verticalSpeed.Value * 3.28084) / -1;
             result.Throttle = FSUIPCOffsets.throttle.Value;
             result.Altitude = (FSUIPCOffsets.altitude.Value * 3.2808399);
             result.Gear = FSUIPCOffsets.GetBool(FSUIPCOffsets.gear);
-            result.Slew = (FSUIPCOffsets.slew.Value == 0) ? false : true;
+            result.Slew = FSUIPCOffsets.slew.Value;
             result.Pause = (FSUIPCOffsets.pause.Value == 0) ? false : true;
             result.OverSpeed = (FSUIPCOffsets.overSpeed.Value == 0) ? false : true;
             result.Stall = (FSUIPCOffsets.stall.Value == 0) ? false : true;

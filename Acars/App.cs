@@ -301,9 +301,9 @@ namespace Acars
 
                 ///FSUIPC Permanent Actions
                 //Slew Mode Bloked
-                if (t.Slew == true)
+                if (t.Slew == 1)
                 {
-                   Telemetry.SetValue(FSUIPCOffsets.slew, false);
+                   FSUIPCOffsets.slew.Value = 0;
                    string Message = "You can't use Slew Mode!";
                    FSUIPCOffsets.messageWrite.Value = Message;
                    FSUIPCOffsets.messageDuration.Value = 5;
@@ -312,7 +312,7 @@ namespace Acars
                 //Unpaused Action
                 if (t.Pause == true)
                 {
-                    Telemetry.SetValue(FSUIPCOffsets.pause, false);
+                    FSUIPCOffsets.pauseWrite.Value = 0;
                     string Message = "Simulator can't be paused!";
                     FSUIPCOffsets.messageWrite.Value = Message;
                     FSUIPCOffsets.messageDuration.Value = 5;
@@ -328,9 +328,9 @@ namespace Acars
                     //FSUIPCConnection.Process();
                 //}
                 //Parking Brakes can not be set on the air
-                if (t.ParkingBrake && t.GroundSpeed >= 10)
+                if (t.ParkingBrake && !t.OnGround)
                 {
-                    Telemetry.SetValue(FSUIPCOffsets.parkingBrake, false);
+                    FSUIPCOffsets.parkingBrakeWrite.Value = 0;
                     string Message = "Parking Brakes can not be set with aircraft movement!";
                     FSUIPCOffsets.messageWrite.Value = Message;
                     FSUIPCOffsets.messageDuration.Value = 5;
