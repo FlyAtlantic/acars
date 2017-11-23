@@ -85,6 +85,7 @@
     <Compile Include="FlightData\FlightPlan.cs" />
     <Compile Include="FlightData\FSUIPCOffsets.cs" />
     <Compile Include="FlightData\Location.cs" />
+    <Compile Include="FlightData\RestrictionByAircraft.cs" />
     <Compile Include="FlightData\Telemetry.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
