@@ -619,7 +619,7 @@
             // OnFlight
             // 
             this.OnFlight.Interval = 300000;
-            this.OnFlight.Tick += new System.EventHandler(this.OnFlight_Tick);
+
             // 
             // txtV1
             // 

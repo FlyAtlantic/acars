@@ -336,9 +336,18 @@ namespace Acars
                     FSUIPCOffsets.messageDuration.Value = 5;
                     FSUIPCConnection.Process();
                 }
-
+                Form1 m = new Form1();
+                // Check Vspeeds are inserted
+                if (m.SpeedV1 == "" || m.SpeedV2 == "" || m.SpeedVr == "")
+                {
+                    FSUIPCOffsets.parkingBrakeWrite.Value = 1;
+                    string Message = "Insert your Vspeeds!";
+                    FSUIPCOffsets.messageWrite.Value = Message;
+                    FSUIPCOffsets.messageDuration.Value = 5;
+                    FSUIPCConnection.Process();
+                }
                 //verifica hora e corrige hora
-                
+
             }
             catch (Exception crap)
             {
