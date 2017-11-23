@@ -14,10 +14,10 @@ namespace Acars.FlightData
             return LoadedFlightPlan;
         }
 
+        RestrictionByAircraft ByAircraft = new RestrictionByAircraft();
+
         public Flight(FlightPhases initialPhase = FlightPhases.PREFLIGHT)
         {
-            RestrictionByAircraft ByAircraft = new RestrictionByAircraft();
-
             #region Register Events
             activeEvents = new FlightEvent[] {
                 new FlightEvent("2A", 5, "Bank Angle Exceeded"                       , 30, 30, (t) => { return (t.Bank > 30); }),

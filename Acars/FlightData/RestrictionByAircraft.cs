@@ -13,9 +13,7 @@ using FSUIPC;
 namespace Acars.FlightData
 {
     class RestrictionByAircraft
-    {
-        
-        public Flight f = new Flight();
+    {                     
 
         //kg
         public int maximumTakeoffWeight
@@ -30,6 +28,8 @@ namespace Acars.FlightData
 
         public void Aircrafts()
         {
+            Flight f = new Flight();
+
             if (f.LoadedFlightPlan.Aircraft == "C172")
             {
                 maximumTakeoffWeight = 1111;
