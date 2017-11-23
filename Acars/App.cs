@@ -319,14 +319,14 @@ namespace Acars
                     FSUIPCConnection.Process();
                 }
                 //Simulator Rate Block Action
-                //if (playerSimRate.Value != 256)
-                //{
-                   // playerSimRate.Value = 256;
-                   // string Message = "Simulator Rate can't be changed!";
-                   // FSUIPCOffsets.messageWrite.Value = Message;
-                    //FSUIPCOffsets.messageDuration.Value = 5;
-                    //FSUIPCConnection.Process();
-                //}
+                if (t.SimRate != 1)
+                {
+                   FSUIPCOffsets.simRate.Value = 256;
+                   string Message = "Simulator Rate can't be changed!";
+                   FSUIPCOffsets.messageWrite.Value = Message;
+                   FSUIPCOffsets.messageDuration.Value = 5;
+                   FSUIPCConnection.Process();
+                }
                 //Parking Brakes can not be set on the air
                 if (t.ParkingBrake && !t.OnGround)
                 {
@@ -336,6 +336,7 @@ namespace Acars
                     FSUIPCOffsets.messageDuration.Value = 5;
                     FSUIPCConnection.Process();
                 }
+
                 //verifica hora e corrige hora
                 
             }
