@@ -12,7 +12,6 @@ namespace Acars
     {            
         static private String debugLogText = null;
 
-        #region Property declaration
         public Flight flight;
         private FsuipcWrapper fs;
         private int flightId;
@@ -20,7 +19,6 @@ namespace Acars
         public string SpeedV1;
         public string SpeedV2;
         public string SpeedVr;       
-        #endregion Property declaration
 
         public Form1()
         {
@@ -66,7 +64,7 @@ namespace Acars
                 sb.AppendFormat("Simulator Rate: {0} X \r\n\r\n", (f.LastTelemetry.SimRate).ToString("F0"));
                 sb.AppendFormat("Latitude: {0} \r\n", f.LastTelemetry.Latitude.ToString().Replace(',', '.'));
                 sb.AppendFormat("Longitude: {0} \r\n\r\n", f.LastTelemetry.Longitude.ToString().Replace(',', '.'));
-                sb.AppendFormat("Gear Pedro: {0} \r\n\r\n", f.LastTelemetry.Gear.ToString().Replace(',', '.'));               
+                sb.AppendFormat("Gear: {0} \r\n\r\n", f.LastTelemetry.Gear.ToString().Replace(',', '.'));               
                 sb.AppendFormat("IAS: {0} \r\n", (f.LastTelemetry.IndicatedAirSpeed).ToString("F0"));
                 sb.AppendFormat("QNH: {0} mbar \r\n\r\n", (f.LastTelemetry.QNH).ToString("F0"));
                 FSUIPCConnection.Process("AircraftInfo");
