@@ -138,7 +138,7 @@ namespace Acars.FlightData
         /// <summary>
         /// GroundSpeed
         /// </summary>
-        public int GroundSpeed;
+        public double GroundSpeed;
         /// <summary>
         /// RadioAltitude
         /// </summary>
@@ -225,7 +225,7 @@ namespace Acars.FlightData
             result.Latitude = FSUIPCOffsets.latitude.Value * (90.0 / (10001750.0 * 65536.0 * 65536.0));
             result.Longitude = FSUIPCOffsets.longitude.Value * (360.0 / (65536.0 * 65536.0 * 65536.0 * 65536.0));
             result.Location = new GeoCoordinate(result.Latitude, result.Longitude);
-            result.GroundSpeed = (FSUIPCOffsets.groundspeed.Value / 65536) * ((int)1.9438444924574 * 2);
+            result.GroundSpeed = (FSUIPCOffsets.groundspeed.Value / 65536)* 1.94384449;
             result.RadioAltitude = FSUIPCOffsets.RadioAltitude.Value / 65536;
 
             return result;
