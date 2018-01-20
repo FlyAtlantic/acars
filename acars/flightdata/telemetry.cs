@@ -178,7 +178,7 @@ namespace Acars.FlightData
 
             return true;
         }
-         
+
         /// <summary>
         /// Returns a snapshot of the current simulator telemetry, or, if unable returns null
         /// 
