@@ -59,7 +59,7 @@ namespace Acars
                 txtZFW.Text = String.Format("{0} kg", f.LastTelemetry.ZeroFuelWeight.ToString("F0"));
                 txtFuel.Text = String.Format("{0} kg", (f.LastTelemetry.GrossWeight - f.LastTelemetry.ZeroFuelWeight).ToString("F0"));
                 txtSquawk.Text = String.Format("{0}", (f.LastTelemetry.Squawk).ToString("X").PadLeft(4, '0'));
-                txtFlapPosition.Text = f.LoadedFlightPlan.Aircraft.FlapSettings[f.LastTelemetry.Flaps].Name;
+                //txtFlapPosition.Text = f.LoadedFlightPlan.Aircraft.FlapSettings[f.LastTelemetry.Flaps].Name;
 
                 Console.WriteLine(String.Format("{0}", f.LastTelemetry.MachSpeed.ToString()));
                 //Log Text
@@ -90,7 +90,7 @@ namespace Acars
                 txtDeparture.Text = f.LoadedFlightPlan.DepartureAirfield.Identifier;
                 txtAlternate.Text = f.LoadedFlightPlan.AlternateICAO;
                 txtArrival.Text = f.LoadedFlightPlan.ArrivalAirfield.Identifier;
-                txtFlightInformation.Text = String.Format("{0} {1} {2} {3:HH:mm}", (f.LoadedFlightPlan.DepartureAirfield.Identifier), (f.LoadedFlightPlan.ArrivalAirfield.Identifier), (f.LoadedFlightPlan.Aircraft), (f.LoadedFlightPlan.DateAssigned));
+                txtFlightInformation.Text = String.Format("{0} {1} {2} {3:HH:mm}", (f.LoadedFlightPlan.DepartureAirfield.Identifier), (f.LoadedFlightPlan.ArrivalAirfield.Identifier), (f.LoadedFlightPlan.Aircraft.Identifier), (f.LoadedFlightPlan.DateAssigned));
                 if (f.FlightRunning == true)
                     txtAcarsStatus.Text = String.Format("Acars Running");
             }

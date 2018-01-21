@@ -128,6 +128,19 @@ namespace Acars.FlightData
                                         { 10, new FlapSetting("1", 85) }
                                 });
                                 break;
+
+                            case "B738":
+                                result.Aircraft = new AircraftPerformance(
+                                    "B738",
+                                    78741,
+                                    66361,
+                                    41500,
+                                    new Dictionary<short, FlapSetting>() {
+                                        { 0, new FlapSetting( "0", 400) },
+                                        { 10, new FlapSetting("1", 210) }
+                                });
+                                break;
+
                             default:
                                 result.Aircraft = null;
                                 break;

@@ -20,17 +20,17 @@ namespace Acars.FlightData
             #region Register Events
             activeEvents = new FlightEvent[] {
                 new FlightEvent("2A", 5, "Bank Angle Exceeded"                       , 30, 30, (t) => { return (t.Bank > 30); }),
-                new FlightEvent("3A", 5, "Landing lights on above 10000 ft"     , 5 , 5 , (t) => { return (t.LandingLights && t.Altitude > 10500); }),
+                new FlightEvent("3A", 5, "Landing lights on above 10000 ft"     , 5 , 5 , (t) => { return (t.LandingLights && (t.Altitude > 10500)); }),
                 new FlightEvent("3B", 5, "Landing lights off durring approach"  , 5 , 5 , (t) => { return (!t.LandingLights && (t.RadioAltitude < 2750 || t.Altitude < 2500) && phase == FlightPhases.APPROACH); }),
-                new FlightEvent("3C", 5, "Speed above 250 IAS bellow 10000 ft"  , 10, 10, (t) => { return (t.IndicatedAirSpeed > 255 && t.Altitude < 9500); }),
-                new FlightEvent("3D", 5, "High Speed On Taxi Out"                      , 5 , 5, (t) => { return (t.GroundSpeed > 30 && t.OnGround && phase == FlightPhases.TAXIOUT); }),
-                new FlightEvent("3E", 5, "High Speed On Taxi In"                      , 5 , 5, (t) => { return (t.GroundSpeed > 30 && t.OnGround && phase == FlightPhases.TAXIIN); }),
+                new FlightEvent("3C", 5, "Speed above 250 IAS bellow 10000 ft"  , 10, 10, (t) => { return ((t.IndicatedAirSpeed > 255) && (t.Altitude < 9500)); }),
+                new FlightEvent("3D", 5, "High Speed On Taxi Out"                      , 5 , 5, (t) => { return ((t.GroundSpeed > 30 && t.OnGround) && phase == FlightPhases.TAXIOUT); }),
+                new FlightEvent("3E", 5, "High Speed On Taxi In"                      , 5 , 5, (t) => { return ((t.GroundSpeed > 30 && t.OnGround) && phase == FlightPhases.TAXIIN); }),
                 new FlightEvent("4A", 5, "Landing light on above 250 IAS"       , 5 , 5 , (t) => { return (t.LandingLights && t.IndicatedAirSpeed > 255); }),
                 new FlightEvent("4B", 5, "Landing lights Off On TakeOff"  , 5 , 5 , (t) => { return (!t.LandingLights && phase == FlightPhases.TAKEOFF); }),
-                new FlightEvent("4C", 5, "Pitch High Below 1500ft on Departure(Radio)"             , 10, 10, (t) => { return (t.RadioAltitude < 1500 && t.Pitch > 20); }),
+                new FlightEvent("4C", 5, "Pitch High Below 1500ft on Departure(Radio)"             , 10, 10, (t) => { return ((t.RadioAltitude < 1500) && t.Pitch > 20); }),
                 new FlightEvent("4D", 5, "Gear down above 250 IAS"             , 10, 30, (t) => { return (t.Gear && t.IndicatedAirSpeed > 255); }),
-                new FlightEvent("6A", 1, "Maximum TakeOff Weight Excceded"             , 30, 30, (t) => { return (phase == FlightPhases.TAKEOFF && t.GrossWeight > LoadedFlightPlan.Aircraft.MTW); }),
-                new FlightEvent("6B", 1, "Maximum Landing Weight Excceded"             , 30, 30, (t) => { return (phase == FlightPhases.LANDING && t.GrossWeight > LoadedFlightPlan.Aircraft.MLW); }),
+                new FlightEvent("6A", 1, "Maximum TakeOff Weight Excceded"             , 30, 30, (t) => { return (phase == FlightPhases.TAKEOFF && (t.GrossWeight > LoadedFlightPlan.Aircraft.MTW)); }),
+                new FlightEvent("6B", 1, "Maximum Landing Weight Excceded"             , 30, 30, (t) => { return (phase == FlightPhases.LANDING && (t.GrossWeight > LoadedFlightPlan.Aircraft.MLW)); }),
                 new FlightEvent("6C", 1, "Maximum Service Ceiling Excceded"             , 30, 30, (t) => { return (!t.OnGround && (t.Altitude > LoadedFlightPlan.Aircraft.Celling)); }),
                 new FlightEvent("7B", 5, "Pitch too high"                       , 30, 30, (t) => { return (t.Pitch > 30); })
             };
