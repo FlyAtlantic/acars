@@ -124,8 +124,23 @@ namespace Acars.FlightData
                                     1111,
                                     14508,
                                     new Dictionary<short, FlapSetting>() {
-                                        { 0, new FlapSetting( "0", 128 + 500) },
-                                        { 10, new FlapSetting("1", 85) }
+                                        { 0, new FlapSetting( "0", 200) },
+                                        { 3890, new FlapSetting("10", 85) },
+                                        { 10415, new FlapSetting("20", 85) },
+                                        { 16383, new FlapSetting("30", 85) }
+                                });
+                                break;
+
+                            case "B190":
+                                result.Aircraft = new AircraftPerformance(
+                                    "B190",
+                                    7766,
+                                    7605,
+                                    25500,
+                                    new Dictionary<short, FlapSetting>() {
+                                        { 0, new FlapSetting( "0", 400) },
+                                        { 7021, new FlapSetting("17", 190) },
+                                        { 16383, new FlapSetting("35", 155) }
                                 });
                                 break;
 
