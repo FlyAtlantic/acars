@@ -32,6 +32,7 @@ namespace Acars.FlightData
                 new FlightEvent("6A", 1, "Maximum TakeOff Weight Excceded"             , 30, 30, (t) => { return (phase == FlightPhases.TAKEOFF && ((int)t.GrossWeight > LoadedFlightPlan.Aircraft.MTW)); }),
                 new FlightEvent("6B", 1, "Maximum Landing Weight Excceded"             , 30, 30, (t) => { return (phase == FlightPhases.LANDING && ((int)t.GrossWeight > LoadedFlightPlan.Aircraft.MLW)); }),
                 new FlightEvent("6C", 1, "Maximum Service Ceiling Excceded"             , 30, 30, (t) => { return (!t.OnGround && (t.Altitude > LoadedFlightPlan.Aircraft.Celling)); }),
+                new FlightEvent("6D", 1, "Maximum Speed Flap Excceded"             , 30, 30, (t) => { return (!t.OnGround && (t.IndicatedAirSpeed > LoadedFlightPlan.Aircraft.FlapSettings[t.Flaps].IASLimit)); }),
                 new FlightEvent("7B", 5, "Pitch too high"                       , 30, 30, (t) => { return (t.Pitch > 30); })
             };
             #endregion Register Events
