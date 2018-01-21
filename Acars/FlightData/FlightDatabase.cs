@@ -137,14 +137,14 @@ namespace Acars.FlightData
                                     41500,
                                     new Dictionary<short, FlapSetting>() {
                                         { 0, new FlapSetting( "0", 400) },
-                                        { 1, new FlapSetting("3640", 250) },
-                                        { 2, new FlapSetting("7509", 250) },
-                                        { 5, new FlapSetting("10239", 250) },
-                                        { 10, new FlapSetting("12742", 210) },
-                                        { 15, new FlapSetting("13652", 200) },
-                                        { 25, new FlapSetting("14335", 190) },
-                                        { 30, new FlapSetting("15017", 175) },
-                                        { 40, new FlapSetting("16383", 160) }
+                                        { 3640, new FlapSetting("1", 250) },
+                                        { 7509, new FlapSetting("2", 250) },
+                                        { 10239, new FlapSetting("5", 250) },
+                                        { 12742, new FlapSetting("10", 210) },
+                                        { 13652, new FlapSetting("15", 200) },
+                                        { 14335, new FlapSetting("25", 190) },
+                                        { 15017, new FlapSetting("30", 175) },
+                                        { 16383, new FlapSetting("40", 160) }
                                 });
                                 break;
 
