@@ -115,7 +115,7 @@ namespace Acars.FlightData
                         result.DateAssigned = (DateTime)sqlCmdRes[8];
 
                         // TODO: Assign performance files from database
-                        switch ((string)sqlCmdRes[12])
+                        switch ((string)sqlCmdRes[13])
                         {
                             case "C172":
                                 result.Aircraft = new AircraftPerformance(
