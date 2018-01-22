@@ -11,6 +11,7 @@ namespace Acars.UI
         public PilotReportFrm()
         {
             InitializeComponent();
+            TopLevel = true;
         }
 
         public void Show(Flight f)
