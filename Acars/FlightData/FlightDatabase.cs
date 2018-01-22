@@ -124,10 +124,18 @@ namespace Acars.FlightData
                                     1111,
                                     14508,
                                     new Dictionary<short, FlapSetting>() {
+                                        //C172 A2A
                                         { 0, new FlapSetting( "0", 200) },
                                         { 3890, new FlapSetting("10", 85) },
                                         { 10415, new FlapSetting("20", 85) },
-                                        { 16383, new FlapSetting("30", 85) }
+                                        { 16383, new FlapSetting("30", 85) },
+                                        //C172 Carenado
+                                        { 0, new FlapSetting( "0", 200) },
+                                        { 4157, new FlapSetting("10", 85) },
+                                        { 9047, new FlapSetting("20", 85) },
+                                        { 12715, new FlapSetting("30", 85) },
+                                        { 16383, new FlapSetting("40", 85) }
+
                                 });
                                 break;
 
@@ -135,12 +143,45 @@ namespace Acars.FlightData
                                 result.Aircraft = new AircraftPerformance(
                                     "B190",
                                     7766,
-                                    7605,
+                                    7620,
                                     25500,
                                     new Dictionary<short, FlapSetting>() {
+                                        //B190 Carenado
                                         { 0, new FlapSetting( "0", 400) },
                                         { 7021, new FlapSetting("17", 190) },
                                         { 16383, new FlapSetting("35", 155) }
+                                });
+                                break;
+
+                            case "DH8D":
+                                result.Aircraft = new AircraftPerformance(
+                                    "DH8D",
+                                    29574,
+                                    28123,
+                                    25500,
+                                    new Dictionary<short, FlapSetting>() {
+                                        //DH8D Majestic v1.0.0.9
+                                        { 0, new FlapSetting( "0", 400) },
+                                        { 2340, new FlapSetting("5", 200) },
+                                        { 4681, new FlapSetting("10", 181) },
+                                        { 7021, new FlapSetting("15", 172) },
+                                        { 16383, new FlapSetting("35", 158) }
+                                });
+                                break;
+
+                            case "A32F":
+                                result.Aircraft = new AircraftPerformance(
+                                    "A32F",
+                                    77000,
+                                    65500,
+                                    40000,
+                                    new Dictionary<short, FlapSetting>() {
+                                        //A32F FSLabs
+                                        { 0, new FlapSetting( "0", 400) },
+                                        { 2926, new FlapSetting("1+F", 215) },
+                                        { 6631, new FlapSetting("2", 200) },
+                                        { 8192, new FlapSetting("3", 185) },
+                                        { 16383, new FlapSetting("FULL", 177) }
                                 });
                                 break;
 
@@ -151,6 +192,7 @@ namespace Acars.FlightData
                                     66361,
                                     41500,
                                     new Dictionary<short, FlapSetting>() {
+                                        //B738 PMDG 
                                         { 0, new FlapSetting( "0", 400) },
                                         { 3640, new FlapSetting("1", 250) },
                                         { 7509, new FlapSetting("2", 250) },

@@ -683,15 +683,17 @@
             // 
             // txtFlapPosition
             // 
-            this.txtFlapPosition.Location = new System.Drawing.Point(609, 579);
+            this.txtFlapPosition.Location = new System.Drawing.Point(171, 546);
             this.txtFlapPosition.Name = "txtFlapPosition";
+            this.txtFlapPosition.ReadOnly = true;
             this.txtFlapPosition.Size = new System.Drawing.Size(43, 20);
             this.txtFlapPosition.TabIndex = 50;
+            this.txtFlapPosition.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(533, 582);
+            this.label1.Location = new System.Drawing.Point(95, 550);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(70, 13);
             this.label1.TabIndex = 51;
