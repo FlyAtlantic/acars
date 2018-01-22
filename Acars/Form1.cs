@@ -5,11 +5,6 @@ using System;
 using System.Security.Cryptography;
 using System.Text;
 using System.Windows.Forms;
-using System.Net;
-using System.Xml.Linq;
-using System.Xml.XPath;
-using System.ComponentModel;
-using System.Xml;
 
 namespace Acars
 {
@@ -26,11 +21,11 @@ namespace Acars
         public string SpeedVr;
         public double totaldistance;
         public double distanceremaining;
-        public double valuedistance;   
+        public double valuedistance;
 
         public Form1()
         {
-            InitializeComponent();            
+            InitializeComponent();
 
             #region DEBUG
 #if DEBUG
@@ -41,7 +36,6 @@ namespace Acars
             #endregion DEBUG
         }
         
-
         public void Update(Flight f)
         {
             SpeedV1 = txtV1.Text;
@@ -50,7 +44,7 @@ namespace Acars
 
             Console.WriteLine(String.Format("{0}", valuedistance.ToString("0")));
 
-            if (f.LastTelemetry != null) {                         
+            if (f.LastTelemetry != null) {
                 txtStatus.Text = f.LastTelemetry.FlightPhase.ToString();
                 txtGrossWeight.Text = f.LastTelemetry.GrossWeight.ToString("F0");
                 txtZFW.Text = f.LastTelemetry.ZeroFuelWeight.ToString("F0");
@@ -93,7 +87,6 @@ namespace Acars
             }
             if (f.LoadedFlightPlan != null)
             {
-                DownloadVatsim.Start();
                 Telemetry t = new Telemetry();
                 txtCallsign.Text = f.LoadedFlightPlan.AtcCallsign;
                 txtDeparture.Text = f.LoadedFlightPlan.DepartureAirfield.Identifier;
@@ -168,7 +161,6 @@ namespace Acars
                 Console.WriteLine(crap.Message);
             }
             Console.Write(result);
-        }
-
+        }     
     }
 }
