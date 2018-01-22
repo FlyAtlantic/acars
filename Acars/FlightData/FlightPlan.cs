@@ -23,6 +23,8 @@ namespace Acars.FlightData
         { get; set; }
         public AircraftPerformance Aircraft
         { get; set; }
+        public string CIDVatsim
+        { get; set; }
 
         public FlightPlan() { }
     }

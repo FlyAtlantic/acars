@@ -32,6 +32,7 @@ namespace Acars
         private Timer timer;
         private Timer telemetryTimer;
         private Timer SimulatorStatusTimer;
+        private Timer VatsimStatusTimer;
 
         private Flight flight;
 
@@ -90,10 +91,17 @@ namespace Acars
             telemetryTimer.Tick += new EventHandler(ProcessFlightTelemetry);
             telemetryTimer.Tick += new EventHandler(SimulatorStatus);
 
+            VatsimStatusTimer = new Timer();
+            VatsimStatusTimer.Interval = 60000;
+            VatsimStatusTimer.Tick += new EventHandler(flight.DownloadVatsimStatus);
+
             TrayIcon.Close_Click += CloseMenuItem_Click;
             TrayIcon.OpenFlightStatus_Click += OpenOldFormMenuItem_Click;
             TrayIcon.OpenSettings_Click += TrayIcon_OpenSettings_Click;
         }
+
+
+
 
         private void TrayIcon_OpenSettings_Click(object sender, EventArgs e)
         {
@@ -212,6 +220,8 @@ namespace Acars
                     timer.Tick -= new EventHandler(WaitForDepartureAirfield);
 
                     flight.StartFlight();
+
+                    VatsimStatusTimer.Start();
 
                     TrayIcon.ShowBalloonTip(ToolTipIcon.Info,
                                             String.Format("{0} from {1} to {2}",
