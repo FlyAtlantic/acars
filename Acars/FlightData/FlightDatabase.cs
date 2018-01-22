@@ -388,5 +388,11 @@ namespace Acars.FlightData
                 conn.Close();
             }
         }
+
+        public static bool IsPilotOnVatsim(Flight flight)
+        {
+            // TODO: check for VATSIM presence here
+            return true;
+        }
     }
 }

@@ -371,6 +371,10 @@ namespace Acars.FlightData
                 FlightDatabase.UpdateFlight(this);
 
                 lastUpdateId = TelemetryLog.Count - 1;
+
+                bool onVatsim = FlightDatabase.IsPilotOnVatsim(this);
+                if (onVatsim)
+                    Events.Add(new EventOccurrence(lastUpdateId, lastUpdateId, new FlightEvent("5A", 900, "Offline From Vatsim", 10, 30, (t) => { return false; })));
             }
         }
 
