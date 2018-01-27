@@ -24,7 +24,8 @@ namespace Acars.FlightData
             {
                 const string message = "Error retrieving response.  Check inner details for more info.";
                 var crap = new ApplicationException(message, response.ErrorException);
-                throw crap;
+                //throw crap;
+                return new T();
             }
             return response.Data;
         }
