@@ -131,12 +131,12 @@ namespace Acars.FlightData
                                         { 3890, new FlapSetting("10", 85) },
                                         { 10415, new FlapSetting("20", 85) },
                                         { 16383, new FlapSetting("30", 85) },
-                                        //C172 Carenado
-                                        { 0, new FlapSetting( "0", 200) },
-                                        { 4157, new FlapSetting("10", 85) },
-                                        { 9047, new FlapSetting("20", 85) },
-                                        { 12715, new FlapSetting("30", 85) },
-                                        { 16383, new FlapSetting("40", 85) }
+                                        ////C172 Carenado
+                                        //{ 0, new FlapSetting( "0", 200) },
+                                        //{ 4157, new FlapSetting("10", 85) },
+                                        //{ 9047, new FlapSetting("20", 85) },
+                                        //{ 12715, new FlapSetting("30", 85) },
+                                        //{ 16383, new FlapSetting("40", 85) }
 
                                 });
                                 break;
