@@ -94,6 +94,7 @@
     <Compile Include="FlightData\Location.cs" />
     <Compile Include="FlightData\RestrictionByAircraft.cs" />
     <Compile Include="FlightData\Telemetry.cs" />
+    <Compile Include="FlightData\VatsimProxyApi.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -391,52 +391,6 @@ namespace Acars.FlightData
             }
         }
 
-
-        public class VatsimProxyClients
-        {
-            [DeserializeAs(Name = "_items")]
-            public List<VatsimProxyClient> Clients { get; set; }
-        }
-
-        public class VatsimProxyClient
-        {
-            public string callsign { get; set; }
-            public string clienttype { get; set; }
-        }
-
-        private class VatsimProxyApi
-        {
-            const string BaseUrl = "https://vatsim-status-proxy.herokuapp.com";
-
-            public VatsimProxyApi() { }
-
-            public T Execute<T>(RestRequest request) where T : new()
-            {
-                var client = new RestClient();
-                client.BaseUrl = new System.Uri(BaseUrl);
-                var response = client.Execute<T>(request);
-
-                if (response.ErrorException != null)
-                {
-                    const string message = "Error retrieving response.  Check inner details for more info.";
-                    var crap = new ApplicationException(message, response.ErrorException);
-                    throw crap;
-                }
-                return response.Data;
-            }
-
-            public VatsimProxyClients GetClientByCid(string CID)
-            {
-                var request = new RestRequest();
-                request.Resource = "clients";
-                request.RootElement = "VatsimProxyClients";
-
-                request.AddParameter("where", "{\"cid\":" + CID + "}");
-
-                return Execute<VatsimProxyClients>(request);
-            }
-        }
-
         public static bool IsPilotOnVatsim(Flight flight)
         {
             return new VatsimProxyApi().GetClientByCid(flight.LoadedFlightPlan.CIDVatsim).Clients.Count > 0;
