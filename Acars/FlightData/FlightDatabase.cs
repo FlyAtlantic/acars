@@ -161,9 +161,9 @@ namespace Acars.FlightData
                                     25500,
                                     new Dictionary<short, FlapSetting>() {
                                         //AT72 FLIGHT ONE
-                                        //{ 0, new FlapSetting( "0", 400) },
-                                        //{ 7021, new FlapSetting("17", 190) },
-                                        //{ 16383, new FlapSetting("35", 155) }
+                                        { 0, new FlapSetting( "0", 400) },
+                                        { 7536, new FlapSetting("15", 185) },
+                                        { 16383, new FlapSetting("30", 150) }
                                 });
                                 break;
 
