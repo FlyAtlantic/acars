@@ -153,6 +153,20 @@ namespace Acars.FlightData
                                 });
                                 break;
 
+                            case "AT72":
+                                result.Aircraft = new AircraftPerformance(
+                                    "AT72",
+                                    22500,
+                                    22350,
+                                    25500,
+                                    new Dictionary<short, FlapSetting>() {
+                                        //AT72 FLIGHT ONE
+                                        //{ 0, new FlapSetting( "0", 400) },
+                                        //{ 7021, new FlapSetting("17", 190) },
+                                        //{ 16383, new FlapSetting("35", 155) }
+                                });
+                                break;
+
                             case "DH8D":
                                 result.Aircraft = new AircraftPerformance(
                                     "DH8D",
