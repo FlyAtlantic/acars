@@ -131,12 +131,10 @@ namespace Acars.FlightData
                                         { 3890, new FlapSetting("10", 85) },
                                         { 10415, new FlapSetting("20", 85) },
                                         { 16383, new FlapSetting("30", 85) },
-                                        //C172 Carenado
-                                        { 0, new FlapSetting( "0", 200) },
+                                        ////C172 Carenado
                                         { 4157, new FlapSetting("10", 85) },
                                         { 9047, new FlapSetting("20", 85) },
                                         { 12715, new FlapSetting("30", 85) },
-                                        { 16383, new FlapSetting("40", 85) }
 
                                 });
                                 break;
@@ -152,6 +150,20 @@ namespace Acars.FlightData
                                         { 0, new FlapSetting( "0", 400) },
                                         { 7021, new FlapSetting("17", 190) },
                                         { 16383, new FlapSetting("35", 155) }
+                                });
+                                break;
+
+                            case "AT72":
+                                result.Aircraft = new AircraftPerformance(
+                                    "AT72",
+                                    22500,
+                                    22350,
+                                    25500,
+                                    new Dictionary<short, FlapSetting>() {
+                                        //AT72 FLIGHT ONE
+                                        { 0, new FlapSetting( "0", 400) },
+                                        { 7536, new FlapSetting("15", 185) },
+                                        { 16383, new FlapSetting("30", 150) }
                                 });
                                 break;
 

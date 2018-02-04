@@ -59,7 +59,8 @@ namespace Acars
                 txtZFW.Text = String.Format("{0} kg", f.LastTelemetry.ZeroFuelWeight.ToString("F0"));
                 txtFuel.Text = String.Format("{0} kg", (f.LastTelemetry.GrossWeight - f.LastTelemetry.ZeroFuelWeight).ToString("F0"));
                 txtSquawk.Text = String.Format("{0}", (f.LastTelemetry.Squawk).ToString("X").PadLeft(4, '0'));
-                if (f.LoadedFlightPlan.Aircraft.FlapSettings.ContainsKey(f.LastTelemetry.Flaps)) {
+                if (f.LoadedFlightPlan.Aircraft.FlapSettings.ContainsKey(f.LastTelemetry.Flaps))
+                {
                     txtFlapPosition.Text = f.LoadedFlightPlan.Aircraft.FlapSettings[f.LastTelemetry.Flaps].Name;
                 }
 
