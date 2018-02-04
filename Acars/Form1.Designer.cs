@@ -90,6 +90,7 @@
             this.txtAcarsStatus = new System.Windows.Forms.TextBox();
             this.txtFlapPosition = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.txtSimInfo = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -699,6 +700,15 @@
             this.label1.TabIndex = 51;
             this.label1.Text = "Flap Position:";
             // 
+            // txtSimInfo
+            // 
+            this.txtSimInfo.Location = new System.Drawing.Point(153, 572);
+            this.txtSimInfo.Name = "txtSimInfo";
+            this.txtSimInfo.ReadOnly = true;
+            this.txtSimInfo.Size = new System.Drawing.Size(91, 20);
+            this.txtSimInfo.TabIndex = 52;
+            this.txtSimInfo.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -706,6 +716,7 @@
             this.BackgroundImage = global::Acars.Properties.Resources.banner;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.ClientSize = new System.Drawing.Size(772, 638);
+            this.Controls.Add(this.txtSimInfo);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txtFlapPosition);
             this.Controls.Add(this.txtAcarsStatus);
@@ -803,6 +814,7 @@
         private System.Windows.Forms.TextBox txtAcarsStatus;
         private System.Windows.Forms.TextBox txtFlapPosition;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox txtSimInfo;
     }
 }
 

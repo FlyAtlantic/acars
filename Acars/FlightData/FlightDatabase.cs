@@ -219,6 +219,24 @@ namespace Acars.FlightData
                                 });
                                 break;
 
+                            case "B77L":
+                                result.Aircraft = new AircraftPerformance(
+                                    "B77L",
+                                    347500,
+                                    223168,
+                                    43500,
+                                    new Dictionary<short, FlapSetting>() {
+                                        //B77L PMDG 
+                                        { 0, new FlapSetting( "0", 400) },
+                                        { 3337, new FlapSetting("1", 265) },
+                                        { 7281, new FlapSetting("5", 245) },
+                                        { 9102, new FlapSetting("15", 230) },
+                                        { 10619, new FlapSetting("20", 225) },
+                                        { 14259, new FlapSetting("25", 200) },
+                                        { 16383, new FlapSetting("30", 180) }
+                                });
+                                break;
+
                             default:
                                 result.Aircraft = null;
                                 break;

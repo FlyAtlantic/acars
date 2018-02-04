@@ -64,6 +64,7 @@ namespace Acars
                     txtFlapPosition.Text = f.LoadedFlightPlan.Aircraft.FlapSettings[f.LastTelemetry.Flaps].Name;
                 }
 
+                txtSimInfo.Text = FSUIPCConnection.FlightSimVersionConnected.ToString();
                 Console.WriteLine(String.Format("{0}", f.LastTelemetry.MachSpeed.ToString()));
                 //Log Text
                 StringBuilder sb = new StringBuilder();
