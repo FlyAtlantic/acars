@@ -40,7 +40,7 @@ namespace Acars.FlightData
                 //    return (!t.OnGround && (t.IndicatedAirSpeed > flapSetting.IASLimit));
                 //}),
 
-                new FlightEvent("6D", 1, "Maximum Speed Flap Excceded"                       , 30, 30, (t) => { return LoadedFlightPlan.Aircraft.FlapSettings.ContainsKey(t.Flaps) && (LoadedFlightPlan.Aircraft.FlapSettings[t.Flaps].IASLimit > t.IndicatedAirSpeed); }),
+                new FlightEvent("6D", 1, "Maximum Speed Flap Excceded"                       , 30, 30, (t) => { return LoadedFlightPlan.Aircraft.FlapSettings.ContainsKey(t.Flaps) && (LoadedFlightPlan.Aircraft.FlapSettings[t.Flaps].IASLimit < t.IndicatedAirSpeed); }),
                 new FlightEvent("7B", 5, "Pitch too high"                       , 30, 30, (t) => { return (t.Pitch > 30); })
             };
             #endregion Register Events
