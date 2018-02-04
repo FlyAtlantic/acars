@@ -195,7 +195,11 @@ namespace Acars.FlightData
                                         { 2926, new FlapSetting("1+F", 215) },
                                         { 6631, new FlapSetting("2", 200) },
                                         { 8192, new FlapSetting("3", 185) },
-                                        { 16383, new FlapSetting("FULL", 177) }
+                                        { 16383, new FlapSetting("FULL", 177) },
+                                        //A32F AEROSOFT
+                                        { 3686, new FlapSetting("1+F", 215) },
+                                        { 9830, new FlapSetting("2", 200) },
+                                        { 11468, new FlapSetting("3", 185) }
                                 });
                                 break;
 
