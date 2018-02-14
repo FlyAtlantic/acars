@@ -153,6 +153,21 @@ namespace Acars.FlightData
                                 });
                                 break;
 
+                            case "JS41":
+                                result.Aircraft = new AircraftPerformance(
+                                    "JS41",
+                                    10886,
+                                    10569,
+                                    26500,
+                                    new Dictionary<short, FlapSetting>() {
+                                        //JS41 PMDG
+                                        { 0, new FlapSetting( "0", 400) },
+                                        { 5898, new FlapSetting("9", 200) },
+                                        { 9830, new FlapSetting("15", 160) },
+                                        { 16383, new FlapSetting("25", 140) }
+                                });
+                                break;
+
                             case "AT72":
                                 result.Aircraft = new AircraftPerformance(
                                     "AT72",
