@@ -16,18 +16,44 @@
     <Icon Id="icon.ico" SourceFile="$(var.Acars.TargetDir)\tszbanner.ico"/>
     <Property Id="ARPPRODUCTICON" Value="tszbanner.ico" />
 
-    <MajorUpgrade DowngradeErrorMessage="A newer version of FlyAtlantic ACARS is already installed." />
+    <MajorUpgrade DowngradeErrorMessage="A newer version of FlyAtlantic ACARS is already installed." AllowSameVersionUpgrades="yes"/>
 		<MediaTemplate EmbedCab="yes" />
 
 		<Feature Id="ProductFeature" Title="FlyAtlantic Acars" Level="1">
 			<ComponentGroupRef Id="ProductComponents" />
+			<ComponentRef Id="ApplicationShortcutDesktop" />
 		</Feature>
 
-    <Property Id="ASSISTANCE_START_VIA_REGISTRY">1</Property>
+	  <InstallExecuteSequence>
+		  <Custom Action='LaunchInstalledExe' After='InstallFinalize'/>
+	  </InstallExecuteSequence>
+	  <CustomAction Id="LaunchInstalledExe"
+		   FileKey="FlyAtlanticAcars.exe"
+		   ExeCommand=""
+		   Execute="immediate"
+		   Impersonate="yes"
+		   Return="asyncNoWait" />
 	</Product>
 
 	<Fragment>
 		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="DesktopFolder" Name="Desktop">
+				<Component Id="ApplicationShortcutDesktop" Guid="*">
+					<Shortcut Id="ApplicationDesktopShortcut"
+						Name="FlyAtlantic Acars"
+						Description="Comment field in your shortcut"
+						Target="[INSTALLFOLDER]FlyAtlanticAcars.exe"
+						WorkingDirectory="INSTALLFOLDER"/>
+					<RemoveFolder Id="DesktopFolder" On="uninstall"/>
+					<RegistryValue
+						Root="HKCU"
+						Key="Software/Acars"
+						Name="installed"
+						Type="integer"
+						Value="1"
+						KeyPath="yes"/>
+				</Component>
+			</Directory>
 			<Directory Id="ProgramFilesFolder">
 				<Directory Id="INSTALLFOLDER" Name="FlyAtlantic ACARS" />
 			</Directory>
@@ -44,32 +70,7 @@
       </Component>
       <Component Id="MySql.Data">
         <File Name="MySql.Data.dll" Source="$(var.Acars.TargetDir)\MySql.Data.dll" />
-      </Component>
-      
-      <!-- Auto-start via Registry -->
-      <Component Id="FlyAtlanticAcarsAutostart" Guid="290768e7-73e1-4432-a118-bde25c5a3cc9">
-        <RegistryValue Id="FlyAtlanticAcars.Autostart" Root="HKMU" Action="write"
-                       Key="Software\Microsoft\Windows\CurrentVersion\Run"
-                       Name="FlyAtlantic ACARS"
-                       Value="[INSTALLFOLDER]Fly Atlantic Acars"
-                       Type="string" />
-        <Condition>ASSISTANCE_START_VIA_REGISTRY</Condition>
-      </Component>
-
-      <ComponentRef Id="FlyAtlanticAcarsAutostart" />
+      </Component>      
 		</ComponentGroup>
 	</Fragment>
-
-  <Fragment>
-    <DirectoryRef Id="ApplicationProgramsFolder">
-
-      <Component Id="RegistryEntries" Guid="1efc6d21-bf25-498d-b293-0f4ed02b6fbF">
-        <RegistryKey Root="HKCU"
-                     Key="Software\Microsoft\Windows\CurrentVersion\Run"
-              Action="createAndRemoveOnUninstall">
-          <RegistryValue Type="string" Name="FlyAtlantic ACARS" Value="[#Fly Altantic Acars.exe]" KeyPath="yes"/>
-        </RegistryKey>
-      </Component>
-    </DirectoryRef>
-  </Fragment>
 </Wix>

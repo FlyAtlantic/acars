@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.15
+VisualStudioVersion = 15.0.26430.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Acars", "Acars\Acars.csproj", "{FED35AB1-B790-4E1F-8B37-AE0EC6919464}"
 EndProject
@@ -13,6 +13,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		tszbanner.ico = tszbanner.ico
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExamCenterUpdate", "..\..\..\..\Source\Repos\ExamCenter\ExamCenterUpdate\ExamCenterUpdate.csproj", "{2B047DB0-E6AE-4A01-974E-D1253D73CA51}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,14 @@ Global
 		{5B3EC688-F463-4055-8FF8-3C5A4C163628}.Release|Any CPU.Build.0 = Release|x86
 		{5B3EC688-F463-4055-8FF8-3C5A4C163628}.Release|x86.ActiveCfg = Release|x86
 		{5B3EC688-F463-4055-8FF8-3C5A4C163628}.Release|x86.Build.0 = Release|x86
+		{2B047DB0-E6AE-4A01-974E-D1253D73CA51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B047DB0-E6AE-4A01-974E-D1253D73CA51}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B047DB0-E6AE-4A01-974E-D1253D73CA51}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2B047DB0-E6AE-4A01-974E-D1253D73CA51}.Debug|x86.Build.0 = Debug|Any CPU
+		{2B047DB0-E6AE-4A01-974E-D1253D73CA51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B047DB0-E6AE-4A01-974E-D1253D73CA51}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B047DB0-E6AE-4A01-974E-D1253D73CA51}.Release|x86.ActiveCfg = Release|Any CPU
+		{2B047DB0-E6AE-4A01-974E-D1253D73CA51}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

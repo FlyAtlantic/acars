@@ -163,6 +163,11 @@ namespace Acars
                 Console.WriteLine(crap.Message);
             }
             Console.Write(result);
-        }     
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Hide();
+        }
     }
 }
