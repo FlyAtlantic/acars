@@ -24,15 +24,6 @@
 			<ComponentRef Id="ApplicationShortcutDesktop" />
 		</Feature>
 
-	  <InstallExecuteSequence>
-		  <Custom Action='LaunchInstalledExe' After='InstallFinalize'/>
-	  </InstallExecuteSequence>
-	  <CustomAction Id="LaunchInstalledExe"
-		   FileKey="FlyAtlanticAcars.exe"
-		   ExeCommand=""
-		   Execute="immediate"
-		   Impersonate="yes"
-		   Return="asyncNoWait" />
 	</Product>
 
 	<Fragment>
@@ -72,5 +63,17 @@
         <File Name="MySql.Data.dll" Source="$(var.Acars.TargetDir)\MySql.Data.dll" />
       </Component>      
 		</ComponentGroup>
+	</Fragment>
+	<Fragment>
+	<DirectoryRef Id="ApplicationProgramsFolder">
+
+		<Component Id="RegistryEntries" Guid="1efc6d21-bf25-498d-b293-0f4ed02b6fbF">
+			<RegistryKey Root="HKCU"
+						 Key="Software\Microsoft\Windows\CurrentVersion\Run"
+				  Action="createAndRemoveOnUninstall">
+				<RegistryValue Type="string" Name="FlyAtlantic ACARS" Value="[#FlyAltanticAcars.exe]" KeyPath="yes"/>
+			</RegistryKey>
+		</Component>
+	</DirectoryRef>
 	</Fragment>
 </Wix>

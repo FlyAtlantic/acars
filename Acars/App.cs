@@ -35,13 +35,13 @@ namespace Acars
         private Timer SimulatorStatusTimer;
 
         private Flight flight;
-        private StartImage startImg = new StartImage();
+
         public App()
         {
 
             Application.ApplicationExit += new EventHandler(this.OnApplicationExit);
             InitializeComponent();
-            startImg.Show();
+
             try
             {
                 if (!FlightDatabase.ValidateLogin(Properties.Settings.Default.Email, Properties.Settings.Default.Password))
