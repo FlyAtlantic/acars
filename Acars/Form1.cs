@@ -167,7 +167,11 @@ namespace Acars
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Hide();
+            if (e.CloseReason != CloseReason.FormOwnerClosing)
+            {
+                Hide();
+                e.Cancel = true; // this cancels the close event.
+            }
         }
     }
 }
