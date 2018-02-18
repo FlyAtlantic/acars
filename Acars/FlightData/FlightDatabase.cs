@@ -256,6 +256,24 @@ namespace Acars.FlightData
                                 });
                                 break;
 
+                            case "B744":
+                                result.Aircraft = new AircraftPerformance(
+                                    "B744",
+                                    396893,
+                                    285763,
+                                    45600,
+                                    new Dictionary<short, FlapSetting>() {
+                                        //B744 V2 PMDG 
+                                        { 0, new FlapSetting( "0", 400) },
+                                        { 2445, new FlapSetting("1", 280) },
+                                        { 10514, new FlapSetting("5", 260) },
+                                        { 11982, new FlapSetting("10", 240) },
+                                        { 13693, new FlapSetting("20", 230) },
+                                        { 14916, new FlapSetting("25", 205) },
+                                        { 16383, new FlapSetting("30", 180) }
+                                });
+                                break;
+
                             default:
                                 result.Aircraft = null;
                                 break;
