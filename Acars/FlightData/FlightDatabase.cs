@@ -89,7 +89,7 @@ namespace Acars.FlightData
         public static FlightPlan GetFlightPlan()
         {
             FlightPlan result = new FlightPlan();
-            string sqlStrGetFlight = "SELECT `flights`.`flightnumber`, `origin`.`ICAO` as originICAO, `origin`.`LAT` as originLat, `origin`.`LON` originLON, `arrival`.`ICAO` as arrivalICAO, `arrival`.`LAT` as arrivalLat, `arrival`.`LON` as arrivalLON, `flights`.`alternate`, `pilotassignments`.`date_assigned`, `utilizadores`.`user_id`, `flights`.`idf`, `flights`.`flighttime`, `flights`.`aircraft`, `utilizadores`.`idvatsim` FROM `pilotassignments` LEFT JOIN `flights` ON `pilotassignments`.`flightid` = `flights`.`idf` LEFT JOIN `airports` origin ON `origin`.`ICAO` = `flights`.`departure` LEFT JOIN `airports` arrival ON `arrival`.`ICAO` = `flights`.`destination` LEFT JOIN `utilizadores` on `pilotassignments`.`pilot` = `utilizadores`.`user_id` WHERE `utilizadores`.`user_email` = @email;";
+            string sqlStrGetFlight = "SELECT `flights`.`flightnumber`, `origin`.`ICAO` as originICAO, `origin`.`LAT` as originLat, `origin`.`LON` originLON, `arrival`.`ICAO` as arrivalICAO, `arrival`.`LAT` as arrivalLat, `arrival`.`LON` as arrivalLON, `flights`.`alternate`, `pilotassignments`.`date_assigned`, `utilizadores`.`user_id`, `flights`.`idf`, `flights`.`flighttime`, `flights`.`aircraft`, `utilizadores`.`idvatsim`, pilotassignments.id FROM `pilotassignments` LEFT JOIN `flights` ON `pilotassignments`.`flightid` = `flights`.`idf` LEFT JOIN `airports` origin ON `origin`.`ICAO` = `flights`.`departure` LEFT JOIN `airports` arrival ON `arrival`.`ICAO` = `flights`.`destination` LEFT JOIN `utilizadores` on `pilotassignments`.`pilot` = `utilizadores`.`user_id` WHERE `utilizadores`.`user_email` = @email;";
             MySqlConnection conn = new MySqlConnection(ConnectionString);
 
             try
@@ -116,6 +116,7 @@ namespace Acars.FlightData
                         result.ID = (int)sqlCmdRes[10];
                         result.DateAssigned = (DateTime)sqlCmdRes[8];
                         result.CIDVatsim = (string)sqlCmdRes[13];
+                        result.AssignID = (int)sqlCmdRes[14];
                         // TODO: Assign performance files from database
                         switch ((string)sqlCmdRes[12])
                         {
@@ -274,6 +275,24 @@ namespace Acars.FlightData
                                 });
                                 break;
 
+                            case "B787":
+                                result.Aircraft = new AircraftPerformance(
+                                    "B787",
+                                    0,
+                                    0,
+                                    43500,
+                                    new Dictionary<short, FlapSetting>() {
+                                        //B789 Quality Wings 
+                                        //{ 0, new FlapSetting( "0", 400) },
+                                        //{ 2445, new FlapSetting("1", 280) },
+                                        //{ 10514, new FlapSetting("5", 260) },
+                                        //{ 11982, new FlapSetting("10", 240) },
+                                        //{ 13693, new FlapSetting("20", 230) },
+                                        //{ 14916, new FlapSetting("25", 205) },
+                                        //{ 16383, new FlapSetting("30", 180) }
+                                });
+                                break;
+
                             default:
                                 result.Aircraft = null;
                                 break;
@@ -296,13 +315,83 @@ namespace Acars.FlightData
             return result;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="flight"></param>
-        /// <returns>(int) Inserted pirep ID</returns>
-        public static long StartFlight(Flight flight)
+        public static bool resultLive { get; set; }
+
+        public static void GetFirstLiveLog(Flight flight)
         {
+            if (flight.LoadedFlightPlan != null) {
+                string sqlStrGetFlight = "SELECT assignid from flight_on_live left join utilizadores on flight_on_live.pilotid = utilizadores.user_id";
+                MySqlConnection conn1 = new MySqlConnection(ConnectionString);
+
+                try
+                {
+                    conn1.Open();
+
+
+                    // GET FLIGHT DATA
+                    MySqlCommand sqlCmd = new MySqlCommand(sqlStrGetFlight, conn1);
+                    sqlCmd.Parameters.AddWithValue("@email", Properties.Settings.Default.Email);
+
+                    MySqlDataReader sqlCmdRes = sqlCmd.ExecuteReader();
+                    if (sqlCmdRes.HasRows)
+                        while (sqlCmdRes.Read())
+                        {
+                            resultLive = Convert.ToBoolean((int)sqlCmdRes[0]);
+
+                        }
+
+                }
+                catch (Exception crap)
+                {
+                    // pass the exception to the caller with an usefull message
+                    throw new Exception(String.Format("Failed to load flight plan for user {0}.\r\nSQL Statements: {1}", Properties.Settings.Default.Email, sqlStrGetFlight), crap);
+                }
+                finally
+                {
+                    conn1.Close();
+
+                    string sqlStrInsertPirep = "INSERT INTO `flight_on_live` (`pilotid`, `assignid`, `last_report`) Values(@Pilotid, @Assignid, NOW());";
+                    MySqlConnection conn = new MySqlConnection(ConnectionString);
+                    if (!resultLive)
+                    {
+
+                        try
+                        {
+                            conn.Open();
+
+                            // INSERT PIREP
+                            MySqlCommand sqlCmd = new MySqlCommand(sqlStrInsertPirep, conn);
+                            sqlCmd.Parameters.AddWithValue("@PilotID", flight.LoadedFlightPlan.ID);
+                            sqlCmd.Parameters.AddWithValue("@Assignid", flight.LoadedFlightPlan.AssignID);
+
+                            sqlCmd.ExecuteNonQuery();
+
+                        }
+                        catch (Exception crap)
+                        {
+                            // pass the exception to the caller with an usefull message
+                            throw new Exception(String.Format("Failed to end the flight plan for user {0}.\r\nSQL Statements: {1}",
+                                                              Properties.Settings.Default.Email,
+                                                              sqlStrInsertPirep),
+                                                crap);
+                        }
+                        finally
+                        {
+                            conn.Close();
+                        }
+
+                    }
+
+                }
+            }
+        }
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <param name="flight"></param>
+            /// <returns>(int) Inserted pirep ID</returns>
+         public static long StartFlight(Flight flight)
+         {
             long insertedId = -1;
 
             string sqlStrInsertPirep = "INSERT INTO `pireps` (`date`, `flightid`, `pilotid`, `accepted`) SELECT @date, @flightid, `user_id`, @accepted FROM `utilizadores` WHERE `user_email` = @email;";
@@ -345,8 +434,11 @@ namespace Acars.FlightData
         /// </summary>
         public static void UpdateFlight(Flight flight)
         {
+            GetFirstLiveLog(flight);
+
             string sqlStrUpdatePilotAsignments = "UPDATE `pilotassignments` JOIN `utilizadores` ON `utilizadores`.`user_id` = `pilotassignments`.`pilot` SET `onflight` = NOW() WHERE `utilizadores`.`user_email`=@email";
             string sqlStrUpdateFlightLog = "INSERT INTO flightLog (pirepid, time, LAT, LON, ALT, HDG, GS, phase) VALUES (@pirepid, @time, @LAT, @LON, @ALT, @HDG, @GS, @phase)";
+            string sqlStrUpdateLiveMap = "UPDATE `flight_on_live` set pilotid = @PilotID, assignid = @AssignID, pirepid = @PirepID, last_report = NOW(), LAT = @LAT, LON = @LON, HDG = @HDG, ALT = @ALT, GS = @GS, phase = @Phase";
             MySqlConnection conn = new MySqlConnection(ConnectionString);
 
             try
@@ -366,9 +458,24 @@ namespace Acars.FlightData
                 sqlCmd.Parameters.AddWithValue("@ALT", flight.LastTelemetry.Altitude);
                 sqlCmd.Parameters.AddWithValue("@HDG", flight.LastTelemetry.Compass);
                 sqlCmd.Parameters.AddWithValue("@GS", flight.LastTelemetry.GroundSpeed);
-                sqlCmd.Parameters.AddWithValue("@phase", flight.LastTelemetry.FlightPhase);
+                sqlCmd.Parameters.AddWithValue("@Phase", flight.LastTelemetry.FlightPhase);
 
                 sqlCmd.ExecuteNonQuery();
+
+
+                MySqlCommand sqlCmd1 = new MySqlCommand(sqlStrUpdateLiveMap, conn);
+                sqlCmd1 = new MySqlCommand(sqlStrUpdateLiveMap, conn);
+                sqlCmd1.Parameters.AddWithValue("@PirepID", flight.PirepID);
+                sqlCmd1.Parameters.AddWithValue("@PilotID", flight.LoadedFlightPlan.ID);
+                sqlCmd1.Parameters.AddWithValue("@AssignID", flight.LoadedFlightPlan.AssignID);
+                sqlCmd1.Parameters.AddWithValue("@LAT", flight.LastTelemetry.Latitude);
+                sqlCmd1.Parameters.AddWithValue("@LON", flight.LastTelemetry.Longitude);
+                sqlCmd1.Parameters.AddWithValue("@ALT", flight.LastTelemetry.Altitude);
+                sqlCmd1.Parameters.AddWithValue("@HDG", flight.LastTelemetry.Compass);
+                sqlCmd1.Parameters.AddWithValue("@GS", flight.LastTelemetry.GroundSpeed);
+                sqlCmd1.Parameters.AddWithValue("@phase", flight.LastTelemetry.FlightPhase);
+
+                sqlCmd1.ExecuteNonQuery();
             }
             catch (Exception crap)
             {

@@ -43,8 +43,9 @@ namespace Acars
             SpeedVr = txtVR.Text;            
 
             Console.WriteLine(String.Format("{0}", valuedistance.ToString("0")));
-
-            if (f.LastTelemetry != null) {
+            if (f.LoadedFlightPlan != null)
+            {
+                if (f.LastTelemetry != null) {
                 txtStatus.Text = f.LastTelemetry.FlightPhase.ToString();
                 txtGrossWeight.Text = f.LastTelemetry.GrossWeight.ToString("F0");
                 txtZFW.Text = f.LastTelemetry.ZeroFuelWeight.ToString("F0");
@@ -87,8 +88,7 @@ namespace Acars
                 txtLog.Text = sb.ToString();
 
             }
-            if (f.LoadedFlightPlan != null)
-            {
+
                 Telemetry t = new Telemetry();
                 txtCallsign.Text = f.LoadedFlightPlan.AtcCallsign;
                 txtDeparture.Text = f.LoadedFlightPlan.DepartureAirfield.Identifier;

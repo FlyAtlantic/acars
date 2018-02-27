@@ -25,6 +25,8 @@ namespace Acars.FlightData
         { get; set; }
         public string CIDVatsim
         { get; set; }
+        public int AssignID
+        { get; set; }
 
         public FlightPlan() { }
     }
