@@ -3,7 +3,7 @@ solution: "./Acars.sln"
 script:
 - xbuild /p:Configuration=Travis ./Acars.sln
 after_success:
-- zip -r travis-build.zip Acars/bin/Travis
+- cd Acars/bin/Travis && zip -r ../../../travis-build.zip . && cd ../../..
 deploy:
   provider: releases
   api_key: "$GH_TOKEN"
