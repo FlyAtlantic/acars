@@ -395,6 +395,8 @@ namespace Acars.FlightData
             long insertedId = -1;
 
             string sqlStrInsertPirep = "INSERT INTO `pireps` (`date`, `flightid`, `pilotid`, `accepted`) SELECT @date, @flightid, `user_id`, @accepted FROM `utilizadores` WHERE `user_email` = @email;";
+            string sqlStrVerify1Sql = "select * from flight_on_live left join utilizadores on flight_on_live.pilotid = utilizadores.user_id where user_email = @Email";
+            string sqlStrInsert1Sql = "INSERT INTO `flight_on_live` (`pilotid`, `assignid`, `pirepid`, `last_report`, `LAT`, `LON`, `HDG`, `ALT`, `GS`, `phase`) SELECT `user_id`, @AssignID, @PirepID, NOW(), @LAT, @LON, @HDG, @ALT, @GS, @phase FROM `utilizadores` WHERE `user_email` = @email;";
 
             MySqlConnection conn = new MySqlConnection(ConnectionString);
 
@@ -412,6 +414,57 @@ namespace Acars.FlightData
 
                 sqlCmd.ExecuteNonQuery();
                 insertedId = sqlCmd.LastInsertedId;
+
+                try
+                {
+                    MySqlCommand sqlCmd1 = new MySqlCommand(sqlStrVerify1Sql, conn);
+                    sqlCmd1.Parameters.AddWithValue("@Email", Properties.Settings.Default.Email);
+
+                    if (Convert.ToInt32(sqlCmd1.ExecuteScalar()) == 0){
+                        try
+                        {
+                            MySqlCommand sqlCmd2 = new MySqlCommand(sqlStrInsert1Sql, conn);
+                            sqlCmd2.Parameters.AddWithValue("@PirepID", flight.PirepID);
+                            sqlCmd2.Parameters.AddWithValue("@email", Properties.Settings.Default.Email);
+                            sqlCmd2.Parameters.AddWithValue("@AssignID", flight.LoadedFlightPlan.AssignID);
+                            sqlCmd2.Parameters.AddWithValue("@LAT", flight.LastTelemetry.Latitude);
+                            sqlCmd2.Parameters.AddWithValue("@LON", flight.LastTelemetry.Longitude);
+                            sqlCmd2.Parameters.AddWithValue("@ALT", flight.LastTelemetry.Altitude);
+                            sqlCmd2.Parameters.AddWithValue("@HDG", flight.LastTelemetry.Compass);
+                            sqlCmd2.Parameters.AddWithValue("@GS", flight.LastTelemetry.GroundSpeed);
+                            sqlCmd2.Parameters.AddWithValue("@phase", flight.LastTelemetry.FlightPhase);
+
+                            sqlCmd2.ExecuteNonQuery();
+
+                        }
+                        catch (Exception crap)
+                        {
+                            // pass the exception to the caller with an usefull message
+                            throw new Exception(String.Format("Failed to end the flight plan for user {0}.\r\nSQL Statements: {1}",
+                                                              Properties.Settings.Default.Email,
+                                                              sqlStrInsertPirep),
+                                                crap);
+                        }
+                        finally
+                        {
+
+                        }
+                    }
+
+
+                }
+                catch (Exception crap)
+                {
+                    // pass the exception to the caller with an usefull message
+                    throw new Exception(String.Format("Failed to end the flight plan for user {0}.\r\nSQL Statements: {1}",
+                                                      Properties.Settings.Default.Email,
+                                                      sqlStrInsertPirep),
+                                        crap);
+                }
+                finally
+                {
+                    conn.Close();
+                }
             }
             catch (Exception crap)
             {
@@ -438,7 +491,7 @@ namespace Acars.FlightData
 
             string sqlStrUpdatePilotAsignments = "UPDATE `pilotassignments` JOIN `utilizadores` ON `utilizadores`.`user_id` = `pilotassignments`.`pilot` SET `onflight` = NOW() WHERE `utilizadores`.`user_email`=@email";
             string sqlStrUpdateFlightLog = "INSERT INTO flightLog (pirepid, time, LAT, LON, ALT, HDG, GS, phase) VALUES (@pirepid, @time, @LAT, @LON, @ALT, @HDG, @GS, @phase)";
-            string sqlStrUpdateLiveMap = "UPDATE `flight_on_live` JOIN `utilizadores` ON `utilizadores`.`user_email` = @Email set pilotid = user_id, assignid = @AssignID, pirepid = @PirepID, last_report = NOW(), LAT = @LAT, LON = @LON, HDG = @HDG, ALT = @ALT, GS = @GS, phase = @phase";
+            string sqlStrUpdateLiveMap = "UPDATE `flight_on_live` JOIN `utilizadores` ON `utilizadores`.`user_email` = @Email where pilotid = utilizadores`.`user_id` set pilotid = user_id, assignid = @AssignID, pirepid = @PirepID, last_report = NOW(), LAT = @LAT, LON = @LON, HDG = @HDG, ALT = @ALT, GS = @GS, phase = @phase";
             MySqlConnection conn = new MySqlConnection(ConnectionString);
 
             try
