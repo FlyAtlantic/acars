@@ -438,7 +438,7 @@ namespace Acars.FlightData
 
             string sqlStrUpdatePilotAsignments = "UPDATE `pilotassignments` JOIN `utilizadores` ON `utilizadores`.`user_id` = `pilotassignments`.`pilot` SET `onflight` = NOW() WHERE `utilizadores`.`user_email`=@email";
             string sqlStrUpdateFlightLog = "INSERT INTO flightLog (pirepid, time, LAT, LON, ALT, HDG, GS, phase) VALUES (@pirepid, @time, @LAT, @LON, @ALT, @HDG, @GS, @phase)";
-            string sqlStrUpdateLiveMap = "UPDATE `flight_on_live` set pilotid = @PilotID, assignid = @AssignID, pirepid = @PirepID, last_report = NOW(), LAT = @LAT, LON = @LON, HDG = @HDG, ALT = @ALT, GS = @GS, phase = @Phase";
+            string sqlStrUpdateLiveMap = "UPDATE `flight_on_live` JOIN `utilizadores` ON `utilizadores`.`user_email` = @Email set pilotid = user_id, assignid = @AssignID, pirepid = @PirepID, last_report = NOW(), LAT = @LAT, LON = @LON, HDG = @HDG, ALT = @ALT, GS = @GS, phase = @phase";
             MySqlConnection conn = new MySqlConnection(ConnectionString);
 
             try
@@ -458,7 +458,7 @@ namespace Acars.FlightData
                 sqlCmd.Parameters.AddWithValue("@ALT", flight.LastTelemetry.Altitude);
                 sqlCmd.Parameters.AddWithValue("@HDG", flight.LastTelemetry.Compass);
                 sqlCmd.Parameters.AddWithValue("@GS", flight.LastTelemetry.GroundSpeed);
-                sqlCmd.Parameters.AddWithValue("@Phase", flight.LastTelemetry.FlightPhase);
+                sqlCmd.Parameters.AddWithValue("@phase", flight.LastTelemetry.FlightPhase);
 
                 sqlCmd.ExecuteNonQuery();
 
@@ -466,7 +466,7 @@ namespace Acars.FlightData
                 MySqlCommand sqlCmd1 = new MySqlCommand(sqlStrUpdateLiveMap, conn);
                 sqlCmd1 = new MySqlCommand(sqlStrUpdateLiveMap, conn);
                 sqlCmd1.Parameters.AddWithValue("@PirepID", flight.PirepID);
-                sqlCmd1.Parameters.AddWithValue("@PilotID", flight.LoadedFlightPlan.ID);
+                sqlCmd1.Parameters.AddWithValue("@email", Properties.Settings.Default.Email);
                 sqlCmd1.Parameters.AddWithValue("@AssignID", flight.LoadedFlightPlan.AssignID);
                 sqlCmd1.Parameters.AddWithValue("@LAT", flight.LastTelemetry.Latitude);
                 sqlCmd1.Parameters.AddWithValue("@LON", flight.LastTelemetry.Longitude);
