@@ -1,0 +1,13 @@
+language: csharp
+solution: "./Acars.sln"
+script:
+- xbuild /p:Configuration=Travis ./Acars.sln
+after_success:
+- cd Acars/bin/Travis && zip -r ../../../travis-build.zip . && cd ../../..
+deploy:
+  provider: releases
+  api_key: "$GH_TOKEN"
+  file: "travis-build.zip"
+  skip_cleanup: true
+  on:
+    tags: true

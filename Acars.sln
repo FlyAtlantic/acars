@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.16
+VisualStudioVersion = 15.0.26730.15
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Acars", "Acars\Acars.csproj", "{FED35AB1-B790-4E1F-8B37-AE0EC6919464}"
 EndProject
@@ -11,10 +11,9 @@ Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "AcarsSetup", "AcarsSetup\Ac
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B5B5B471-45DA-4F50-A013-9C786DAE05B7}"
 	ProjectSection(SolutionItems) = preProject
+		.travis.yml = .travis.yml
 		tszbanner.ico = tszbanner.ico
 	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExamCenterUpdate", "..\..\..\..\Source\Repos\ExamCenter\ExamCenterUpdate\ExamCenterUpdate.csproj", "{2B047DB0-E6AE-4A01-974E-D1253D73CA51}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -22,6 +21,8 @@ Global
 		Debug|x86 = Debug|x86
 		Release|Any CPU = Release|Any CPU
 		Release|x86 = Release|x86
+		Travis|Any CPU = Travis|Any CPU
+		Travis|x86 = Travis|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{FED35AB1-B790-4E1F-8B37-AE0EC6919464}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -32,6 +33,10 @@ Global
 		{FED35AB1-B790-4E1F-8B37-AE0EC6919464}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FED35AB1-B790-4E1F-8B37-AE0EC6919464}.Release|x86.ActiveCfg = Release|Any CPU
 		{FED35AB1-B790-4E1F-8B37-AE0EC6919464}.Release|x86.Build.0 = Release|Any CPU
+		{FED35AB1-B790-4E1F-8B37-AE0EC6919464}.Travis|Any CPU.ActiveCfg = Travis|Any CPU
+		{FED35AB1-B790-4E1F-8B37-AE0EC6919464}.Travis|Any CPU.Build.0 = Travis|Any CPU
+		{FED35AB1-B790-4E1F-8B37-AE0EC6919464}.Travis|x86.ActiveCfg = Travis|Any CPU
+		{FED35AB1-B790-4E1F-8B37-AE0EC6919464}.Travis|x86.Build.0 = Travis|Any CPU
 		{7A51B8CB-9528-4A2E-A79D-D87A7C5D3A41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7A51B8CB-9528-4A2E-A79D-D87A7C5D3A41}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7A51B8CB-9528-4A2E-A79D-D87A7C5D3A41}.Debug|x86.ActiveCfg = Debug|Any CPU
@@ -40,6 +45,9 @@ Global
 		{7A51B8CB-9528-4A2E-A79D-D87A7C5D3A41}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7A51B8CB-9528-4A2E-A79D-D87A7C5D3A41}.Release|x86.ActiveCfg = Release|Any CPU
 		{7A51B8CB-9528-4A2E-A79D-D87A7C5D3A41}.Release|x86.Build.0 = Release|Any CPU
+		{7A51B8CB-9528-4A2E-A79D-D87A7C5D3A41}.Travis|Any CPU.ActiveCfg = Travis|Any CPU
+		{7A51B8CB-9528-4A2E-A79D-D87A7C5D3A41}.Travis|x86.ActiveCfg = Travis|Any CPU
+		{7A51B8CB-9528-4A2E-A79D-D87A7C5D3A41}.Travis|x86.Build.0 = Travis|Any CPU
 		{5B3EC688-F463-4055-8FF8-3C5A4C163628}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{5B3EC688-F463-4055-8FF8-3C5A4C163628}.Debug|x86.ActiveCfg = Debug|x86
 		{5B3EC688-F463-4055-8FF8-3C5A4C163628}.Debug|x86.Build.0 = Debug|x86
@@ -47,14 +55,9 @@ Global
 		{5B3EC688-F463-4055-8FF8-3C5A4C163628}.Release|Any CPU.Build.0 = Release|x86
 		{5B3EC688-F463-4055-8FF8-3C5A4C163628}.Release|x86.ActiveCfg = Release|x86
 		{5B3EC688-F463-4055-8FF8-3C5A4C163628}.Release|x86.Build.0 = Release|x86
-		{2B047DB0-E6AE-4A01-974E-D1253D73CA51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2B047DB0-E6AE-4A01-974E-D1253D73CA51}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2B047DB0-E6AE-4A01-974E-D1253D73CA51}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{2B047DB0-E6AE-4A01-974E-D1253D73CA51}.Debug|x86.Build.0 = Debug|Any CPU
-		{2B047DB0-E6AE-4A01-974E-D1253D73CA51}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2B047DB0-E6AE-4A01-974E-D1253D73CA51}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2B047DB0-E6AE-4A01-974E-D1253D73CA51}.Release|x86.ActiveCfg = Release|Any CPU
-		{2B047DB0-E6AE-4A01-974E-D1253D73CA51}.Release|x86.Build.0 = Release|Any CPU
+		{5B3EC688-F463-4055-8FF8-3C5A4C163628}.Travis|Any CPU.ActiveCfg = Release|x86
+		{5B3EC688-F463-4055-8FF8-3C5A4C163628}.Travis|x86.ActiveCfg = Release|x86
+		{5B3EC688-F463-4055-8FF8-3C5A4C163628}.Travis|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
