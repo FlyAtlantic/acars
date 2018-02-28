@@ -491,7 +491,7 @@ namespace Acars.FlightData
 
             string sqlStrUpdatePilotAsignments = "UPDATE `pilotassignments` JOIN `utilizadores` ON `utilizadores`.`user_id` = `pilotassignments`.`pilot` SET `onflight` = NOW() WHERE `utilizadores`.`user_email`=@email";
             string sqlStrUpdateFlightLog = "INSERT INTO flightLog (pirepid, time, LAT, LON, ALT, HDG, GS, phase) VALUES (@pirepid, @time, @LAT, @LON, @ALT, @HDG, @GS, @phase)";
-            string sqlStrUpdateLiveMap = "UPDATE `flight_on_live` JOIN `utilizadores` ON `utilizadores`.`user_email` = @Email where pilotid = utilizadores`.`user_id` set pilotid = user_id, assignid = @AssignID, pirepid = @PirepID, last_report = NOW(), LAT = @LAT, LON = @LON, HDG = @HDG, ALT = @ALT, GS = @GS, phase = @phase";
+            string sqlStrUpdateLiveMap = "UPDATE `flight_on_live` JOIN `utilizadores` users ON users.`user_email` = @Email set pilotid = user_id, assignid = @AssignID, pirepid = @PirepID, last_report = NOW(), LAT = @LAT, LON = @LON, HDG = @HDG, ALT = @ALT, GS = @GS, phase = @phase where users.user_id = pilotid";
             MySqlConnection conn = new MySqlConnection(ConnectionString);
 
             try
@@ -517,7 +517,6 @@ namespace Acars.FlightData
 
 
                 MySqlCommand sqlCmd1 = new MySqlCommand(sqlStrUpdateLiveMap, conn);
-                sqlCmd1 = new MySqlCommand(sqlStrUpdateLiveMap, conn);
                 sqlCmd1.Parameters.AddWithValue("@PirepID", flight.PirepID);
                 sqlCmd1.Parameters.AddWithValue("@email", Properties.Settings.Default.Email);
                 sqlCmd1.Parameters.AddWithValue("@AssignID", flight.LoadedFlightPlan.AssignID);
