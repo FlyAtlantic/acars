@@ -7,7 +7,7 @@ after_success:
 deploy:
   provider: releases
   api_key: "$GH_TOKEN"
-  file: "travis-build.zip.zip"
+  file: "travis-build.zip"
   skip_cleanup: true
   on:
     tags: true
