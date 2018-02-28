@@ -200,11 +200,5 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\Source\Repos\ExamCenter\ExamCenterUpdate\ExamCenterUpdate.csproj">
-      <Project>{2b047db0-e6ae-4a01-974e-d1253d73ca51}</Project>
-      <Name>ExamCenterUpdate</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
