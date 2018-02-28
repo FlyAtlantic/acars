@@ -3,11 +3,5 @@ solution: "./Acars.sln"
 after_success:
 - zip -r build.zip Acars/bin/Release
 - zip -r setup.zip AcarsSetup/bin/Release
-deploy:
-  provider: releases
-  api_key: "$GH_TOKEN"
-  file: "build.zip"
-  file: "setup.zip"
-  skip_cleanup: true
-  on:
-    tags: true
+script:
+- xbuild /p:Configuration=Travis ./Acars.sln
