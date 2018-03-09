@@ -61,7 +61,16 @@
       </Component>
       <Component Id="MySql.Data">
         <File Name="MySql.Data.dll" Source="$(var.Acars.TargetDir)\MySql.Data.dll" />
-      </Component>      
+      </Component>
+		<Component Id="RestSharp">
+        <File Name="RestSharp.dll" Source="$(var.Acars.TargetDir)\RestSharp.dll" />
+      </Component>
+	<Component Id="System.Device.Portable">
+        <File Name="System.Device.Portable.dll" Source="$(var.Acars.TargetDir)\System.Device.Portable.dll" />
+      </Component>
+			<Component Id="System.ValueTuple">
+        <File Name="System.ValueTuple.dll" Source="$(var.Acars.TargetDir)\System.ValueTuple.dll" />
+      </Component>
 		</ComponentGroup>
 	</Fragment>
 	<Fragment>
