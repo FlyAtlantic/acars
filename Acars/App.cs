@@ -109,12 +109,13 @@ namespace Acars
 
         private void CloseMenuItem_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Do you really want to close me?",
-                    "Are you sure?", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation,
-                    MessageBoxDefaultButton.Button1) == DialogResult.Yes)
-            {
-                Application.Exit();
-            }
+            DialogResult result = MessageBox.Show(
+                "Do you really want to close me?",
+                "Are you sure?",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Exclamation);
+            if (result == DialogResult.Yes)
+                Environment.Exit(1);
         }
 
         private void OpenOldFormMenuItem_Click(object sender, EventArgs e)
