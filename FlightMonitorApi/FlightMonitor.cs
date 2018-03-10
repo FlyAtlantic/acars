@@ -1,41 +1,29 @@
-﻿using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Threading;
+﻿using System.Threading;
 
 namespace FlightMonitorApi
 {
-    public class FlightMonitor
+    public static partial class FlightMonitor
     {
-        public delegate bool SnapshotInterest(FSUIPCSnapshot queued, FSUIPCSnapshot contenter);
-
-        public BlockingCollection<FSUIPCSnapshot> Queue;
-
-        private FSUIPCSnapshot lastQueued;
-
-        public List<SnapshotInterest> Interests;
-
-        Thread monitoringThread;
-
-        private bool running = false;
-
-        public FlightMonitor()
-        {
-            monitoringThread = new Thread(new ThreadStart(MonitoringWorker));
-            Queue = new BlockingCollection<FSUIPCSnapshot>();
-            Interests = new List<SnapshotInterest>();
-            lastQueued = null;
-        }
-
-        public void StartWorkers()
+        /// <summary>
+        /// Starts monitoring and publishing threads
+        /// 
+        /// Use SignalStop() to request them stop asap
+        ///     Note: if any thread is waiting (for a db timeout for example) it
+        ///     will still wait for that timeout before dying.
+        /// </summary>
+        public static void StartWorkers()
         {
             if (running)
-                return;
-            running = true;
+                return; 
+            running = true;                                                         
 
             monitoringThread.Start();
         }
 
-        private void MonitoringWorker()
+        /// <summary>
+        /// The flight monitor worker
+        /// </summary>
+        private static void MonitoringWorker()
         {
             while (running)
             {
@@ -47,6 +35,16 @@ namespace FlightMonitorApi
 
                 Thread.Sleep(1);
             }
+        }
+
+        /// <summary>
+        /// Signals all threads to stop asap
+        ///     Note: if any thread is waiting (for a db timeout for example) it
+        ///     will still wait for that timeout before dying.
+        /// </summary>
+        public static void SignalStop()
+        {
+            running = false;
         }
     }
 }

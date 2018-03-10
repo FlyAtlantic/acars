@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FlightMonitor.cs" />
+    <Compile Include="FlightMonitor.Properties.cs" />
     <Compile Include="FSUIPCSnapshot.cs" />
     <Compile Include="FSUIPCSnapshot.Properties.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
