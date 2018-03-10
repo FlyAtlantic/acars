@@ -31,7 +31,6 @@ namespace Acars
 
         private Timer timer;
         private Timer telemetryTimer;
-        private Timer SimulatorStatusTimer;
 
         private Flight flight;
 
@@ -265,17 +264,6 @@ namespace Acars
                 }
                 t = flight.HandleFlightPhases(t);
                 flight.ProcessTelemetry(t);
-
-                //Update flight every 5 minutes
-                int reportDelay = 0;
-
-                if (flight.LastTelemetry.Altitude > 6000) {
-                    reportDelay = 5;
-                    }
-                if (flight.LastTelemetry.Altitude < 6000)
-                {
-                    reportDelay = 1;
-                }
 
                 flight.UpdateFlight();
 
