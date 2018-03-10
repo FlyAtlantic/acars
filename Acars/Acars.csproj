@@ -106,14 +106,12 @@
     <Compile Include="FlightData\FSUIPCOffsets.cs" />
     <Compile Include="FlightData\Location.cs" />
     <Compile Include="FlightData\RestrictionByAircraft.cs" />
-    <Compile Include="FlightData\Telemetry.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="FlightData\FsuipcWrapper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UI\AcarsNotifyIcon.cs" />
@@ -212,6 +210,12 @@
     <Content Include="tszbanner.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FlightMonitorApi\FlightMonitorApi.csproj">
+      <Project>{46ef6fdb-c7f0-4e7e-9832-2e5c024af84b}</Project>
+      <Name>FlightMonitorApi</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

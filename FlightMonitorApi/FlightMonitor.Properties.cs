@@ -1,5 +1,4 @@
 ﻿using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Threading;
 
 namespace FlightMonitorApi
@@ -16,19 +15,17 @@ namespace FlightMonitorApi
         /// </summary>
         /// <param name="queued">The last queued snapshot</param>
         /// <param name="contenter">The current snapshot</param>
-        /// <param name="message">Message to add to the queue (Optional).</param>
         /// <returns></returns>
         public delegate bool SnapshotInterest(
             FSUIPCSnapshot queued,
-            FSUIPCSnapshot contenter,
-            string message = null);
+            FSUIPCSnapshot contenter);
 
         /// <summary>
         /// Snapshot Queue used to to keep track of the data to be 
         /// published
         /// </summary>
-        public static BlockingCollection<FSUIPCSnapshot> Queue
-            = new BlockingCollection<FSUIPCSnapshot>();
+        public static ConcurrentQueue<FSUIPCSnapshot> Queue
+            = new ConcurrentQueue<FSUIPCSnapshot>();
 
         /// <summary>
         /// The last queued object for interest comparisons
@@ -38,8 +35,8 @@ namespace FlightMonitorApi
         /// <summary>
         /// Gets or sets the list of resgistered interests in the profile
         /// </summary>
-        public static List<SnapshotInterest> Interests
-            = new List<SnapshotInterest>();
+        public static ConcurrentBag<SnapshotInterest> Interests
+            = new ConcurrentBag<SnapshotInterest>();
 
         /// <summary>
         /// Flight monitoring worker

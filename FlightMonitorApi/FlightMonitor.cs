@@ -31,7 +31,7 @@ namespace FlightMonitorApi
 
                 foreach (SnapshotInterest s in Interests)
                     if (lastQueued == null || s(lastQueued, contender))
-                        Queue.Add(lastQueued = contender);
+                        Queue.Enqueue(lastQueued = contender);
 
                 Thread.Sleep(1);
             }
