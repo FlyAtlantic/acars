@@ -65,7 +65,6 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
-    <Compile Include="FlightData\FlightDatabaseTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

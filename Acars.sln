@@ -11,8 +11,17 @@ Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "AcarsSetup", "AcarsSetup\Ac
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B5B5B471-45DA-4F50-A013-9C786DAE05B7}"
 	ProjectSection(SolutionItems) = preProject
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
 		.travis.yml = .travis.yml
 		tszbanner.ico = tszbanner.ico
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlightMonitorApi", "FlightMonitorApi\FlightMonitorApi.csproj", "{46EF6FDB-C7F0-4E7E-9832-2E5C024AF84B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dependencies", "Dependencies", "{7AD7FD37-6146-448D-8B14-F3CF52976C21}"
+	ProjectSection(SolutionItems) = preProject
+		Dependencies\FSUIPCClient.dll = Dependencies\FSUIPCClient.dll
 	EndProjectSection
 EndProject
 Global
@@ -58,6 +67,18 @@ Global
 		{5B3EC688-F463-4055-8FF8-3C5A4C163628}.Travis|Any CPU.ActiveCfg = Release|x86
 		{5B3EC688-F463-4055-8FF8-3C5A4C163628}.Travis|x86.ActiveCfg = Release|x86
 		{5B3EC688-F463-4055-8FF8-3C5A4C163628}.Travis|x86.Build.0 = Release|x86
+		{46EF6FDB-C7F0-4E7E-9832-2E5C024AF84B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46EF6FDB-C7F0-4E7E-9832-2E5C024AF84B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46EF6FDB-C7F0-4E7E-9832-2E5C024AF84B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{46EF6FDB-C7F0-4E7E-9832-2E5C024AF84B}.Debug|x86.Build.0 = Debug|Any CPU
+		{46EF6FDB-C7F0-4E7E-9832-2E5C024AF84B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46EF6FDB-C7F0-4E7E-9832-2E5C024AF84B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{46EF6FDB-C7F0-4E7E-9832-2E5C024AF84B}.Release|x86.ActiveCfg = Release|Any CPU
+		{46EF6FDB-C7F0-4E7E-9832-2E5C024AF84B}.Release|x86.Build.0 = Release|Any CPU
+		{46EF6FDB-C7F0-4E7E-9832-2E5C024AF84B}.Travis|Any CPU.ActiveCfg = Release|Any CPU
+		{46EF6FDB-C7F0-4E7E-9832-2E5C024AF84B}.Travis|Any CPU.Build.0 = Release|Any CPU
+		{46EF6FDB-C7F0-4E7E-9832-2E5C024AF84B}.Travis|x86.ActiveCfg = Release|Any CPU
+		{46EF6FDB-C7F0-4E7E-9832-2E5C024AF84B}.Travis|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
