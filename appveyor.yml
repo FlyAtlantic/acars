@@ -4,14 +4,3 @@ before_build:
 - cmd: nuget restore
 build:
   verbosity: minimal
-deploy:
-  release: Acars-v$(appveyor_build_version)
-  provider: GitHub
-  auth_token:
-    secure: <your encrypted token> # your encrypted token from GitHub
-  artifact: AcarsSetup/bin/Release/FlyAltanticAcarsSetup.msi
-  draft: false
-  prerelease: true
-  on:
-    branch: master                 # release from master branch only
-    appveyor_repo_tag: true        # deploy on tag push only
