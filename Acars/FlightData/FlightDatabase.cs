@@ -89,7 +89,24 @@
 //        public static FlightPlan GetFlightPlan()
 //        {
 //            FlightPlan result = new FlightPlan();
-//            string sqlStrGetFlight = "SELECT `flights`.`flightnumber`, `origin`.`ICAO` as originICAO, `origin`.`LAT` as originLat, `origin`.`LON` originLON, `arrival`.`ICAO` as arrivalICAO, `arrival`.`LAT` as arrivalLat, `arrival`.`LON` as arrivalLON, `flights`.`alternate`, `pilotassignments`.`date_assigned`, `utilizadores`.`user_id`, `flights`.`idf`, `flights`.`flighttime`, `flights`.`aircraft`, `utilizadores`.`idvatsim`, pilotassignments.id FROM `pilotassignments` LEFT JOIN `flights` ON `pilotassignments`.`flightid` = `flights`.`idf` LEFT JOIN `airports` origin ON `origin`.`ICAO` = `flights`.`departure` LEFT JOIN `airports` arrival ON `arrival`.`ICAO` = `flights`.`destination` LEFT JOIN `utilizadores` on `pilotassignments`.`pilot` = `utilizadores`.`user_id` WHERE `utilizadores`.`user_email` = @email;";
+//            string sqlStrGetFlight = "
+//SELECT
+//  `flights`.`flightnumber`,
+//  `origin`.`ICAO` as originICAO,
+//  `origin`.`LAT` as originLat,
+//  `origin`.`LON` originLON,
+//  `arrival`.`ICAO` as arrivalICAO,
+//  `arrival`.`LAT` as arrivalLat,
+//  `arrival`.`LON` as arrivalLON,
+//  `flights`.`alternate`,
+//  `pilotassignments`.`date_assigned`,
+//  `utilizadores`.`user_id
+//  `flights`.`idf`,
+//  `flights`.`flighttime`,
+//  `flights`.`aircraft`,
+//  `utilizadores`.`idvatsim`,
+//  pilotassignments.id
+//  FROM `pilotassignments` LEFT JOIN `flights` ON `pilotassignments`.`flightid` = `flights`.`idf` LEFT JOIN `airports` origin ON `origin`.`ICAO` = `flights`.`departure` LEFT JOIN `airports` arrival ON `arrival`.`ICAO` = `flights`.`destination` LEFT JOIN `utilizadores` on `pilotassignments`.`pilot` = `utilizadores`.`user_id` WHERE `utilizadores`.`user_email` = @email;";
 //            MySqlConnection conn = new MySqlConnection(ConnectionString);
 
 //            try

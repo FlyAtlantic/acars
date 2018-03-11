@@ -9,21 +9,76 @@ namespace Acars.FlightData
 {
     public class FlightPlan
     {
-        public int ID
+        /// <summary>
+        /// 
+        /// </summary>
+        public int? Id
         { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public string AtcCallsign
         { get; set; }
-        public Location DepartureAirfield
+        
+        /// <summary>
+        /// Departure airfield ICAO
+        /// </summary>
+        public string DepartureIcao
         { get; set; }
-        public Location ArrivalAirfield
+
+        /// <summary>
+        /// Departure airfield latitude
+        /// </summary>
+        public double DepartureLat
         { get; set; }
-        public string AlternateICAO
+
+        /// <summary>
+        /// Departure airfield longitude
+        /// </summary>
+        public double DepartureLng
         { get; set; }
-        public DateTime DateAssigned
+
+        /// <summary>
+        /// Destination airfield ICAO
+        /// </summary>
+        public string DestinationIcao
         { get; set; }
-        public string CIDVatsim
+
+        /// <summary>
+        /// Destination airfield latitude
+        /// </summary>
+        public double DestinationLat
         { get; set; }
-        public int AssignID
+
+        /// <summary>
+        /// Destination airfield longitude
+        /// </summary>
+        public double DestinationLng
+        { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string AlternateIcao
+        { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public DateTime? DateAssigned
+        { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string CidVatsim
+        { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public int? AssignId
         { get; set; }
 
         public FlightPlan() { }

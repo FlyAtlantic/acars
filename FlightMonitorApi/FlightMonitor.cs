@@ -2,8 +2,14 @@
 
 namespace FlightMonitorApi
 {
-    public static partial class FlightMonitor
+    public partial class FlightMonitor
     {
+        public FlightMonitor(IDataConnector DataConnector)
+        {
+            this.DataConnector = DataConnector;
+            InitializeComponent();
+        }
+
         /// <summary>
         /// Starts monitoring and publishing threads
         /// 
@@ -11,24 +17,31 @@ namespace FlightMonitorApi
         ///     Note: if any thread is waiting (for a db timeout for example) it
         ///     will still wait for that timeout before dying.
         /// </summary>
-        public static void StartWorkers()
+        public void StartWorkers()
         {
-            if (monitorRunning)
-                return; 
-            monitorRunning = true;
+            StartDatabaseWorker();
         }
 
-        public static void StartMonitoringWorker()
+        private void StartMonitoringWorker()
         {
             monitorRunning = true;
             if (monitoringThread.IsAlive)
                 return;
             monitoringThread.Start();
         }
+
+        private void StartDatabaseWorker()
+        {
+            databaseRunning = true;
+            if (databaseThread.IsAlive)
+                return;
+            databaseThread.Start();
+        }
+
         /// <summary>
         /// The flight monitor worker
         /// </summary>
-        private static void MonitoringWorker()
+        private void MonitoringWorker()
         {
             while (monitorRunning)
             {
@@ -42,11 +55,18 @@ namespace FlightMonitorApi
             }
         }
 
-        private static void DatabaseWorker()
+        /// <summary>
+        /// Consider async await instead of using a separate thread, this may be
+        /// an issue an cause actual sequential behaviour. This is mostly IO bound..
+        /// </summary>
+        private void DatabaseWorker()
         {
             while (databaseRunning)
             {
-                Thread.Sleep(30000);
+                while (!DataConnector.BeforeStart())
+                    Thread.Sleep(30000);
+
+
             }
 
             // flush the queue
@@ -57,7 +77,7 @@ namespace FlightMonitorApi
         ///     Note: if any thread is waiting (for a db timeout for example) it
         ///     will still wait for that timeout before dying.
         /// </summary>
-        public static void SignalStop()
+        public void SignalStop()
         {
             monitorRunning = false;
         }

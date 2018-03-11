@@ -16,6 +16,16 @@ namespace Acars
         /// </summary>
         private Timer IntegrationTimer;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        private DatabaseConnector databaseConnector;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private FlightMonitor flightMonitor;
+
         public App()
         {
             Application.ApplicationExit += new EventHandler(OnApplicationExit);
@@ -36,28 +46,35 @@ namespace Acars
                 Interval = 1000
             };
             IntegrationTimer.Tick += IntegrationTimer_Tick;
+            IntegrationTimer.Start();
 
+            ///
+            databaseConnector = new DatabaseConnector("prodrigues1990@gmail.com");
 
             ///
             /// Register on the flight monitor API
             ///
-            FlightMonitor.Interests = new List<FlightMonitor.SnapshotInterest>();
-            FlightMonitor.Queue = new ConcurrentQueue<FSUIPCSnapshot>();
-            FlightMonitor.StartWorkers();
+            flightMonitor = new FlightMonitor(databaseConnector);
+            flightMonitor.Interests = new List<FlightMonitor.SnapshotInterest>();
+            flightMonitor.Queue = new ConcurrentQueue<FSUIPCSnapshot>();
+            flightMonitor.StartWorkers();
 
             /// TODO: do UI stuff
         }
 
         private void IntegrationTimer_Tick(object sender, EventArgs e)
         {
-            //FSUIPCSnapshot snapshot;
-            //bool took = FlightMonitor.Queue.TryPeek(out snapshot);
+            if (databaseConnector.ActiveFlightPlan != null)
+            {
+                TrayIcon.SetStatusText(String.Format("{0}",
+                    databaseConnector.ActiveFlightPlan.AtcCallsign));
+            }
         }
 
         private void OnApplicationExit(object sender, EventArgs e)
         {
             TrayIcon.Dispose();
-            FlightMonitor.SignalStop();
+            flightMonitor.SignalStop();
 
             // dispose ui stuff and threads in here
         }
