@@ -47,6 +47,7 @@
     <Compile Include="FlightMonitor.Properties.cs" />
     <Compile Include="FSUIPCSnapshot.cs" />
     <Compile Include="FSUIPCSnapshot.Properties.cs" />
+    <Compile Include="IDataConnector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Threading;
 
 namespace FlightMonitorApi
@@ -35,8 +36,8 @@ namespace FlightMonitorApi
         /// <summary>
         /// Gets or sets the list of resgistered interests in the profile
         /// </summary>
-        public static ConcurrentBag<SnapshotInterest> Interests
-            = new ConcurrentBag<SnapshotInterest>();
+        public static List<SnapshotInterest> Interests
+            = new List<SnapshotInterest>();
 
         /// <summary>
         /// Flight monitoring worker
@@ -47,11 +48,22 @@ namespace FlightMonitorApi
             = new Thread(new ThreadStart(MonitoringWorker));
 
         /// <summary>
-        /// Gets or sets the running state of all threads.
+        /// Gets or sets the running state of the sim monitoring thread.
         /// 
-        /// Setting to false does kill the threads, it just signals them to stop
+        /// Setting to false does not kill the thread, it just signals it to stop
         /// working the next time they check this value (once every worker cycle)
         /// </summary>
-        private static bool running = false;
+        private static bool monitorRunning = false;
+
+        /// <summary>
+        /// Gets or sets the running state of the database pusher thread.
+        /// 
+        /// Setting to false does not kill the thread, it just signals it to stop
+        /// working the next time they check this value (once every worker cycle)
+        /// 
+        /// One last cycle will execute, or any number of cycles required to empty
+        /// the snapshot queue.
+        /// </summary>
+        private static bool databaseRunning = false;
     }
 }

@@ -73,6 +73,7 @@ namespace FlightMonitorApi
                             connected = true;
                             break;
                         case FSUIPCError.FSUIPC_ERR_NOFS:
+                        case FSUIPCError.FSUIPC_ERR_SENDMSG:
                             Thread.Sleep(connectCooldown);
                             break;
                         default:

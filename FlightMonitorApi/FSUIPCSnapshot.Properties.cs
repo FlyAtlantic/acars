@@ -21,7 +21,8 @@ namespace FlightMonitorApi
             {
                 return new double[] {
                     _latitude.Value * (90.0 / (10001750.0 * 65536.0 * 65536.0)),
-                    _longitude.Value * (360.0 / (65536.0 * 65536.0 * 65536.0 * 65536.0))
+                    _longitude.Value *
+                    (360.0 / (65536.0 * 65536.0 * 65536.0 * 65536.0))
                 };
             }
         }

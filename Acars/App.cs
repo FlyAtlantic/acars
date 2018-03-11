@@ -2,6 +2,7 @@
 using FlightMonitorApi;
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace Acars
@@ -9,6 +10,11 @@ namespace Acars
     class App : ApplicationContext
     {
         private AcarsNotifyIcon TrayIcon;
+
+        /// <summary>
+        /// Takes care of signaling all threads with relevant application state
+        /// </summary>
+        private Timer IntegrationTimer;
 
         public App()
         {
@@ -25,17 +31,25 @@ namespace Acars
             /// Resgiter basic UI hooks
             ///
             TrayIcon.Close_Click += CloseMenuItem_Click;
+            IntegrationTimer = new Timer();
+            IntegrationTimer.Interval = 1000;
+            IntegrationTimer.Tick += IntegrationTimer_Tick;
 
 
             ///
             /// Register on the flight monitor API
             ///
-            FlightMonitor.Interests
-                = new ConcurrentBag<FlightMonitor.SnapshotInterest>();
+            FlightMonitor.Interests = new List<FlightMonitor.SnapshotInterest>();
             FlightMonitor.Queue = new ConcurrentQueue<FSUIPCSnapshot>();
             FlightMonitor.StartWorkers();
 
             /// TODO: do UI stuff
+        }
+
+        private void IntegrationTimer_Tick(object sender, EventArgs e)
+        {
+            //FSUIPCSnapshot snapshot;
+            //bool took = FlightMonitor.Queue.TryPeek(out snapshot);
         }
 
         private void OnApplicationExit(object sender, EventArgs e)
@@ -54,9 +68,7 @@ namespace Acars
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Exclamation);
             if (result == DialogResult.Yes)
-            {
                 Application.Exit();
-            }
         }
     }
 }

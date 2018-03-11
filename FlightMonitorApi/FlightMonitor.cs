@@ -13,19 +13,24 @@ namespace FlightMonitorApi
         /// </summary>
         public static void StartWorkers()
         {
-            if (running)
+            if (monitorRunning)
                 return; 
-            running = true;                                                         
-
-            monitoringThread.Start();
+            monitorRunning = true;
         }
 
+        public static void StartMonitoringWorker()
+        {
+            monitorRunning = true;
+            if (monitoringThread.IsAlive)
+                return;
+            monitoringThread.Start();
+        }
         /// <summary>
         /// The flight monitor worker
         /// </summary>
         private static void MonitoringWorker()
         {
-            while (running)
+            while (monitorRunning)
             {
                 FSUIPCSnapshot contender = FSUIPCSnapshot.Pool();
 
@@ -37,6 +42,16 @@ namespace FlightMonitorApi
             }
         }
 
+        private static void DatabaseWorker()
+        {
+            while (databaseRunning)
+            {
+                if (data)
+            }
+
+            // flush the queue
+        }
+
         /// <summary>
         /// Signals all threads to stop asap
         ///     Note: if any thread is waiting (for a db timeout for example) it
@@ -44,7 +59,7 @@ namespace FlightMonitorApi
         /// </summary>
         public static void SignalStop()
         {
-            running = false;
+            monitorRunning = false;
         }
     }
 }
