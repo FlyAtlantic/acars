@@ -31,8 +31,10 @@ namespace Acars
             /// Resgiter basic UI hooks
             ///
             TrayIcon.Close_Click += CloseMenuItem_Click;
-            IntegrationTimer = new Timer();
-            IntegrationTimer.Interval = 1000;
+            IntegrationTimer = new Timer
+            {
+                Interval = 1000
+            };
             IntegrationTimer.Tick += IntegrationTimer_Tick;
 
 

@@ -46,7 +46,7 @@ namespace FlightMonitorApi
         {
             while (databaseRunning)
             {
-                if (data)
+                Thread.Sleep(30000);
             }
 
             // flush the queue
