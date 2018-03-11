@@ -444,24 +444,6 @@ namespace FlightMonitorApi
         { get; set; }
 
         /// <summary>
-        /// simTime  setting
-        /// 
-        /// Offsets
-        /// static proterty for correctly processing Offset data
-        /// instance property
-        /// </summary>
-        private static Offset<byte[]> _simTime = new Offset<byte[]>(0x023B, 10);
-        private static byte[] simTime
-        {
-            get
-            {
-                return Convert.ToByte(new DateTime(BitConverter.ToInt16(_simTime.Value, 8), 1, 1, _simTime.Value[0], _simTime.Value[1], _simTime.Value[2]).Add(new TimeSpan(BitConverter.ToInt16(_simTime.Value, 6) - 1, 0, 0, 0)));
-            }
-        }
-        public byte[] SimTime
-        { get; set; }
-
-        /// <summary>
         /// SimRate setting
         /// 
         /// Offsets
