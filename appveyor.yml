@@ -4,14 +4,12 @@ before_build:
 - cmd: nuget restore
 build:
   verbosity: minimal
-artifacts:
-  - path: 'AcarsSetup\**\*.msi'
 deploy:
   release: Acars-v$(appveyor_build_version)
   provider: GitHub
   auth_token:
     secure: <your encrypted token> # your encrypted token from GitHub
-  artifact: AcarsSetup\**\*.msi    # upload all NuGet packages to release assets
+  artifact: AcarsSetup/bin/Release/FlyAltanticAcarsSetup.msi
   draft: false
   prerelease: true
   on:
