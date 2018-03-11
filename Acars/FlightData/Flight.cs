@@ -2,7 +2,11 @@
 {
     public class Flight
     {
-
+        /// <summary>
+        /// Database ID for table pireps
+        /// </summary>
+        public int Id
+        { get; set; }
 
 
         ///

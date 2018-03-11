@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FlightMonitorApi
+﻿namespace FlightMonitorApi
 {
     public interface IDataConnector
     {
         bool BeforeStart();
+
+        bool PushOne(FSUIPCSnapshot Snapshot);
     }
 }

@@ -55,7 +55,33 @@ namespace Acars
             /// Register on the flight monitor API
             ///
             flightMonitor = new FlightMonitor(databaseConnector);
-            flightMonitor.Interests = new List<FlightMonitor.SnapshotInterest>();
+            flightMonitor.Interests = new List<FlightMonitor.SnapshotInterest>()
+            {
+                new FlightMonitor.SnapshotInterest(
+                    (queued, contender) =>
+                    {
+                        return (CompassDelta(queued.Compass, contender.Compass)
+                            > 10); // heading changes in orders of 10 degrees
+                    }),
+                new FlightMonitor.SnapshotInterest(
+                    (queued, contender) =>
+                    {
+                        return (Math.Abs(queued.Altitude - contender.Altitude)
+                            > 150); // altitude changes in orders of 150 feet
+                    }),
+                new FlightMonitor.SnapshotInterest(
+                    (queued, contender) =>
+                    {
+                        return (Math.Abs(queued.GroundSpeed - contender.GroundSpeed)
+                            > 35); // groundspeed changes in orders of 35 kts
+                    }),
+                new FlightMonitor.SnapshotInterest(
+                    (queued, contender) =>
+                    {
+                        return ((contender.TimeStamp - queued.TimeStamp)
+                            .TotalMinutes > 1); // max 1 mins between queues
+                    })
+            };
             flightMonitor.Queue = new ConcurrentQueue<FSUIPCSnapshot>();
             flightMonitor.StartWorkers();
 
@@ -88,6 +114,16 @@ namespace Acars
                 MessageBoxIcon.Exclamation);
             if (result == DialogResult.Yes)
                 Application.Exit();
+        }
+
+        private int CompassDelta(int firstAngle, int secondAngle)
+        {
+            double difference = secondAngle - firstAngle;
+            while (difference < -180)
+                difference += 360;
+            while (difference > 180)
+                difference -= 360;
+            return (int)difference;
         }
     }
 }

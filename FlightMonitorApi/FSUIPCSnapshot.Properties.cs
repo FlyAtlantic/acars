@@ -13,8 +13,8 @@ namespace FlightMonitorApi
         /// instance property
         /// json output for API
         /// </summary>
-        static public Offset<long> _longitude = new Offset<long>(0x0568);
-        static public Offset<long> _latitude = new Offset<long>(0x0560);
+        private static Offset<long> _longitude = new Offset<long>(0x0568);
+        private static Offset<long> _latitude = new Offset<long>(0x0560);
         private static double[] position
         {
             get

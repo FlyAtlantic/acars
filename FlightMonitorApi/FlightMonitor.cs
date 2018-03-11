@@ -49,7 +49,9 @@ namespace FlightMonitorApi
 
                 foreach (SnapshotInterest s in Interests)
                     if (lastQueued == null || s(lastQueued, contender))
+                    {
                         Queue.Enqueue(lastQueued = contender);
+                    }
 
                 Thread.Sleep(1);
             }
@@ -66,6 +68,14 @@ namespace FlightMonitorApi
                 while (!DataConnector.BeforeStart())
                     Thread.Sleep(30000);
 
+                if (Queue.TryPeek(out FSUIPCSnapshot snapshot))
+                {
+                    if (DataConnector.PushOne(snapshot))
+                        while (!Queue.TryDequeue(out snapshot)) ;
+
+                    // TODO: do the signaling stuff
+                    Thread.Sleep(1000);
+                }
 
             }
 
@@ -80,6 +90,7 @@ namespace FlightMonitorApi
         public void SignalStop()
         {
             monitorRunning = false;
+            databaseRunning = false;
         }
     }
 }

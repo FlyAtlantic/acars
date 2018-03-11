@@ -88,14 +88,20 @@ namespace Acars.UI
             this.OpenOldFormMenuItem.Name = "OpenOldFormMenuItem";
             this.OpenOldFormMenuItem.Size = new Size(152, 22);
             this.OpenOldFormMenuItem.Text = "Flight Status";
-            this.OpenOldFormMenuItem.Click += (s, e) => { OpenFlightStatus_Click(this, e); };
+            this.OpenOldFormMenuItem.Click += (s, e) =>
+            {
+                OpenFlightStatus_Click(this, e);
+            };
             // 
             // SettingsMenuItem
             // 
             this.SettingsMenuItem.Name = "SettingsMenuItem";
             this.SettingsMenuItem.Size = new Size(152, 22);
             this.SettingsMenuItem.Text = "Settings";
-            this.SettingsMenuItem.Click += (s, e) => { OpenSettings_Click(this, e); };
+            this.SettingsMenuItem.Click += (s, e) =>
+            {
+                OpenSettings_Click(this, e);
+            };
 
             TrayIconContextMenu.ResumeLayout(false);
             StatusIcon.ContextMenuStrip = TrayIconContextMenu;

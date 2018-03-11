@@ -34,14 +34,14 @@ namespace FlightMonitorApi
 
         public void InitializeComponent()
         {
-            this.Position = position;
-            this.Compass = compass;
-            this.Altitude = altitude;
-            this.GroundSpeed = groundspeed;
-            this.IndicatedAirspeed = indicatedairspeed;
-            this.TrueAirpeed = trueairspeed;
-            this.OnGround = onground;
-            this.QNH = qnh;
+            Position = position;
+            Compass = compass;
+            Altitude = altitude;
+            GroundSpeed = groundspeed;
+            IndicatedAirspeed = indicatedairspeed;
+            TrueAirpeed = trueairspeed;
+            OnGround = onground;
+            QNH = qnh;
         }
 
         /// <summary>
@@ -49,7 +49,8 @@ namespace FlightMonitorApi
         /// 
         /// 
         /// </summary>
-        /// <param name="connectCooldown">Time between reconnect tries to Simulator, in miliseconds.
+        /// <param name="connectCooldown">Time between reconnect tries to Simulator,
+        /// in miliseconds.
         /// Defaults to 30000.</param>
         /// <returns></returns>
         public static FSUIPCSnapshot Pool(int connectCooldown = 30000)
@@ -78,7 +79,8 @@ namespace FlightMonitorApi
                             break;
                         default:
                             throw new ApplicationException(
-                                "Unexpected exception trying FSUIPC.Open(). Check inner exception.",
+                                "Unexpected exception trying FSUIPC.Open(). " +
+                                "Check inner exception.",
                                 crap);
                     }
                 }
@@ -92,7 +94,9 @@ namespace FlightMonitorApi
             {
                 // TODO: catch ONLY relevant execeptions
                 //       connected = false;
-                throw new ApplicationException("Provider.Pool() failed with:", crap);
+                throw new ApplicationException(
+                    "Provider.Pool() failed with:",
+                    crap);
             }
 
             if (connected)
@@ -102,7 +106,8 @@ namespace FlightMonitorApi
                 // FSUIPC will return data even if the user is in scenario screen
                 // or any other screen really.
                 // TODO: actually filter invalid locations
-                return data.Position.SequenceEqual(new double[] { 0, 0 }) ? null : data;
+                return data.Position.SequenceEqual(
+                    new double[] { 0, 0 }) ? null : data;
             }
 
             return null;
