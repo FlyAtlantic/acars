@@ -2,8 +2,11 @@
 using Dapper;
 using FlightMonitorApi;
 using MySql.Data.MySqlClient;
+using NLog;
 using System;
 using System.Diagnostics;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace Acars
 {
@@ -62,6 +65,45 @@ namespace Acars
         { get; private set; }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        public static bool ValidateLogin(string email, string password)
+        {
+            int ValidLogin = -1;
+            using (MySqlConnection conn = new MySqlConnection(ConnectionString))
+            {
+                try
+                {
+                    conn.Open();
+
+                    ValidLogin = conn.Execute(
+                        SELECT_ONE_USER,
+                        new
+                        {
+                            UserEmail = Properties.Settings.Default.Email,
+                            Properties.Settings.Default.Password
+                        });
+
+                    return ValidLogin > 0;
+                }
+                catch (Exception crap)
+                {
+                    // TODO: don't crash filter known exceptions
+                    LogManager.GetCurrentClassLogger()
+                        .Error(crap, "Failed to validated credentials.");
+                    throw crap;
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+        }
+
+        /// <summary>
         /// Tries to load the currently active flight plan, if one available.
         /// 
         /// Returns true if a valid flight is available at `ActiveFlightPlan`, false
@@ -70,7 +112,7 @@ namespace Acars
         /// `ActiveFlightPlan = null` before to achieve that.
         /// </summary>
         /// <returns></returns>
-        public bool BeforeStart()
+        public bool LookupFlightPlan()
         {
             if (ActiveFlightPlan != null)
                 return true;
@@ -218,5 +260,29 @@ namespace Acars
 
             return (UpdateFlight(Snapshot) > -1);
         }
+
+        #region Helper Functions
+        /// <summary>
+        /// Returns the SHA1 hash string for a given string
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        private static string StringToSha1Hash(string input)
+        {
+            using (SHA1Managed sha1 = new SHA1Managed())
+            {
+                var hash = sha1.ComputeHash(Encoding.UTF8.GetBytes(input));
+                var sb = new StringBuilder(hash.Length * 2);
+
+                foreach (byte b in hash)
+                {
+                    // can be "x2" if you want lowercase
+                    sb.Append(b.ToString("X2"));
+                }
+
+                return sb.ToString();
+            }
+        }
+        #endregion Helper Functions
     }
 }

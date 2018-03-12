@@ -85,7 +85,7 @@ namespace FlightMonitorApi
             {
                 try
                 {
-                    while (!DataConnector.BeforeStart())
+                    while (!DataConnector.LookupFlightPlan())
                         Thread.Sleep(3000);
 
                     if (Queue.TryPeek(out FSUIPCSnapshot snapshot))

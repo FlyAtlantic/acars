@@ -6,6 +6,13 @@ namespace Acars
 {
     public partial class DatabaseConnector : IDataConnector
     {
+        private const string SELECT_ONE_USER = @"
+SELECT COUNT(*)
+FROM `utilizadores`
+WHERE
+        `user_email`=@UserEmail
+    AND `user_senha`=@Password";
+
         private const string SELECT_FLIGHT_PLAN = @"
 SELECT
     `flights`.`idf`                     AS `Id`,

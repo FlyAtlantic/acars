@@ -2,7 +2,7 @@
 {
     public interface IDataConnector
     {
-        bool BeforeStart();
+        bool LookupFlightPlan();
 
         bool PushOne(FSUIPCSnapshot Snapshot);
     }
