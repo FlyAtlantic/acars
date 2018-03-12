@@ -30,14 +30,14 @@ namespace Acars
         public App()
         {
             LogManager.GetCurrentClassLogger()
-                .Debug("Booting up");
+                .Trace("Booting up");
 
             Application.ApplicationExit += new EventHandler(OnApplicationExit);
 
             InitializeComponent();
 
             LogManager.GetCurrentClassLogger()
-                .Debug("Boot up finished");
+                .Trace("Boot up finished");
         }
 
         private void InitializeComponent()
