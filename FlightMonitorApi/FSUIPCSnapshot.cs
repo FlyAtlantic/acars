@@ -47,14 +47,9 @@ namespace FlightMonitorApi
 
         /// <summary>
         /// Returns an FSUIPCSnapshot instance with the current state of the sim
-        /// 
-        /// 
         /// </summary>
-        /// <param name="ReconnectCooldown">Time between reconnect tries to Simulator,
-        /// in miliseconds.
-        /// Defaults to 30000.</param>
         /// <returns></returns>
-        public static FSUIPCSnapshot Pool(int ReconnectCooldown = 30000)
+        public static FSUIPCSnapshot Pool()
         {
             // TODO: do not block the current thread on this
             //       application may receive a OS taskkill command.
@@ -64,8 +59,17 @@ namespace FlightMonitorApi
                 try
                 {
                     FSUIPCConnection.Open();
-
                     connected = true;
+
+                    FSUIPCConnection.Process();
+                    FSUIPCSnapshot data = new FSUIPCSnapshot(true);
+
+                    // FSUIPC will return data even if the user is in scenario
+                    // screen or any other screen really, this just compares the
+                    // returned location with a location of [0, 0]
+                    // TODO: actually filter invalid locations
+                    return data.Position.SequenceEqual(
+                        new double[] { 0, 0 }) ? null : data;
                 }
                 catch (FSUIPCException crap)
                 {
@@ -78,37 +82,11 @@ namespace FlightMonitorApi
                         case FSUIPCError.FSUIPC_ERR_SENDMSG:
                             return null;
                         default:
-                            Exception e = new ApplicationException(
-                                "Unexpected exception trying FSUIPC.Open(). " +
-                                "Check inner exception.",
-                                crap);
-                            LogManager.GetCurrentClassLogger().Error(e);
-                            throw e;
+                            LogManager.GetCurrentClassLogger()
+                                .Error(crap, "Pooling data from FSUIPC");
+                            throw crap;
                     }
                 }
-            }
-
-            try
-            {
-                FSUIPCConnection.Process();
-            }
-            catch (Exception crap)
-            {
-                // TODO: catch ONLY relevant execeptions
-                //       connected = false;
-                LogManager.GetCurrentClassLogger().Error(crap);
-                throw crap;
-            }
-
-            if (connected)
-            {
-                FSUIPCSnapshot data = new FSUIPCSnapshot(true);
-
-                // FSUIPC will return data even if the user is in scenario screen
-                // or any other screen really.
-                // TODO: actually filter invalid locations
-                return data.Position.SequenceEqual(
-                    new double[] { 0, 0 }) ? null : data;
             }
 
             return null;
