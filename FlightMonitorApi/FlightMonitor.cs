@@ -1,4 +1,6 @@
-﻿using System.Threading;
+﻿using NLog;
+using System;
+using System.Threading;
 
 namespace FlightMonitorApi
 {
@@ -20,6 +22,7 @@ namespace FlightMonitorApi
         public void StartWorkers()
         {
             StartDatabaseWorker();
+            StartMonitoringWorker();
         }
 
         private void StartMonitoringWorker()
@@ -43,18 +46,31 @@ namespace FlightMonitorApi
         /// </summary>
         private void MonitoringWorker()
         {
+            LogManager.GetCurrentClassLogger()
+                .Trace("Monitor thread started");
             while (monitorRunning)
             {
-                FSUIPCSnapshot contender = FSUIPCSnapshot.Pool();
+                try
+                {
+                    FSUIPCSnapshot contender = FSUIPCSnapshot.Pool();
 
-                foreach (SnapshotInterest s in Interests)
-                    if (lastQueued == null || s(lastQueued, contender))
-                    {
-                        Queue.Enqueue(lastQueued = contender);
-                    }
+                    if (contender != null)
+                        foreach (SnapshotInterest s in Interests)
+                            if (lastQueued == null || s(lastQueued, contender))
+                            {
+                                Queue.Enqueue(lastQueued = contender);
+                            }
 
-                Thread.Sleep(100);
+                    Thread.Sleep(100);
+                }
+                catch(Exception crap)
+                {
+                    LogManager.GetCurrentClassLogger().Error(crap);
+                    throw crap;
+                }
             }
+            LogManager.GetCurrentClassLogger()
+                .Trace("Monitor thread dying on request");
         }
 
         /// <summary>
@@ -63,23 +79,32 @@ namespace FlightMonitorApi
         /// </summary>
         private void DatabaseWorker()
         {
+            LogManager.GetCurrentClassLogger()
+                .Trace("Database thread started");
             while (databaseRunning)
             {
-                while (!DataConnector.BeforeStart())
-                    Thread.Sleep(30000);
-
-                StartMonitoringWorker();
-
-                if (Queue.TryPeek(out FSUIPCSnapshot snapshot))
+                try
                 {
-                    if (DataConnector.PushOne(snapshot))
-                        while (!Queue.TryDequeue(out snapshot)) ;
+                    while (!DataConnector.BeforeStart())
+                        Thread.Sleep(3000);
 
-                    // TODO: do the signaling stuff
-                    Thread.Sleep(1000);
+                    if (Queue.TryPeek(out FSUIPCSnapshot snapshot))
+                    {
+                        if (DataConnector.PushOne(snapshot))
+                            while (!Queue.TryDequeue(out snapshot)) ;
+
+                        // TODO: do the signaling stuff
+                        Thread.Sleep(1000);
+                    }
                 }
-
+                catch (Exception crap)
+                {
+                    LogManager.GetCurrentClassLogger().Error(crap);
+                    throw crap;
+                }
             }
+            LogManager.GetCurrentClassLogger()
+                .Trace("Database thread dying on request");
 
             // flush the queue
         }
@@ -91,6 +116,9 @@ namespace FlightMonitorApi
         /// </summary>
         public void SignalStop()
         {
+            LogManager.GetCurrentClassLogger()
+                .Trace("Sending stop signal to all threads");
+
             monitorRunning = false;
             databaseRunning = false;
         }

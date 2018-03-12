@@ -1,4 +1,5 @@
 ﻿using FSUIPC;
+using NLog;
 using System;
 using System.Linq;
 using System.Threading;
@@ -38,10 +39,10 @@ namespace FlightMonitorApi
             Compass = compass;
             Altitude = altitude;
             GroundSpeed = groundspeed;
-            //IndicatedAirspeed = indicatedairspeed;
-            //TrueAirpeed = trueairspeed;
-            //OnGround = onground;
-            //QNH = qnh;
+            IndicatedAirspeed = indicatedairspeed;
+            TrueAirpeed = trueairspeed;
+            OnGround = onground;
+            QNH = qnh;
         }
 
         /// <summary>
@@ -75,13 +76,14 @@ namespace FlightMonitorApi
                             break;
                         case FSUIPCError.FSUIPC_ERR_NOFS:
                         case FSUIPCError.FSUIPC_ERR_SENDMSG:
-                            Thread.Sleep(ReconnectCooldown);
-                            break;
+                            return null;
                         default:
-                            throw new ApplicationException(
+                            Exception e = new ApplicationException(
                                 "Unexpected exception trying FSUIPC.Open(). " +
                                 "Check inner exception.",
                                 crap);
+                            LogManager.GetCurrentClassLogger().Error(e);
+                            throw e;
                     }
                 }
             }
@@ -94,9 +96,8 @@ namespace FlightMonitorApi
             {
                 // TODO: catch ONLY relevant execeptions
                 //       connected = false;
-                throw new ApplicationException(
-                    "Provider.Pool() failed with:",
-                    crap);
+                LogManager.GetCurrentClassLogger().Error(crap);
+                throw crap;
             }
 
             if (connected)

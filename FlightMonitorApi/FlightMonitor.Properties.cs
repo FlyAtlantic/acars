@@ -61,7 +61,7 @@ namespace FlightMonitorApi
         /// Setting to false does not kill the thread, it just signals it to stop
         /// working the next time they check this value (once every worker cycle)
         /// </summary>
-        private bool monitorRunning = false;
+        private bool monitorRunning;
 
         /// <summary>
         /// Gets or sets the running state of the database pusher thread.
@@ -72,7 +72,7 @@ namespace FlightMonitorApi
         /// One last cycle will execute, or any number of cycles required to empty
         /// the snapshot queue.
         /// </summary>
-        private bool databaseRunning = false;
+        private bool databaseRunning;
 
         private void InitializeComponent()
         {

@@ -29,15 +29,9 @@ namespace Acars
 
         public App()
         {
-            LogManager.GetCurrentClassLogger()
-                .Trace("Booting up");
-
             Application.ApplicationExit += new EventHandler(OnApplicationExit);
 
             InitializeComponent();
-
-            LogManager.GetCurrentClassLogger()
-                .Trace("Boot up finished");
         }
 
         private void InitializeComponent()
@@ -108,9 +102,10 @@ namespace Acars
         private void OnApplicationExit(object sender, EventArgs e)
         {
             TrayIcon.Dispose();
+
             flightMonitor.SignalStop();
 
-            // dispose ui stuff and threads in here
+            // dispose ui stuff in here
         }
 
         private void CloseMenuItem_Click(object sender, EventArgs e)
