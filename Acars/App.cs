@@ -1,6 +1,5 @@
 ﻿using Acars.UI;
 using FlightMonitorApi;
-using NLog;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
