@@ -49,11 +49,11 @@ namespace FlightMonitorApi
         /// 
         /// 
         /// </summary>
-        /// <param name="connectCooldown">Time between reconnect tries to Simulator,
+        /// <param name="ReconnectCooldown">Time between reconnect tries to Simulator,
         /// in miliseconds.
         /// Defaults to 30000.</param>
         /// <returns></returns>
-        public static FSUIPCSnapshot Pool(int connectCooldown = 30000)
+        public static FSUIPCSnapshot Pool(int ReconnectCooldown = 30000)
         {
             // TODO: do not block the current thread on this
             //       application may receive a OS taskkill command.
@@ -75,7 +75,7 @@ namespace FlightMonitorApi
                             break;
                         case FSUIPCError.FSUIPC_ERR_NOFS:
                         case FSUIPCError.FSUIPC_ERR_SENDMSG:
-                            Thread.Sleep(connectCooldown);
+                            Thread.Sleep(ReconnectCooldown);
                             break;
                         default:
                             throw new ApplicationException(
