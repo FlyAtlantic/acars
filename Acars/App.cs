@@ -1,5 +1,6 @@
 ﻿using Acars.UI;
 using FlightMonitorApi;
+using NLog;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -28,9 +29,15 @@ namespace Acars
 
         public App()
         {
+            LogManager.GetCurrentClassLogger()
+                .Debug("Booting up");
+
             Application.ApplicationExit += new EventHandler(OnApplicationExit);
 
             InitializeComponent();
+
+            LogManager.GetCurrentClassLogger()
+                .Debug("Boot up finished");
         }
 
         private void InitializeComponent()
@@ -86,6 +93,7 @@ namespace Acars
             flightMonitor.StartWorkers();
 
             /// TODO: do UI stuff
+            
         }
 
         private void IntegrationTimer_Tick(object sender, EventArgs e)
