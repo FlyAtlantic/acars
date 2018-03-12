@@ -3,6 +3,7 @@ using Dapper;
 using FlightMonitorApi;
 using MySql.Data.MySqlClient;
 using System;
+using System.Diagnostics;
 
 namespace Acars
 {
@@ -189,9 +190,10 @@ namespace Acars
                             Snapshot.Altitude,
                             Heading = Snapshot.Compass,
                             Snapshot.GroundSpeed,
-                            FlightPhase = "Not Implemented in 1.2"
+                            FlightPhase = "TEST FLIGHT"
                         }
                     );
+                    Debug.WriteLine("TOUCH_PILOT_ASSIGNMENT");
                 }
                 catch (Exception crap)
                 {

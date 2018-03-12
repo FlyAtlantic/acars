@@ -53,7 +53,7 @@ namespace FlightMonitorApi
                         Queue.Enqueue(lastQueued = contender);
                     }
 
-                Thread.Sleep(1);
+                Thread.Sleep(100);
             }
         }
 
@@ -67,6 +67,8 @@ namespace FlightMonitorApi
             {
                 while (!DataConnector.BeforeStart())
                     Thread.Sleep(30000);
+
+                StartMonitoringWorker();
 
                 if (Queue.TryPeek(out FSUIPCSnapshot snapshot))
                 {

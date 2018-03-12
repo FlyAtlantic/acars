@@ -38,10 +38,10 @@ namespace FlightMonitorApi
             Compass = compass;
             Altitude = altitude;
             GroundSpeed = groundspeed;
-            IndicatedAirspeed = indicatedairspeed;
-            TrueAirpeed = trueairspeed;
-            OnGround = onground;
-            QNH = qnh;
+            //IndicatedAirspeed = indicatedairspeed;
+            //TrueAirpeed = trueairspeed;
+            //OnGround = onground;
+            //QNH = qnh;
         }
 
         /// <summary>

@@ -72,11 +72,11 @@ INSERT INTO flightLog (
 ) VALUES (
     @FlightId,
     @TimeStamp,
-    @LAT,
-    @LON,
-    @ALT,
-    @HDG,
-    @GS,
-    @phase)";
+    @Latitude,
+    @Longitude,
+    @Altitude,
+    @Heading,
+    @GroundSpeed,
+    @FlightPhase)";
     }
 }
