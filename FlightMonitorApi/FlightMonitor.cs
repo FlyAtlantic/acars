@@ -55,10 +55,19 @@ namespace FlightMonitorApi
                     FSUIPCSnapshot contender = FSUIPCSnapshot.Pool();
 
                     if (contender != null)
-                        foreach (SnapshotInterest s in Interests)
-                            if (lastQueued == null || s(lastQueued, contender))
+                        foreach (FSUIPCInterest i in Interests)
+                            if (i.IsInteresting(contender))
                             {
-                                Queue.Enqueue(lastQueued = contender);
+                                Queue.Enqueue(contender);
+                                LogManager.GetCurrentClassLogger()
+                                    .Trace(String.Format(
+                                        "alt:{0} hdg:{2} gs:{1} lat:{3} lng:{4}",
+                                        contender.Altitude,
+                                        contender.Compass,
+                                        contender.GroundSpeed,
+                                        contender.Position[0],
+                                        contender.Position[1]
+                                        ));
                             }
 
                     Thread.Sleep(100);

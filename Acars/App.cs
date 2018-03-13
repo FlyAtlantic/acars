@@ -55,33 +55,67 @@ namespace Acars
             /// Register on the flight monitor API
             ///
             flightMonitor = new FlightMonitor(databaseConnector);
-            flightMonitor.Interests = new List<FlightMonitor.SnapshotInterest>()
+            flightMonitor.Interests = new List<FSUIPCInterest>();
+            flightMonitor.Interests.Add(new FSUIPCInterest()
             {
-                new FlightMonitor.SnapshotInterest(
-                    (queued, contender) =>
+                Scenario = (
+                    FSUIPCSnapshot Snapshot,
+                    ref FSUIPCSnapshot Cached) =>
+                {
+                    if (Cached == null)
                     {
-                        return (CompassDelta(queued.Compass, contender.Compass)
-                            > 10); // heading changes in orders of 10 degrees
-                    }),
-                new FlightMonitor.SnapshotInterest(
-                    (queued, contender) =>
+                        Cached = Snapshot;
+                        return false;
+                    }
+                    return (CompassDelta(Cached.Compass, Snapshot.Compass)
+                        > 10); // heading changes in orders of 10 degrees
+                }
+            });
+            flightMonitor.Interests.Add(new FSUIPCInterest()
+            {
+                Scenario = (
+                    FSUIPCSnapshot Snapshot,
+                    ref FSUIPCSnapshot Cached) =>
+                {
+                    if (Cached == null)
                     {
-                        return (Math.Abs(queued.Altitude - contender.Altitude)
-                            > 150); // altitude changes in orders of 150 feet
-                    }),
-                new FlightMonitor.SnapshotInterest(
-                    (queued, contender) =>
+                        Cached = Snapshot;
+                        return false;
+                    }
+                    return (Math.Abs(Cached.Altitude - Snapshot.Altitude)
+                        > 150); // altitude changes in orders of 150 feet
+                    }
+            });
+            flightMonitor.Interests.Add(new FSUIPCInterest()
+            {
+                Scenario = (
+                    FSUIPCSnapshot Snapshot,
+                    ref FSUIPCSnapshot Cached) =>
+                {
+                    if (Cached == null)
                     {
-                        return (Math.Abs(queued.GroundSpeed - contender.GroundSpeed)
-                            > 35); // groundspeed changes in orders of 35 kts
-                    }),
-                new FlightMonitor.SnapshotInterest(
-                    (queued, contender) =>
+                        Cached = Snapshot;
+                        return false;
+                    }
+                    return (Math.Abs(Cached.GroundSpeed - Snapshot.GroundSpeed)
+                        > 35); // groundspeed changes in orders of 35 kts
+                    }
+            });
+            flightMonitor.Interests.Add(new FSUIPCInterest()
+            {
+                Scenario = (
+                    FSUIPCSnapshot Snapshot,
+                    ref FSUIPCSnapshot Cached) =>
+                {
+                    if (Cached == null)
                     {
-                        return ((contender.TimeStamp - queued.TimeStamp)
-                            .TotalMinutes > 1); // max 1 mins between queues
-                    })
-            };
+                        Cached = Snapshot;
+                        return false;
+                    }
+                    return ((Snapshot.TimeStamp - Cached.TimeStamp)
+                        .TotalMinutes > 1); // max 1 mins between queues
+                    }
+            });
             flightMonitor.Queue = new ConcurrentQueue<FSUIPCSnapshot>();
             flightMonitor.StartWorkers();
 

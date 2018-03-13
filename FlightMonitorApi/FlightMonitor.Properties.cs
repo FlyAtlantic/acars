@@ -15,17 +15,7 @@ namespace FlightMonitorApi
         /// </summary>
         public IDataConnector DataConnector;
 
-        /// <summary>
-        /// Delegate that represents a condition to be checked,
-        /// if true the snapshot being analyzed will be added to
-        /// the Queue.
-        /// </summary>
-        /// <param name="queued">The last queued snapshot</param>
-        /// <param name="contenter">The current snapshot</param>
-        /// <returns></returns>
-        public delegate bool SnapshotInterest(
-            FSUIPCSnapshot queued,
-            FSUIPCSnapshot contenter);
+
 
         /// <summary>
         /// Snapshot Queue used to to keep track of the data to be 
@@ -34,14 +24,9 @@ namespace FlightMonitorApi
         public ConcurrentQueue<FSUIPCSnapshot> Queue;
 
         /// <summary>
-        /// The last queued object for interest comparisons
-        /// </summary>
-        private FSUIPCSnapshot lastQueued;
-
-        /// <summary>
         /// Gets or sets the list of resgistered interests in the profile
         /// </summary>
-        public List<SnapshotInterest> Interests;
+        public List<FSUIPCInterest> Interests;
 
         /// <summary>
         /// Flight monitoring worker
@@ -80,8 +65,7 @@ namespace FlightMonitorApi
             monitorRunning = false;
             databaseThread = new Thread(new ThreadStart(DatabaseWorker));
             monitoringThread = new Thread(new ThreadStart(MonitoringWorker));
-            Interests = new List<SnapshotInterest>();
-            lastQueued = null;
+            Interests = new List<FSUIPCInterest>();
             Queue = new ConcurrentQueue<FSUIPCSnapshot>();
         }
     }
