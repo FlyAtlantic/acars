@@ -67,8 +67,13 @@ namespace Acars
                         Cached = Snapshot;
                         return false;
                     }
-                    return (CompassDelta(Cached.Compass, Snapshot.Compass)
+                    bool Flag = (CompassDelta(Cached.Compass, Snapshot.Compass)
                         > 10); // heading changes in orders of 10 degrees
+
+                    if (Flag)
+                        Cached = Snapshot;
+
+                    return Flag;
                 }
             });
             flightMonitor.Interests.Add(new FSUIPCInterest()
@@ -82,9 +87,14 @@ namespace Acars
                         Cached = Snapshot;
                         return false;
                     }
-                    return (Math.Abs(Cached.Altitude - Snapshot.Altitude)
+                    bool Flag = (Math.Abs(Cached.Altitude - Snapshot.Altitude)
                         > 150); // altitude changes in orders of 150 feet
-                    }
+
+                    if (Flag)
+                        Cached = Snapshot;
+
+                    return Flag;
+                }
             });
             flightMonitor.Interests.Add(new FSUIPCInterest()
             {
@@ -97,9 +107,14 @@ namespace Acars
                         Cached = Snapshot;
                         return false;
                     }
-                    return (Math.Abs(Cached.GroundSpeed - Snapshot.GroundSpeed)
+                    bool Flag = (Math.Abs(Cached.GroundSpeed - Snapshot.GroundSpeed)
                         > 35); // groundspeed changes in orders of 35 kts
-                    }
+
+                    if (Flag)
+                        Cached = Snapshot;
+
+                    return Flag;
+                }
             });
             flightMonitor.Interests.Add(new FSUIPCInterest()
             {
@@ -110,10 +125,15 @@ namespace Acars
                     if (Cached == null)
                     {
                         Cached = Snapshot;
-                        return false;
+                        return true; // if cache is not set, push this one
                     }
-                    return ((Snapshot.TimeStamp - Cached.TimeStamp)
+                    bool Flag = ((Snapshot.TimeStamp - Cached.TimeStamp)
                         .TotalMinutes > 1); // max 1 mins between queues
+
+                    if (Flag)
+                        Cached = Snapshot;
+
+                    return Flag;
                     }
             });
             flightMonitor.Queue = new ConcurrentQueue<FSUIPCSnapshot>();
