@@ -68,6 +68,7 @@ namespace FlightMonitorApi
                                         contender.Position[0],
                                         contender.Position[1]
                                         ));
+                                QueueHandle.Set();
                             }
 
                     Thread.Sleep(100);
@@ -90,21 +91,29 @@ namespace FlightMonitorApi
         {
             LogManager.GetCurrentClassLogger()
                 .Trace("Database thread started");
+
+            // wait for a flight plan
+            while (databaseRunning)
+                if (DataConnector.LookupFlightPlan())
+                    break;
+                else
+                    Thread.Sleep(3000);
+
+            // keep pushing stuff to the server
             while (databaseRunning)
             {
                 try
                 {
-                    while (!DataConnector.LookupFlightPlan())
-                        Thread.Sleep(3000);
-
-                    if (Queue.TryPeek(out FSUIPCSnapshot snapshot))
+                    FSUIPCSnapshot newSnapshot = null;
+                    if (Queue.TryDequeue(out newSnapshot))
                     {
-                        if (DataConnector.PushOne(snapshot))
-                            while (!Queue.TryDequeue(out snapshot)) ;
-
-                        // TODO: do the signaling stuff
-                        Thread.Sleep(1000);
+                        if (!DataConnector.PushOne(newSnapshot)) // TODO: async
+                            // failed to send to server
+                            // send back to the queue
+                            Queue.Enqueue(newSnapshot);
                     }
+                    else
+                        QueueHandle.WaitOne();
                 }
                 catch (Exception crap)
                 {
@@ -115,7 +124,7 @@ namespace FlightMonitorApi
             LogManager.GetCurrentClassLogger()
                 .Trace("Database thread dying on request");
 
-            // flush the queue
+            // TODO: flush the queue
         }
 
         /// <summary>

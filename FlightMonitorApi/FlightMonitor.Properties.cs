@@ -24,6 +24,11 @@ namespace FlightMonitorApi
         public ConcurrentQueue<FSUIPCSnapshot> Queue;
 
         /// <summary>
+        /// Queue handle event
+        /// </summary>
+        private AutoResetEvent QueueHandle;
+
+        /// <summary>
         /// Gets or sets the list of resgistered interests in the profile
         /// </summary>
         public List<FSUIPCInterest> Interests;
@@ -67,6 +72,7 @@ namespace FlightMonitorApi
             monitoringThread = new Thread(new ThreadStart(MonitoringWorker));
             Interests = new List<FSUIPCInterest>();
             Queue = new ConcurrentQueue<FSUIPCSnapshot>();
+            QueueHandle = new AutoResetEvent(false);
         }
     }
 }
