@@ -53,22 +53,12 @@ namespace FlightMonitorApi
             // TODO: do not block the current thread on this
             //       application may receive a OS taskkill command.
             //       Maybe expose connected = true?
-            while (!connected)
+            if (!connected)
             {
                 try
                 {
                     FSUIPCConnection.Open();
                     connected = true;
-
-                    FSUIPCConnection.Process();
-                    FSUIPCSnapshot data = new FSUIPCSnapshot(true);
-
-                    // FSUIPC will return data even if the user is in scenario
-                    // screen or any other screen really, this just compares the
-                    // returned location with a location of [0, 0]
-                    // TODO: actually filter invalid locations
-                    return data.Position.SequenceEqual(
-                        new double[] { 0, 0 }) ? null : data;
                 }
                 catch (FSUIPCException crap)
                 {
@@ -79,12 +69,36 @@ namespace FlightMonitorApi
                             break;
                         case FSUIPCError.FSUIPC_ERR_NOFS:
                         case FSUIPCError.FSUIPC_ERR_SENDMSG:
-                            return null;
+                            connected = false;
+                            break;
                         default:
                             LogManager.GetCurrentClassLogger()
                                 .Error(crap, "Pooling data from FSUIPC");
                             throw crap;
                     }
+                }
+            }
+
+            if (connected)
+            {
+                try
+                {
+                    FSUIPCConnection.Process();
+                    FSUIPCSnapshot data = new FSUIPCSnapshot(true);
+
+                    // FSUIPC will return data even if the user is in scenario
+                    // screen or any other screen really, this just compares the
+                    // returned location with a location of [0, 0]
+                    // TODO: actually filter invalid locations
+                    return data.Position.SequenceEqual(
+                        new double[] { 0, 0 }) ? null : data;
+                }
+                catch (Exception crap)
+                {
+                    LogManager.GetCurrentClassLogger()
+                        .Error(crap, "Pooling data from FSUIPC");
+
+                    connected = false;
                 }
             }
 

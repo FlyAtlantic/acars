@@ -1,4 +1,5 @@
-﻿using FlightMonitorApi;
+﻿using System;
+using FlightMonitorApi;
 using NUnit.Framework;
 
 namespace FlightMonitorApiTests
@@ -7,7 +8,7 @@ namespace FlightMonitorApiTests
     public partial class FSUIPCSnapshotTests
     {
         [TestCase]
-        public void IsInteresting_ZeroDuration()
+        public void IsInteresting_OneSecondDuration_SetsCache()
         {
             FSUIPCInterest interest = new FSUIPCInterest()
             {
@@ -15,27 +16,31 @@ namespace FlightMonitorApiTests
                     FSUIPCSnapshot Snapshot,
                     ref FSUIPCSnapshot Cached) =>
                 {
-                    return true;
+                    Cached = Cached ?? Snapshot;
+
+                    var minutes = (Snapshot.TimeStamp - Cached.TimeStamp)
+                        .TotalMinutes;
+
+                    return (minutes > 10);
                 }
             };
-            Assert.IsTrue(interest.IsInteresting(new FSUIPCSnapshot()));
-            Assert.IsNull(interest.Cached);
-
-
-            interest.Scenario = (
-                FSUIPCSnapshot Snapshot,
-                ref FSUIPCSnapshot Cached) =>
+            Assert.IsFalse(interest.IsInteresting(new FSUIPCSnapshot()
             {
-                if (Cached == null)
-                {
-                    Cached = new FSUIPCSnapshot();
-                    return false;
-                }
-                return true;
-            };
-            Assert.IsFalse(interest.IsInteresting(new FSUIPCSnapshot()));
+                TimeStamp = DateTime.UtcNow
+            }));
             Assert.IsNotNull(interest.Cached);
-            Assert.IsTrue(interest.IsInteresting(new FSUIPCSnapshot()));
+            Assert.IsFalse(interest.IsInteresting(new FSUIPCSnapshot()
+            {
+                TimeStamp = DateTime.UtcNow.AddMinutes(9)
+            }));
+            Assert.IsFalse(interest.IsInteresting(new FSUIPCSnapshot()
+            {
+                TimeStamp = DateTime.UtcNow.AddMinutes(9)
+            }));
+            Assert.IsTrue(interest.IsInteresting(new FSUIPCSnapshot()
+            {
+                TimeStamp = DateTime.UtcNow.AddMinutes(10)
+            }));
         }
     }
 }
