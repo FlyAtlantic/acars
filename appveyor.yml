@@ -1,5 +1,9 @@
 version: 2.0.{build}
 image: Visual Studio 2017
+test:
+  assemblies:
+    only:
+      - '**\*.FlightMonitorApiTests.dll'
 before_build:
 - cmd: nuget restore
 build:
