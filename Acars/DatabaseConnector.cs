@@ -121,6 +121,8 @@ namespace Acars
             {
                 try
                 {
+                    LogManager.GetCurrentClassLogger()
+                        .Trace("Looking up flight plan");
                     conn.Open();
                     ActiveFlightPlan = conn.QueryFirstOrDefault<FlightPlan>(
                         SELECT_FLIGHT_PLAN,
@@ -131,12 +133,23 @@ namespace Acars
                 {
                     ActiveFlightPlan = null;
                 }
+                catch (Exception crap)
+                {
+                    LogManager.GetCurrentClassLogger()
+                        .Error(crap, "Failed on flight plan lookup.");
+                    throw crap;
+                }
                 finally
                 {
                     conn.Close();
                 }
             }
 
+            LogManager.GetCurrentClassLogger()
+                .Trace(String.Format(
+                    "Flight plan lookup : {0}",
+                    (ActiveFlightPlan == null)
+                        ? "none" : ActiveFlightPlan.AtcCallsign));
             return (ActiveFlightPlan != null);
         }
 
