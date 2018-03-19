@@ -73,7 +73,9 @@ namespace FlightMonitorApi
                             break;
                         default:
                             LogManager.GetCurrentClassLogger()
-                                .Error(crap, "Pooling data from FSUIPC");
+                                .Error(crap, String.Format(
+                                    "Pooling data from FSUIPC:{0}",
+                                    crap.FSUIPCErrorCode));
                             throw crap;
                     }
                 }
@@ -92,6 +94,15 @@ namespace FlightMonitorApi
                     // TODO: actually filter invalid locations
                     return data.Position.SequenceEqual(
                         new double[] { 0, 0 }) ? null : data;
+                }
+                catch (FSUIPCException crap)
+                {
+                    LogManager.GetCurrentClassLogger().Info(
+                        crap,
+                        String.Format(
+                            "FSUIPC Disconnected:{0}",
+                            crap.FSUIPCErrorCode));
+                    connected = false;
                 }
                 catch (Exception crap)
                 {
