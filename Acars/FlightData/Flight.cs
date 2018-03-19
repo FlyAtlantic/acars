@@ -271,8 +271,8 @@ namespace Acars.FlightData
                 Telemetry.SetValue(FSUIPCOffsets.parkingBrake, true);
 
                 Telemetry.SetValue(FSUIPCOffsets.environmentDateTimeHour, DateTime.UtcNow.Hour);
-                Telemetry.SetValue(FSUIPCOffsets.environmentDateTimeMinute, DateTime.UtcNow.Minute);                
-                Telemetry.SetValue(FSUIPCOffsets.environmentDateTimeDayOfYear , DateTime.UtcNow.DayOfYear);
+                Telemetry.SetValue(FSUIPCOffsets.environmentDateTimeMinute, DateTime.UtcNow.Minute);
+                Telemetry.SetValue(FSUIPCOffsets.environmentDateTimeDayOfYear, DateTime.UtcNow.DayOfYear);
                 Telemetry.SetValue(FSUIPCOffsets.environmentDateTimeYear, DateTime.UtcNow.Year);
 
                 string Message = "Welcome to FlyAtlantic Acars";
