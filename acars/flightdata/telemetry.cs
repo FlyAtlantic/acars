@@ -82,7 +82,7 @@ namespace Acars.FlightData
         /// <summary>
         /// Altitude? MSL AGL ... ?, in ft most likely
         /// </summary>
-        public double Altitude;
+        public int Altitude;
         /// <summary>
         /// Landing gear state, (true = down, false = up, ? = off)
         /// </summary>
@@ -214,7 +214,7 @@ namespace Acars.FlightData
             result.OnGround = (FSUIPCOffsets.onGround.Value == 0) ? false : true;
             result.VerticalSpeed = (FSUIPCOffsets.verticalSpeed.Value * 3.28084) / -1;
             result.Throttle = FSUIPCOffsets.throttle.Value;
-            result.Altitude = (FSUIPCOffsets.altitude.Value * 3.2808399);
+            result.Altitude = (Convert.ToInt32(FSUIPCOffsets.altitude.Value * 3.2808399));
             result.Gear = FSUIPCOffsets.GetBool(FSUIPCOffsets.gear);
             result.Slew = FSUIPCOffsets.slew.Value;
             result.Pause = (FSUIPCOffsets.pause.Value == 0) ? false : true;
