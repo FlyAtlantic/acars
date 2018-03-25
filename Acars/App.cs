@@ -275,12 +275,6 @@ namespace Acars
                 if (flight.LastTelemetry.Altitude < 6000)
                 {
                     reportDelay = 1;
-                    Console.WriteLine(String.Format("Parking Brakes: {0}",t.ParkingBrake.ToString()));
-                    Console.WriteLine(String.Format("Engine 1: {0}", t.Engine1.ToString()));
-                    Console.WriteLine(String.Format("Engine 2: {0}", t.Engine2.ToString()));
-                    Console.WriteLine(String.Format("Engine 3: {0}", t.Engine3.ToString()));
-                    Console.WriteLine(String.Format("Engine 4: {0}", t.Engine4.ToString()));
-                    Console.WriteLine(String.Format("Engine Count: {0}", t.EngineCount.ToString()));
                 }
 
                 flight.UpdateFlight();
