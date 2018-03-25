@@ -247,8 +247,26 @@ namespace Acars.FlightData
                         phase = FlightPhases.TAXIIN;
                     break;
                 case FlightPhases.TAXIIN:
-                    if (!currentTelemetry.Engine1 && !currentTelemetry.Engine2 && !currentTelemetry.Engine3 && !currentTelemetry.Engine4 && currentTelemetry.ParkingBrake)
-                        phase = FlightPhases.PARKING;
+                    if (currentTelemetry.EngineCount == 1)
+                    {
+                        if (!currentTelemetry.Engine1 && currentTelemetry.ParkingBrake)
+                            phase = FlightPhases.PARKING;
+                    }
+                    if (currentTelemetry.EngineCount == 2)
+                    {
+                        if (!currentTelemetry.Engine1 && !currentTelemetry.Engine2 && currentTelemetry.ParkingBrake)
+                            phase = FlightPhases.PARKING;
+                    }
+                    if (currentTelemetry.EngineCount == 3)
+                    {
+                        if (!currentTelemetry.Engine1 && !currentTelemetry.Engine2 && !currentTelemetry.Engine3 && currentTelemetry.ParkingBrake)
+                            phase = FlightPhases.PARKING;
+                    }
+                    if (currentTelemetry.EngineCount == 4)
+                    {
+                        if (!currentTelemetry.Engine1 && !currentTelemetry.Engine2 && !currentTelemetry.Engine3 && !currentTelemetry.Engine4 && currentTelemetry.ParkingBrake)
+                            phase = FlightPhases.PARKING;
+                    }
                     break;
             }
             currentTelemetry.FlightPhase = phase;
