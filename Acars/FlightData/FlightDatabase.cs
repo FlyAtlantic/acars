@@ -550,7 +550,7 @@ namespace Acars.FlightData
         /// <param name="flight"></param>
         public static void EndFlight(Flight flight)
         {
-            string sqlStrInsertPirep = "UPDATE `pireps` set `date` = NOW(), `flighttime` = @flighttime, `ft/pm` = @landingrate, `sum` = @sum, `accepted` = @accepted, `eps_granted` = @flighteps WHERE `id` = @pirepid;";
+            string sqlStrInsertPirep = "UPDATE `pireps` set `date` = @date, `flighttime` = @flighttime, `ft/pm` = @landingrate, `sum` = @sum, `accepted` = @accepted, `eps_granted` = @flighteps WHERE `id` = @pirepid;";
             string sqlStrUpdateUser = "UPDATE `utilizadores` SET `eps` = eps + @flighteps, `location` = @location WHERE `user_email` = @email;";
             string sqlStrDeleteAssignment = "DELETE `pilotassignments` from `pilotassignments` left join `utilizadores` on `pilotassignments`.`pilot` = `utilizadores`.`user_id` where `utilizadores`.`user_email` = @email;";
             string sqlInsertPenalizations = "INSERT INTO penalizations(datepenalization, pirepid, code) VALUES (@DatePenalization, @PirepId, @Code)";
