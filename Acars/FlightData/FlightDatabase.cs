@@ -551,7 +551,7 @@ namespace Acars.FlightData
         public static void EndFlight(Flight flight)
         {
             string sqlStrInsertPirep = "UPDATE `pireps` set `date` = @date, `flighttime` = @flighttime, `ft/pm` = @landingrate, `sum` = @sum, `accepted` = @accepted, `eps_granted` = @flighteps WHERE `id` = @pirepid;";
-            string sqlStrUpdateUser = "UPDATE `utilizadores` SET `eps` = eps + @flighteps, `location` = @location WHERE `user_email` = @email;";
+            string sqlStrUpdateUser = "UPDATE `utilizadores` SET `eps` = eps + @flighteps, pilot_hours = pilot_hours + @flighttime, `location` = @location WHERE `user_email` = @email;";
             string sqlStrDeleteAssignment = "DELETE `pilotassignments` from `pilotassignments` left join `utilizadores` on `pilotassignments`.`pilot` = `utilizadores`.`user_id` where `utilizadores`.`user_email` = @email;";
             string sqlInsertPenalizations = "INSERT INTO penalizations(datepenalization, pirepid, code) VALUES (@DatePenalization, @PirepId, @Code)";
             MySqlConnection conn = new MySqlConnection(ConnectionString);
@@ -578,6 +578,7 @@ namespace Acars.FlightData
                 sqlCmd.Parameters.AddWithValue("@email", Properties.Settings.Default.Email);
                 sqlCmd.Parameters.AddWithValue("@flighteps", flight.EfficiencyPoints);
                 sqlCmd.Parameters.AddWithValue("@location", flight.LoadedFlightPlan.ArrivalAirfield.Identifier);
+                sqlCmd.Parameters.AddWithValue("@flighttime", (int)Math.Round(flight.ActualTimeEnRoute.TotalMinutes));
 
                 sqlCmd.ExecuteNonQuery();
 
