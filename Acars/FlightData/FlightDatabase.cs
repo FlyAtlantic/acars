@@ -633,6 +633,7 @@ namespace Acars.FlightData
         private class VatsimProxyApi
         {
             const string BaseUrl = "https://vatsim-status-proxy.herokuapp.com";
+	    public static DateTime? lastPilotCheck = null;
 
             public VatsimProxyApi() { }
 
@@ -660,11 +661,19 @@ namespace Acars.FlightData
                 request.AddParameter("where", "{\"cid\":" + CID + "}");
 
                 return Execute<VatsimProxyClients>(request);
-            }
+            
         }
 
         public static bool IsPilotOnVatsim(Flight flight)
         {
+	    if (VatsimProxyApi.lastPilotCheck != null)
+	    {
+		TimeSpan diff = DateTime.UtcNow - VatsimProxyApi.lastPilotCheck;
+	    	if (diff.TotalMinutes < 5)
+		    return true;
+	    }
+
+	    VatsimProxyApi.lastPilotCheck = DateTime.UtcNow;
             return new VatsimProxyApi().GetClientByCid(flight.LoadedFlightPlan.CIDVatsim).Clients.Count > 0;
         }
     }
